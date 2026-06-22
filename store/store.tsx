@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import type { Profile, Role } from "@/types";
+import type { GapItem, Profile, Role } from "@/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // The single client-side store both sides of the marketplace read and write.
@@ -30,6 +30,8 @@ export const EMPTY_PROFILE: Profile = {
 interface AppState {
   role: Role;
   profile: Profile;
+  /** Deduped gaps from the latest match — feeds the reskilling recommendations. */
+  matchGaps: GapItem[];
 }
 
 interface StoreValue extends AppState {
@@ -38,12 +40,13 @@ interface StoreValue extends AppState {
   setRole: (role: Role) => void;
   setProfile: (profile: Profile) => void;
   updateProfile: (patch: Partial<Profile>) => void;
+  setMatchGaps: (gaps: GapItem[]) => void;
 }
 
 const StoreContext = createContext<StoreValue | null>(null);
 const STORAGE_KEY = "jm-state-v1";
 
-const INITIAL: AppState = { role: "candidate", profile: EMPTY_PROFILE };
+const INITIAL: AppState = { role: "candidate", profile: EMPTY_PROFILE, matchGaps: [] };
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AppState>(INITIAL);
@@ -80,10 +83,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       setState((s) => ({ ...s, profile: { ...s.profile, ...patch } })),
     [],
   );
+  const setMatchGaps = useCallback(
+    (matchGaps: GapItem[]) => setState((s) => ({ ...s, matchGaps })),
+    [],
+  );
 
   return (
     <StoreContext.Provider
-      value={{ ...state, hydrated, setRole, setProfile, updateProfile }}
+      value={{ ...state, hydrated, setRole, setProfile, updateProfile, setMatchGaps }}
     >
       {children}
     </StoreContext.Provider>

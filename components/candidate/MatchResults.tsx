@@ -4,11 +4,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { FadeUp, StaggerList } from "@/components/common/Motion";
 import { MatchCard } from "@/components/candidate/MatchCard";
+import { aggregateGaps } from "@/lib/reskill";
 import { useStore } from "@/store/store";
 import type { MatchResult } from "@/types";
 
 export function MatchResults() {
-  const { profile } = useStore();
+  const { profile, setMatchGaps } = useStore();
   const [results, setResults] = useState<MatchResult[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,7 +27,9 @@ export function MatchResults() {
       });
       const data = (await res.json()) as { results?: MatchResult[]; error?: string };
       if (!res.ok) throw new Error(data.error ?? "Matching failed.");
-      setResults(data.results ?? []);
+      const matched = data.results ?? [];
+      setResults(matched);
+      setMatchGaps(aggregateGaps(matched));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Matching failed.");
     } finally {

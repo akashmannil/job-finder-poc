@@ -5,6 +5,7 @@ import { FadeUp, StaggerList, motion } from "@/components/common/Motion";
 import { ProfileBuilder } from "@/components/candidate/ProfileBuilder";
 import { SkillPassport } from "@/components/candidate/SkillPassport";
 import { MatchResults } from "@/components/candidate/MatchResults";
+import { ReskillPanel } from "@/components/candidate/ReskillPanel";
 import { useStore } from "@/store/store";
 
 export default function Home() {
@@ -35,6 +36,7 @@ function CandidateWorkspace() {
       <ProfileBuilder />
       <SkillPassport />
       <MatchResults />
+      <ReskillPanel />
     </div>
   );
 }

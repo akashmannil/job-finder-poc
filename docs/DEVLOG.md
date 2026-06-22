@@ -13,5 +13,6 @@ file in that commit.
 | 05 | [Profile builder & evidence tiers](05-profile-builder.md) | `feat: candidate profile builder & evidence tiers` | The verified profile that replaces the résumé — skills with evidence tiers, animated editor, and a one-click sample profile. |
 | 06 | [Match results UI](06-match-results.md) | `feat: match results UI` | Ranked match cards with an animated score ring, evidence-cited "why it fits", and severity-tagged gaps. |
 | 07 | [Skill assessment & passport](07-assessment-passport.md) | `feat: skill assessment & passport` | Claude-generated quiz (answer key server-side) that, on passing, upgrades a skill to assessment-verified and adds it to a shareable passport. |
+| 08 | [Reskilling loop](08-reskilling.md) | `feat: reskilling loop` | Gaps → course recommendations → a "currently reskilling" signal that feeds back into matching. |
 
 > Build in progress — rows are appended as each feature lands.
