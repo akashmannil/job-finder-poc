@@ -1,10 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import { ScoreBadge } from "@/components/common/ScoreBadge";
+import { ConsentShare } from "@/components/candidate/ConsentShare";
+import { useStore } from "@/store/store";
 import type { MatchResult } from "@/types";
 
 export function MatchCard({ result, top = false }: { result: MatchResult; top?: boolean }) {
   const { job } = result;
+  const { applications } = useStore();
+  const [applying, setApplying] = useState(false);
+  const applied = applications.some((a) => a.jobId === job.id && a.own);
+
   return (
     <article
       className={`card relative p-5 ${top ? "ring-2 ring-accent" : ""}`}
@@ -25,6 +32,13 @@ export function MatchCard({ result, top = false }: { result: MatchResult; top?: 
           </p>
           <p className="mt-2 text-sm">{result.summary}</p>
         </div>
+        <button
+          className={applied ? "btn-ghost text-sm" : "btn-primary text-sm"}
+          disabled={applied}
+          onClick={() => setApplying(true)}
+        >
+          {applied ? "Applied ✓" : "Apply"}
+        </button>
       </div>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -65,6 +79,8 @@ export function MatchCard({ result, top = false }: { result: MatchResult; top?: 
           </ul>
         </div>
       </div>
+
+      {applying && <ConsentShare job={job} onClose={() => setApplying(false)} />}
     </article>
   );
 }

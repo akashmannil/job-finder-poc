@@ -8,7 +8,8 @@ import {
   useRef,
   useState,
 } from "react";
-import type { Endorsement, GapItem, Profile, Role } from "@/types";
+import { SEED_APPLICATIONS } from "@/lib/seedApplications";
+import type { Application, Endorsement, GapItem, Profile, Role } from "@/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // The single client-side store both sides of the marketplace read and write.
@@ -33,6 +34,7 @@ interface AppState {
   /** Deduped gaps from the latest match — feeds the reskilling recommendations. */
   matchGaps: GapItem[];
   endorsements: Endorsement[];
+  applications: Application[];
 }
 
 interface StoreValue extends AppState {
@@ -44,6 +46,8 @@ interface StoreValue extends AppState {
   setMatchGaps: (gaps: GapItem[]) => void;
   addEndorsement: (e: Endorsement) => void;
   removeEndorsement: (id: string) => void;
+  addApplication: (a: Application) => void;
+  updateApplication: (id: string, patch: Partial<Application>) => void;
 }
 
 const StoreContext = createContext<StoreValue | null>(null);
@@ -54,6 +58,7 @@ const INITIAL: AppState = {
   profile: EMPTY_PROFILE,
   matchGaps: [],
   endorsements: [],
+  applications: SEED_APPLICATIONS,
 };
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {
@@ -104,6 +109,18 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       setState((s) => ({ ...s, endorsements: s.endorsements.filter((e) => e.id !== id) })),
     [],
   );
+  const addApplication = useCallback(
+    (a: Application) => setState((s) => ({ ...s, applications: [a, ...s.applications] })),
+    [],
+  );
+  const updateApplication = useCallback(
+    (id: string, patch: Partial<Application>) =>
+      setState((s) => ({
+        ...s,
+        applications: s.applications.map((a) => (a.id === id ? { ...a, ...patch } : a)),
+      })),
+    [],
+  );
 
   return (
     <StoreContext.Provider
@@ -116,6 +133,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         setMatchGaps,
         addEndorsement,
         removeEndorsement,
+        addApplication,
+        updateApplication,
       }}
     >
       {children}

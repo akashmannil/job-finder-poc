@@ -9,6 +9,7 @@ import { SkillPassport } from "@/components/candidate/SkillPassport";
 import { Endorsements } from "@/components/candidate/Endorsements";
 import { MatchResults } from "@/components/candidate/MatchResults";
 import { ReskillPanel } from "@/components/candidate/ReskillPanel";
+import { ApplicationTracker } from "@/components/candidate/ApplicationTracker";
 import { useStore } from "@/store/store";
 
 export default function Home() {
@@ -75,6 +76,7 @@ function CandidateWorkspace() {
               <Endorsements />
               <MatchResults />
               <ReskillPanel />
+              <ApplicationTracker />
             </div>
           ) : (
             <IdentityPage profile={profile} endorsements={endorsements} />

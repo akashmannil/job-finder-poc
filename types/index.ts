@@ -173,3 +173,46 @@ export interface Endorsement {
   evidence: string;
   createdAt: number;
 }
+
+// ── Applications & consent ────────────────────────────────────────────────────
+
+/** What the candidate chooses to share with a recruiter when applying. */
+export interface ConsentChoices {
+  skills: boolean;
+  endorsements: boolean;
+  reskilling: boolean;
+  experience: boolean;
+  projects: boolean;
+}
+
+/** The exact, filtered view a recruiter receives — the candidate's consented data. */
+export interface ConsentSnapshot {
+  profile: Profile;
+  endorsements: Endorsement[];
+  choices: ConsentChoices;
+}
+
+export type ApplicationStatus =
+  | "received"
+  | "reviewing"
+  | "offer"
+  | "rejected"
+  | "auto_closed";
+
+export interface Application {
+  id: string;
+  jobId: string;
+  recruiterId: string;
+  candidateName: string;
+  consent: ConsentSnapshot;
+  status: ApplicationStatus;
+  createdAt: number;
+  /** When the recruiter first moved it past "received" — used for the conduct score. */
+  respondedAt?: number;
+  decisionReason?: string;
+  decisionMessage?: string;
+  candidateInterested: boolean;
+  recruiterInterested: boolean;
+  /** True for applications the current candidate created (vs. seeded other candidates). */
+  own: boolean;
+}
