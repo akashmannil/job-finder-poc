@@ -99,3 +99,31 @@ export interface Recruiter {
 
 /** Which side of the marketplace the user is currently acting as. */
 export type Role = "candidate" | "recruiter";
+
+// ── Matching ────────────────────────────────────────────────────────────────
+
+/** A requirement the candidate satisfies, with the evidence that satisfied it. */
+export interface MetRequirement {
+  requirement: string;
+  evidence: string;
+}
+
+/** A missing/weak requirement, tagged by how much it matters. */
+export interface GapItem {
+  skill: string;
+  severity: "must_have" | "nice_to_have";
+}
+
+/** The per-job result Claude returns (structured output). */
+export interface MatchResultRaw {
+  jobId: string;
+  fitScore: number;
+  summary: string;
+  metRequirements: MetRequirement[];
+  gaps: GapItem[];
+}
+
+/** A match joined back to its full job, for rendering. */
+export interface MatchResult extends MatchResultRaw {
+  job: Job;
+}
