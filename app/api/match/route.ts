@@ -1,4 +1,3 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 import { matchProfileToJobs } from "@/lib/matcher";
 import type { Profile } from "@/types";
@@ -23,16 +22,9 @@ export async function POST(req: Request) {
   }
 
   try {
-    const results = await matchProfileToJobs(profile);
+    const results = matchProfileToJobs(profile);
     return NextResponse.json({ results });
   } catch (err) {
-    // Surface a clean, typed error to the UI.
-    if (err instanceof Anthropic.APIError) {
-      return NextResponse.json(
-        { error: `Anthropic API error: ${err.message}` },
-        { status: err.status ?? 502 },
-      );
-    }
     const message = err instanceof Error ? err.message : "Matching failed.";
     return NextResponse.json({ error: message }, { status: 500 });
   }

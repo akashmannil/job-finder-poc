@@ -27,6 +27,7 @@ file in that commit.
 | # | Feature | Commit | What & why |
 |---|---------|--------|------------|
 | 16 | [Skill catalog & question bank](16-skill-catalog.md) | `feat: predefined skill catalog & question bank` | The expandable knowledge base (skills, aliases, related, question banks) that powers offline engines. |
+| 17 | [Local matching engine](17-local-matcher.md) | `feat: local matching engine` | Deterministic, catalog-driven scoring (verified > claims, must-have > nice, transferable credit) replacing the AI matcher — no key needed. |
 
 ## Root documentation
 

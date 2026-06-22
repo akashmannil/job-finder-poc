@@ -1,74 +1,128 @@
-import { callStructured, MODEL, type StructuredRequest } from "@/lib/anthropic";
-import { getJobs, getJob } from "@/lib/jobs";
-import { MATCH_RESULT_SCHEMA } from "@/lib/schema";
-import type { MatchResult, MatchResultRaw, Profile } from "@/types";
+import { getJobs } from "@/lib/jobs";
+import { areRelated, normalizeSkill } from "@/lib/skills/catalog";
+import {
+  EVIDENCE_LABEL,
+  EVIDENCE_RANK,
+  type EvidenceTier,
+  type GapItem,
+  type Job,
+  type MatchResult,
+  type MetRequirement,
+  type Profile,
+} from "@/types";
 
-const SYSTEM_PROMPT = `You are an expert technical recruiter scoring how well a candidate fits each open role.
+// ─────────────────────────────────────────────────────────────────────────────
+// Local, deterministic matching engine (no AI). Scores a profile against each job
+// using the predefined skill catalog. Verified evidence outweighs claims; must-haves
+// outweigh nice-to-haves; related skills earn transferable partial credit.
+// ─────────────────────────────────────────────────────────────────────────────
 
-Score HONESTLY. Do not inflate. A weak fit must get a low score.
+const KIND_WEIGHT = { must_have: 3, nice_to_have: 1 } as const;
 
-Rules:
-- Weight VERIFIED evidence above self-asserted claims. Evidence tiers, strongest to weakest:
-  reference_verified > assessment_passed > portfolio > self_asserted. A self-asserted skill is a
-  claim, not proof — treat it with appropriate skepticism.
-- A job's "must_have" requirements matter far more than "nice_to_have" ones. Missing a must_have
-  should heavily reduce the score; missing a nice_to_have should only slightly reduce it.
-- Never reward keyword matching. Judge whether the candidate can actually do the job.
-- "currentlyReskilling" on a skill is a positive growth signal: it slightly softens a gap.
+const EVIDENCE_FACTOR: Record<EvidenceTier, number> = {
+  self_asserted: 0.6,
+  portfolio: 0.8,
+  assessment_passed: 1.0,
+  reference_verified: 1.0,
+};
 
-For every job, return:
-- fitScore: integer 0-100 (honest overall fit).
-- summary: one sentence on the overall fit.
-- metRequirements: the job requirements the candidate genuinely meets, each with the specific
-  evidence from their profile that satisfies it (cite the skill + its evidence tier).
-- gaps: requirements the candidate is missing or weak on, each tagged must_have or nice_to_have.
+const TRANSFER_FACTOR = 0.5; // credit when only a related skill is present
+const RESKILL_BONUS = 0.1; // small boost for a self-asserted skill being actively grown
 
-Return a result for EVERY job provided.`;
-
-/** Compact, stable representation of the job list — goes first so it can be cached. */
-function jobsBlock(): string {
-  const jobs = getJobs().map((j) => ({
-    id: j.id,
-    title: j.title,
-    seniority: j.seniority,
-    remote: j.remote,
-    description: j.description,
-    requirements: j.requirements,
-  }));
-  return `JOBS (score the candidate against every one):\n${JSON.stringify(jobs)}`;
+interface CandSkill {
+  tier: EvidenceTier;
+  reskilling: boolean;
 }
 
-function profileBlock(profile: Profile): string {
-  return `CANDIDATE PROFILE:\n${JSON.stringify(profile)}`;
+function candidateMap(profile: Profile): Map<string, CandSkill> {
+  const map = new Map<string, CandSkill>();
+  for (const s of profile.skills) {
+    const key = normalizeSkill(s.name);
+    const prev = map.get(key);
+    if (!prev || EVIDENCE_RANK[s.evidence] > EVIDENCE_RANK[prev.tier]) {
+      map.set(key, { tier: s.evidence, reskilling: !!s.currentlyReskilling });
+    }
+  }
+  return map;
 }
 
-/** Run the candidate's profile against every job and return ranked, joined matches. */
-export async function matchProfileToJobs(profile: Profile): Promise<MatchResult[]> {
-  const req: StructuredRequest = {
-    model: MODEL,
-    max_tokens: 8000,
-    system: SYSTEM_PROMPT,
-    messages: [
-      {
-        role: "user",
-        content: [
-          // Stable prefix first, cached so repeated matches are cheaper/faster.
-          { type: "text", text: jobsBlock(), cache_control: { type: "ephemeral" } },
-          { type: "text", text: profileBlock(profile) },
-        ],
-      },
-    ],
-    output_config: { format: { type: "json_schema", schema: MATCH_RESULT_SCHEMA } },
-  };
+function scoreJob(job: Job, cand: Map<string, CandSkill>): MatchResult {
+  let possible = 0;
+  let earned = 0;
+  let disqualified = false;
+  let mustTotal = 0;
+  let mustMet = 0;
+  const metRequirements: MetRequirement[] = [];
+  const gaps: GapItem[] = [];
 
-  const parsed = await callStructured<{ results: MatchResultRaw[] }>(req);
-  const results = Array.isArray(parsed.results) ? parsed.results : [];
+  for (const req of job.requirements) {
+    const reqCanon = normalizeSkill(req.skill);
 
-  return results
-    .map((r) => {
-      const job = getJob(r.jobId);
-      return job ? ({ ...r, job } satisfies MatchResult) : null;
-    })
-    .filter((r): r is MatchResult => r !== null)
+    if (req.kind === "disqualifier") {
+      if (cand.has(reqCanon)) disqualified = true;
+      continue;
+    }
+
+    const weight = KIND_WEIGHT[req.kind];
+    possible += weight;
+    if (req.kind === "must_have") mustTotal++;
+
+    const direct = cand.get(reqCanon);
+    if (direct) {
+      let factor = EVIDENCE_FACTOR[direct.tier];
+      if (direct.reskilling && direct.tier === "self_asserted") factor += RESKILL_BONUS;
+      earned += weight * Math.min(factor, 1);
+      if (req.kind === "must_have") mustMet++;
+      metRequirements.push({
+        requirement: req.skill,
+        evidence: `${reqCanon} — ${EVIDENCE_LABEL[direct.tier]}${
+          direct.reskilling ? " · reskilling" : ""
+        }`,
+      });
+      continue;
+    }
+
+    // Transferable: a related skill the candidate does have.
+    let transfer: string | null = null;
+    for (const have of cand.keys()) {
+      if (areRelated(have, reqCanon)) {
+        transfer = have;
+        break;
+      }
+    }
+    if (transfer) {
+      const t = cand.get(transfer)!;
+      earned += weight * TRANSFER_FACTOR * EVIDENCE_FACTOR[t.tier];
+      if (req.kind === "must_have") mustMet++;
+      metRequirements.push({ requirement: req.skill, evidence: `transferable from ${transfer}` });
+    } else {
+      gaps.push({ skill: req.skill, severity: req.kind });
+    }
+  }
+
+  const raw = possible > 0 ? Math.round((100 * earned) / possible) : 0;
+  const fitScore = disqualified ? 0 : Math.max(0, Math.min(100, raw));
+
+  return { jobId: job.id, fitScore, summary: summarize(job, fitScore, mustMet, mustTotal, disqualified), metRequirements, gaps, job };
+}
+
+function summarize(
+  job: Job,
+  score: number,
+  mustMet: number,
+  mustTotal: number,
+  disqualified: boolean,
+): string {
+  if (disqualified) return "Not a fit — a disqualifying requirement applies.";
+  const band =
+    score >= 80 ? "Strong fit" : score >= 60 ? "Good fit" : score >= 40 ? "Partial fit" : "Weak fit";
+  return `${band} — meets ${mustMet}/${mustTotal} must-have${mustTotal === 1 ? "" : "s"} for this ${job.seniority} role.`;
+}
+
+/** Score the profile against every job and return ranked, joined matches. */
+export function matchProfileToJobs(profile: Profile): MatchResult[] {
+  const cand = candidateMap(profile);
+  return getJobs()
+    .map((job) => scoreJob(job, cand))
     .sort((a, b) => b.fitScore - a.fitScore);
 }
