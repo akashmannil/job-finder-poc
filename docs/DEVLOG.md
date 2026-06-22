@@ -15,5 +15,6 @@ file in that commit.
 | 07 | [Skill assessment & passport](07-assessment-passport.md) | `feat: skill assessment & passport` | Claude-generated quiz (answer key server-side) that, on passing, upgrades a skill to assessment-verified and adds it to a shareable passport. |
 | 08 | [Reskilling loop](08-reskilling.md) | `feat: reskilling loop` | Gaps → course recommendations → a "currently reskilling" signal that feeds back into matching. |
 | 09 | [Evidence-backed endorsements](09-endorsements.md) | `feat: evidence-backed endorsements` | Endorsements that require a relationship + specific evidence sentence, weighted by credibility — proof over one-tap noise. |
+| 10 | [Public identity page](10-identity-page.md) | `feat: public identity page (no vanity metrics)` | A reusable proof-over-reach profile view with zero vanity metrics, previewable via a Workspace/Public-profile toggle. |
 
 > Build in progress — rows are appended as each feature lands.
