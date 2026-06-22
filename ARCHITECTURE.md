@@ -1,8 +1,9 @@
 # Architecture
 
 JobMatch is a Next.js (App Router) app where **both sides of the marketplace run in one client
-store**, and all AI work happens server-side behind API routes. This document explains the
-load-bearing decisions.
+store**, and matching / assessment / decision logic runs in **deterministic, in-app engines**
+behind API routes — no external AI, no API keys. This document explains the load-bearing
+decisions.
 
 ## The shared store + role switcher
 
@@ -18,14 +19,14 @@ underneath both.
 
 ## The Application — the pivot object
 
-```
+```text
 Candidate                         Shared store                         Recruiter
 ---------                         ------------                         ---------
 build verified profile
   └─ apply (consent dialog) ──▶ Application {                ┌──▶ dashboard (own postings)
                                   jobId, recruiterId,        │     └─ consented applicant view
                                   consent snapshot,  ────────┘     └─ Start reviewing
-                                  status, createdAt,               └─ pick reason → AI draft
+                                  status, createdAt,               └─ pick reason → drafted msg
                                   respondedAt?, ...        ◀────────── send decision
                                 }
   tracker shows status  ◀────────  (status, decisionMessage)
@@ -52,25 +53,30 @@ The matcher compares requirements against evidence and weights must-haves heavil
 fuzzy text-vs-text similarity. Results are explainable: each met requirement cites the evidence
 that satisfied it, and gaps are tagged by severity — which then drive the reskilling loop.
 
-## Why structured outputs
+## Deterministic engines (no AI)
 
-Every AI call uses `output_config.format` with a JSON schema
-([`lib/schema.ts`](lib/schema.ts) and inline schemas in `lib/assessor.ts` / `lib/decision.ts`),
-so responses are guaranteed-valid JSON we parse directly — never scraped from prose. See
-[PROMPTS.md](PROMPTS.md) for the prompts and schemas.
+Matching, assessment, and decision drafting are pure, in-app engines driven by a predefined
+**skill catalog** and **question bank** ([`lib/skills/`](lib/skills/)). They take no API key,
+make no network calls, and produce the same output for the same input — so the app runs in any
+dev/CI/test environment and is trivial to reason about. See [PROMPTS.md](PROMPTS.md) for how each
+engine works.
 
-## Prompt caching
+- **Matcher** ([`lib/matcher.ts`](lib/matcher.ts)) — scores a profile against each job using
+  weighted requirements (must-have > nice-to-have) and evidence factors (verified > claimed),
+  with transferable credit from `related` skills in the catalog.
+- **Assessor** ([`lib/assessor.ts`](lib/assessor.ts)) — serves bank questions with options
+  shuffled and the answer key withheld; grades by matching selected text server-side.
+- **Decision** ([`lib/decision.ts`](lib/decision.ts)) — composes a personalized message per
+  reason code from the consented application data.
 
-In the matcher, the large, stable **job list is the first content block** and carries
-`cache_control: { type: "ephemeral" }`. The volatile profile comes after it. Because caching is a
-prefix match, repeated matches (e.g. re-running after passing an assessment) reuse the cached job
-prefix — cheaper and faster.
+Each engine sits behind a small, stable function signature, so an AI-backed implementation could
+later replace any one of them without changing the routes or UI.
 
-## Server-side trust boundary
+## Server-side boundary
 
-The Anthropic key is read only in [`lib/anthropic.ts`](lib/anthropic.ts) and used inside the
-`/api/*` route handlers (`runtime = "nodejs"`). It is never imported into a client component, so
-it never reaches the browser bundle. The UI talks to Claude only through those routes.
+The engines run inside the `/api/*` route handlers (`runtime = "nodejs"`). The one thing that
+must not reach the browser — the **assessment answer key** — stays server-side: generation strips
+it and grading looks it up from the bank. There are no secrets or API keys in the app.
 
 ## SLA & conduct score
 

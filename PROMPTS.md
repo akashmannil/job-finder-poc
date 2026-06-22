@@ -1,63 +1,61 @@
-# Prompts & schemas
+# Engines & knowledge base
 
-The three places JobMatch calls Claude, why each prompt is written the way it is, and the JSON
-schema that constrains each response. All calls use `claude-opus-4-8` with
-`output_config.format` (structured outputs), server-side only.
+JobMatch runs on **deterministic, in-app engines** instead of an external model. This document
+explains how each engine works and the predefined knowledge it draws on. (There are no AI prompts;
+the name is kept for continuity with the build trail.)
+
+## Knowledge base — [`lib/skills/`](lib/skills/)
+
+- **Catalog** ([`catalog.ts`](lib/skills/catalog.ts)) — canonical skills with `aliases`
+  (synonyms that should match, e.g. TS ↔ TypeScript) and `related` skills (adjacencies that earn
+  transferable credit). `normalizeSkill`, `relatedOf`, and `areRelated` are the helpers the
+  engines use.
+- **Question bank** ([`questionBank.ts`](lib/skills/questionBank.ts)) — per-skill multiple-choice
+  questions; `answer` is stored as the correct option's *text* so options can be shuffled for
+  display without breaking grading. Skills without a bank fall back to generic competence
+  questions, so everything stays assessable.
+
+Both are small and **expandable by appending entries** — no engine code changes needed.
 
 ## 1. Matching — [`lib/matcher.ts`](lib/matcher.ts)
 
-**System prompt (essence):** an expert technical recruiter who scores fit *honestly* (low scores
-for weak fits), weights **verified evidence above self-asserted claims** (with the tier order
-spelled out), treats **must-haves as far more important than nice-to-haves**, never rewards
-keyword matching, and slightly softens a gap when a skill is `currentlyReskilling`.
+For each job, the matcher scores requirements against the candidate's skills:
 
-**Why:** the prompt encodes the entire thesis. Spelling out the evidence ranking and the
-must-have/nice-to-have weighting is what stops AI-tailored résumé keywords from winning — the
-model is told to judge capability, not vocabulary. Asking for the *evidence behind each met
-requirement* is what makes results explainable in the UI.
+- **Weights:** `must_have` = 3, `nice_to_have` = 1 — must-haves dominate the score.
+- **Evidence factors:** `self_asserted` 0.6 · `portfolio` 0.8 · `assessment_passed` 1.0 ·
+  `reference_verified` 1.0 — verified evidence is worth more than a claim, so inflation doesn't pay.
+- **Transferable credit:** if a requirement isn't met directly but the candidate has a `related`
+  skill, it earns partial credit (`TRANSFER_FACTOR` = 0.5) and is shown as "transferable from X".
+- **Reskilling** gives a small bonus to a self-asserted skill being actively grown; a
+  **disqualifier** the candidate has zeroes the score.
+- `fitScore = round(100 × earned / possible)`. Results carry explainable `metRequirements` (with
+  the evidence that satisfied each) and `gaps` (tagged by severity), then sort by score.
 
-**Caching:** the job list is sent first with `cache_control: ephemeral`; the profile follows, so
-re-runs reuse the cached prefix.
-
-**Schema** ([`lib/schema.ts`](lib/schema.ts)): `{ results: [{ jobId, fitScore:int, summary,
-metRequirements:[{requirement, evidence}], gaps:[{skill, severity:"must_have"|"nice_to_have"}] }] }`,
-`additionalProperties:false` throughout. Mirrors `MatchResultRaw` in
-[`types/index.ts`](types/index.ts).
+The thesis lives in the constants at the top of the file — tuning is a one-line change.
 
 ## 2. Assessment — [`lib/assessor.ts`](lib/assessor.ts)
 
-Two calls:
+- **Generate:** take up to 4 questions for the (normalized) skill from the bank, shuffle each
+  question's options, and return them **without** the answer key.
+- **Grade:** rebuild the answer map from the bank server-side and compare each selected option's
+  *text* to the known answer. `score = round(100 × correct / total)`, `passed = score ≥ 70`.
 
-- **Generate:** "write exactly 4 fair multiple-choice questions, 4 options each, one correct,
-  **do not reveal which is correct**." → `{ questions: [{ question, options[] }] }`.
-- **Grade:** given the questions, options, and the candidate's selected answers, "decide
-  correctness yourself; return an integer score 0–100, `passed = score >= 70`, and a one-sentence
-  rationale." → `{ passed, score:int, rationale }`.
+Splitting generate/grade keeps the answer key off the client, so a pass genuinely earns the
+`assessment_passed` evidence tier.
 
-**Why:** splitting generate and grade keeps the **answer key off the client** — generation omits
-it and grading happens server-side — so passing actually means something. That's the difference
-between *earned* `assessment_passed` evidence and a self-selected label.
+## 3. Decision — [`lib/decision.ts`](lib/decision.ts)
 
-## 3. Decision draft — [`lib/decision.ts`](lib/decision.ts)
+One template per reason code (`moving_forward`, `skills_gap`, `role_filled`,
+`seniority_mismatch`), personalized from the consented application data (candidate name, role,
+company, a shared skill). The recruiter edits the draft before sending — the template removes the
+effort, the human keeps control. `outcomeFor` maps each reason to the terminal status
+(`offer` / `rejected`).
 
-**System prompt (essence):** a recruiter writing a short (2–4 sentence), warm, **specific**
-decision message; reference something concrete from the candidate's profile; if a rejection, be
-kind and name the reason honestly; if moving forward, be enthusiastic and state the next step;
-never generic or cold. Input includes the candidate name, role, their consented skills, and the
-chosen reason code.
+## Why deterministic
 
-**Why:** ghosting persists because a thoughtful rejection is *effort*. Making a kind, specific
-message one click away (then letting the recruiter edit it) removes the effort excuse — the
-mechanism behind the whole anti-ghosting argument. The reason code keeps it honest.
-
-**Schema:** `{ subject, body }`, `additionalProperties:false`.
-
-## Cross-cutting notes
-
-- **Structured outputs over prose parsing** everywhere — no regex, no brittle string scraping.
-- **`callStructured`** ([`lib/anthropic.ts`](lib/anthropic.ts)) centralizes the call: it checks
-  for a `refusal` stop reason and extracts the JSON text block. `output_config` / per-block
-  `cache_control` are typed locally and cast at the call site because they can be ahead of the
-  installed SDK's static types; the SDK still forwards them on the wire.
-- **Honest scoring is a prompt instruction, not a post-filter** — the value is in telling the
-  model what "good" means (verified > claimed, must-have > nice-to-have, kind > generic).
+- **Runs anywhere** — no key, no network, works in CI/test/dev and offline.
+- **Reproducible** — same input, same output; easy to reason about and verify.
+- **Honest by construction** — "verified > claimed" and "must-have > nice-to-have" are explicit,
+  inspectable rules rather than a prompt the model might drift from.
+- **Swap-friendly** — each engine has a small, stable signature, so an AI-backed implementation
+  could replace any one of them later without touching the routes or UI.

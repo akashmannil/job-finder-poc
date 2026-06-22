@@ -18,9 +18,9 @@ anywhere).
 **Candidate side**
 
 - **Verified profile** that replaces the résumé — every skill carries an evidence tier.
-- **Requirement-level matching** (Claude) that weights verified evidence over claims and
-  must-haves over fluff, with explainable "why it fits" and gaps.
-- **Skill passport** — pass a Claude-generated assessment to *earn* verified evidence.
+- **Requirement-level matching** that weights verified evidence over claims and must-haves over
+  fluff, with explainable "why it fits" and gaps.
+- **Skill passport** — pass an assessment to *earn* verified evidence.
 - **Reskilling loop** — gaps become course recommendations; "currently reskilling" is a positive
   signal a résumé can't carry.
 - **Evidence-backed endorsements** — relationship + specific evidence required (no one-tap skills).
@@ -31,7 +31,7 @@ anywhere).
 - **Dashboard** of postings with applicant/overdue counts and a **public response score**.
 - **Consented applicant view** — only what the candidate chose to share.
 - **Application SLA + auto-close** — ghosting is penalized, not free.
-- **One-click AI decision** — pick a reason, get a kind, specific, editable message; send.
+- **One-click decision** — pick a reason, get a kind, specific, editable message; send.
 - **Mutual-interest gating** — contact unlocks only when both sides opt in.
 
 ## Try it (the demo script)
@@ -55,24 +55,25 @@ grows slower. That's the values choice this POC is making on purpose.
 ## Tech stack
 
 Next.js (App Router) · TypeScript (strict) · Tailwind (CSS-variable theming, 5 accents ×
-light/dark) · Framer Motion · Anthropic SDK (`claude-opus-4-8`, structured outputs, server-side).
+light/dark) · Framer Motion. Matching, assessments, and decision messages run on **deterministic,
+in-app engines** over a predefined, expandable skill catalog — no external AI, no API keys.
 
 ## Setup
 
 ```bash
 npm install
-cp .env.example .env.local   # add your ANTHROPIC_API_KEY
 npm run dev
 ```
 
-Open http://localhost:3000. The AI features (matching, assessments, decision drafts) need a valid
-key; the rest of the UI works without one.
+Open `http://localhost:3000`. No environment variables or keys are required — everything runs
+offline and deterministically.
 
 ## Project structure
 
 - [`app/`](app/) — App Router pages and API routes (`/api/match`, `/api/assess`, `/api/draft-decision`).
 - [`components/`](components/) — `common/`, `candidate/`, `recruiter/` UI.
-- [`lib/`](lib/) — matcher, assessor, decision, reskill, sla, conduct, consent, endorsements, data.
+- [`lib/`](lib/) — the engines (matcher, assessor, decision), plus reskill, sla, conduct, consent,
+  endorsements, data accessors, and [`lib/skills/`](lib/skills/) (the catalog + question bank).
 - [`store/`](store/) — the shared client store both sides use.
 - [`data/`](data/) — seed jobs & courses.
 - [`docs/`](docs/) — the commit-by-commit build trail. See also
@@ -88,3 +89,7 @@ key; the rest of the UI works without one.
   detection** (flag stale/evergreen reqs).
 - **Recruiter accountability is local.** Next: org-wide response scores and candidate-facing
   "typical response time" at apply time.
+- **Engines are deterministic & offline by design** (no external AI), driven by the predefined
+  skill catalog so the app runs anywhere. They're built behind small, stable interfaces, so an
+  AI-backed engine could later be swapped in without touching the UI — and the catalog/question
+  bank expand by appending entries.

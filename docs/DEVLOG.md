@@ -30,6 +30,7 @@ file in that commit.
 | 17 | [Local matching engine](17-local-matcher.md) | `feat: local matching engine` | Deterministic, catalog-driven scoring (verified > claims, must-have > nice, transferable credit) replacing the AI matcher — no key needed. |
 | 18 | [Local assessment engine](18-local-assessment.md) | `feat: local assessment engine` | Offline quiz from the question bank with server-side grading (answer key never sent) — earned verification without AI. |
 | 19 | [Local decision engine](19-local-decision.md) | `feat: local decision engine` | Template-based, personalized decision messages replacing the AI draft — humane closure, offline. |
+| 20 | [Retire Anthropic dependency](20-retire-ai.md) | `chore: retire Anthropic dependency` | Remove the unused SDK + key requirement and update the root docs — the app now runs fully offline. |
 
 ## Root documentation
 
@@ -37,4 +38,4 @@ file in that commit.
 - [ARCHITECTURE](../ARCHITECTURE.md) — design rationale
 - [PROMPTS](../PROMPTS.md) — the engines & question bank
 
-Phase 2 in progress — replacing the Anthropic API with predefined, expandable skillsets.
+Build complete — 20 commits. The platform runs end-to-end on predefined, expandable skillsets (no AI, no keys).
