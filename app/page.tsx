@@ -2,6 +2,7 @@
 
 import { AnimatePresence } from "framer-motion";
 import { FadeUp, StaggerList, motion } from "@/components/common/Motion";
+import { ProfileBuilder } from "@/components/candidate/ProfileBuilder";
 import { useStore } from "@/store/store";
 
 export default function Home() {
@@ -28,19 +29,10 @@ export default function Home() {
 
 function CandidateWorkspace() {
   return (
-    <StaggerList className="space-y-6">
-      <FadeUp className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">Your candidate workspace</h1>
-        <p className="text-muted">
-          Build a verified profile, match against roles, prove skills, and apply on your terms.
-        </p>
-      </FadeUp>
-      <FadeUp>
-        <div className="card p-6 text-sm text-muted">
-          Profile builder and matching arrive in the next commits.
-        </div>
-      </FadeUp>
-    </StaggerList>
+    <div className="space-y-8">
+      <ProfileBuilder />
+      {/* Match results land in the next commit. */}
+    </div>
   );
 }
 

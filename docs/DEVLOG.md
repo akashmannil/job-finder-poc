@@ -10,5 +10,6 @@ file in that commit.
 | 02 | [Domain types & seed data](02-domain-types.md) | `feat: domain types & seed data` | The shared model (evidence tiers, classified requirements) + 30 seed jobs and 30 courses, with typed accessors. |
 | 03 | [Shared store & role switcher](03-store-role-switcher.md) | `feat: shared store & role switcher` | One localStorage-backed Context both sides read/write, with an animated Candidate ⇄ Recruiter toggle — the mechanism that makes a two-sided POC demoable. |
 | 04 | [Requirement-level matcher](04-matcher.md) | `feat: requirement-level matcher` | Server-side Claude matching with structured outputs + prompt caching: weights verified evidence over claims and must-haves over fluff. |
+| 05 | [Profile builder & evidence tiers](05-profile-builder.md) | `feat: candidate profile builder & evidence tiers` | The verified profile that replaces the résumé — skills with evidence tiers, animated editor, and a one-click sample profile. |
 
 > Build in progress — rows are appended as each feature lands.
