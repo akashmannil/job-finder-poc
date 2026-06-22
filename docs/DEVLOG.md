@@ -20,5 +20,12 @@ file in that commit.
 | 12 | [SLA & two-way conduct score](12-sla-conduct.md) | `feat: SLA & two-way conduct score` | Response SLAs with auto-close (the ghost path), a behavior-based conduct score replacing vanity metrics, and a simulated clock to demo it. |
 | 13 | [Recruiter dashboard](13-recruiter-dashboard.md) | `feat: recruiter dashboard & consented applicant view` | Postings with applicant/overdue counts, the recruiter's public response score, and consent-filtered applicant profiles. |
 | 14 | [One-click AI decision](14-ai-decision.md) | `feat: one-click AI decision & state machine` | Application state machine + reason codes + a Claude-drafted, editable decision message — humane closure made one click; plus mutual-interest gating. |
+| 15 | [Root documentation](15-root-docs.md) | `docs: root README, ARCHITECTURE, PROMPTS` | The polished top-level docs above this trail, plus a verified production build. |
 
-> Build in progress — rows are appended as each feature lands.
+## Root documentation
+
+- [README](../README.md) — overview, demo script, setup, limitations
+- [ARCHITECTURE](../ARCHITECTURE.md) — design rationale
+- [PROMPTS](../PROMPTS.md) — the AI prompts & schemas
+
+Build complete — all 15 commits landed.
