@@ -2,7 +2,7 @@
 
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { FadeUp, StaggerList, motion } from "@/components/common/Motion";
+import { motion } from "@/components/common/Motion";
 import { IdentityPage } from "@/components/common/IdentityPage";
 import { ProfileBuilder } from "@/components/candidate/ProfileBuilder";
 import { SkillPassport } from "@/components/candidate/SkillPassport";
@@ -10,6 +10,7 @@ import { Endorsements } from "@/components/candidate/Endorsements";
 import { MatchResults } from "@/components/candidate/MatchResults";
 import { ReskillPanel } from "@/components/candidate/ReskillPanel";
 import { ApplicationTracker } from "@/components/candidate/ApplicationTracker";
+import { RecruiterDashboard } from "@/components/recruiter/RecruiterDashboard";
 import { candidateConduct } from "@/lib/conductScore";
 import { useStore } from "@/store/store";
 
@@ -90,19 +91,5 @@ function CandidateWorkspace() {
 }
 
 function RecruiterWorkspace() {
-  return (
-    <StaggerList className="space-y-6">
-      <FadeUp className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">Your recruiter workspace</h1>
-        <p className="text-muted">
-          Review consented applicants, decide with one click, and answer on the clock.
-        </p>
-      </FadeUp>
-      <FadeUp>
-        <div className="card p-6 text-sm text-muted">
-          The posting dashboard arrives in a later commit.
-        </div>
-      </FadeUp>
-    </StaggerList>
-  );
+  return <RecruiterDashboard />;
 }

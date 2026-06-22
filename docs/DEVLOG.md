@@ -18,5 +18,6 @@ file in that commit.
 | 10 | [Public identity page](10-identity-page.md) | `feat: public identity page (no vanity metrics)` | A reusable proof-over-reach profile view with zero vanity metrics, previewable via a Workspace/Public-profile toggle. |
 | 11 | [Consent & apply + tracker](11-consent-apply.md) | `feat: consent & apply + application tracker` | Applying creates an Application carrying a consent snapshot (selective disclosure), with a live recruiter preview and a candidate status tracker. |
 | 12 | [SLA & two-way conduct score](12-sla-conduct.md) | `feat: SLA & two-way conduct score` | Response SLAs with auto-close (the ghost path), a behavior-based conduct score replacing vanity metrics, and a simulated clock to demo it. |
+| 13 | [Recruiter dashboard](13-recruiter-dashboard.md) | `feat: recruiter dashboard & consented applicant view` | Postings with applicant/overdue counts, the recruiter's public response score, and consent-filtered applicant profiles. |
 
 > Build in progress — rows are appended as each feature lands.
