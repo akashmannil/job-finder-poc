@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Theming model: neutrals flip with [data-mode], accent hue swaps with [data-theme].
+ * Every surface reads CSS variables, so a theme change is a single attribute swap.
+ */
+:root {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* neutrals — light */
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #f0f2f6;
+  --border: #e3e6ec;
+  --text: #0d1424;
+  --muted: #5a6378;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 10px 30px rgba(16, 24, 40, 0.07);
+
+  /* status */
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+
+  /* accent — default: indigo */
+  --accent: #4f46e5;
+  --accent-strong: #4338ca;
+  --accent-contrast: #ffffff;
+  --accent-soft: #eef2ff;
+  --ring: var(--accent);
+}
+
+[data-mode="dark"] {
+  --bg: #0a0d14;
+  --surface: #11151f;
+  --surface-2: #1a2030;
+  --border: #283044;
+  --text: #e8ecf4;
+  --muted: #97a1b6;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 40px rgba(0, 0, 0, 0.5);
+  --accent-soft: rgba(99, 102, 241, 0.16);
+}
+
+/* ---- accent themes ---- */
+[data-theme="emerald"] {
+  --accent: #059669;
+  --accent-strong: #047857;
+  --accent-soft: #ecfdf5;
+}
+[data-theme="emerald"][data-mode="dark"] {
+  --accent-soft: rgba(16, 185, 129, 0.16);
+}
+[data-theme="rose"] {
+  --accent: #e11d48;
+  --accent-strong: #be123c;
+  --accent-soft: #fff1f3;
+}
+[data-theme="rose"][data-mode="dark"] {
+  --accent-soft: rgba(244, 63, 94, 0.16);
+}
+[data-theme="amber"] {
+  --accent: #d97706;
+  --accent-strong: #b45309;
+  --accent-contrast: #1a1206;
+  --accent-soft: #fff8eb;
+}
+[data-theme="amber"][data-mode="dark"] {
+  --accent-contrast: #1a1206;
+  --accent-soft: rgba(245, 158, 11, 0.18);
+}
+[data-theme="violet"] {
+  --accent: #7c3aed;
+  --accent-strong: #6d28d9;
+  --accent-soft: #f5f3ff;
+}
+[data-theme="violet"][data-mode="dark"] {
+  --accent-soft: rgba(139, 92, 246, 0.16);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  html[data-mode="dark"] {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-bg text-fg antialiased;
+    font-family: var(--font-sans);
+  }
+  /* Smooth, fluid theme transitions across the whole app. */
+  *,
+  *::before,
+  *::after {
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      color 0.2s ease,
+      box-shadow 0.3s ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-border bg-surface shadow-card;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-accent-contrast hover:bg-accent-strong;
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-fg hover:bg-surface2;
+  }
+  .btn-soft {
+    @apply btn bg-accent-soft text-accent hover:brightness-95;
+  }
+  .input {
+    @apply w-full rounded-xl border border-border bg-surface px-3 py-2 text-sm text-fg placeholder:text-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-border bg-surface2 px-2.5 py-0.5 text-xs font-medium text-muted;
+  }
+}
