@@ -10,6 +10,7 @@ import { Endorsements } from "@/components/candidate/Endorsements";
 import { MatchResults } from "@/components/candidate/MatchResults";
 import { ReskillPanel } from "@/components/candidate/ReskillPanel";
 import { ApplicationTracker } from "@/components/candidate/ApplicationTracker";
+import { candidateConduct } from "@/lib/conductScore";
 import { useStore } from "@/store/store";
 
 export default function Home() {
@@ -35,8 +36,9 @@ export default function Home() {
 }
 
 function CandidateWorkspace() {
-  const { profile, endorsements } = useStore();
+  const { profile, endorsements, applications } = useStore();
   const [view, setView] = useState<"workspace" | "profile">("workspace");
+  const myConduct = candidateConduct(applications.filter((a) => a.own)).score;
 
   return (
     <div className="space-y-6">
@@ -79,7 +81,7 @@ function CandidateWorkspace() {
               <ApplicationTracker />
             </div>
           ) : (
-            <IdentityPage profile={profile} endorsements={endorsements} />
+            <IdentityPage profile={profile} endorsements={endorsements} conduct={myConduct} />
           )}
         </motion.div>
       </AnimatePresence>

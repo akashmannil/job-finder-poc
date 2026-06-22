@@ -1,12 +1,14 @@
 "use client";
 
 import { FadeUp, StaggerList } from "@/components/common/Motion";
-import { formatRelative, STATUS_META } from "@/lib/applications";
+import { formatRelative, isTerminal, STATUS_META } from "@/lib/applications";
+import { slaLabel } from "@/lib/sla";
 import { getJob } from "@/lib/jobs";
 import { useStore } from "@/store/store";
 
 export function ApplicationTracker() {
-  const { applications } = useStore();
+  const { applications, now } = useStore();
+  const t = now();
   const mine = applications.filter((a) => a.own);
 
   if (mine.length === 0) return null;
@@ -29,15 +31,20 @@ export function ApplicationTracker() {
                 <div>
                   <p className="font-medium">{job?.title ?? a.jobId}</p>
                   <p className="text-sm text-muted">
-                    {job?.company} · applied {formatRelative(a.createdAt)}
+                    {job?.company} · applied {formatRelative(a.createdAt, t)}
                   </p>
                   {a.decisionMessage && (
                     <p className="mt-1 max-w-prose text-sm">{a.decisionMessage}</p>
                   )}
                 </div>
-                <span className={`rounded-full px-3 py-1 text-sm font-medium ${meta.className}`}>
-                  {meta.label}
-                </span>
+                <div className="flex flex-col items-end gap-1">
+                  <span className={`rounded-full px-3 py-1 text-sm font-medium ${meta.className}`}>
+                    {meta.label}
+                  </span>
+                  {!isTerminal(a.status) && (
+                    <span className="text-xs text-muted">{slaLabel(a, t)}</span>
+                  )}
+                </div>
               </div>
             </FadeUp>
           );

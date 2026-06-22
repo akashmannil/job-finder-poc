@@ -2,6 +2,7 @@
 
 import { FadeUp, StaggerList } from "@/components/common/Motion";
 import { EvidenceBadge } from "@/components/common/EvidenceBadge";
+import { ConductScore } from "@/components/common/ConductScore";
 import { RELATIONSHIP_WEIGHT } from "@/lib/endorsements";
 import { EVIDENCE_RANK, type Endorsement, type Profile } from "@/types";
 
@@ -13,9 +14,12 @@ import { EVIDENCE_RANK, type Endorsement, type Profile } from "@/types";
 export function IdentityPage({
   profile,
   endorsements,
+  conduct,
 }: {
   profile: Profile;
   endorsements: Endorsement[];
+  /** Optional candidate conduct score (0–100 or null) — shown when provided. */
+  conduct?: number | null;
 }) {
   const skills = [...profile.skills].sort(
     (a, b) => EVIDENCE_RANK[b.evidence] - EVIDENCE_RANK[a.evidence],
@@ -39,6 +43,11 @@ export function IdentityPage({
                   {s.name}
                 </span>
               ))}
+            </div>
+          )}
+          {conduct !== undefined && (
+            <div className="mt-4">
+              <ConductScore score={conduct} label="Conduct" detail="responsiveness & follow-through" />
             </div>
           )}
           <p className="mt-4 text-xs text-muted">

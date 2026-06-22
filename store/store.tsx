@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { SEED_APPLICATIONS } from "@/lib/seedApplications";
+import { autoResolveLapsed, DAY } from "@/lib/sla";
 import type { Application, Endorsement, GapItem, Profile, Role } from "@/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -35,6 +36,8 @@ interface AppState {
   matchGaps: GapItem[];
   endorsements: Endorsement[];
   applications: Application[];
+  /** Simulated-clock offset (ms) so SLA expiry can be demoed in seconds. */
+  clockOffset: number;
 }
 
 interface StoreValue extends AppState {
@@ -48,6 +51,10 @@ interface StoreValue extends AppState {
   removeEndorsement: (id: string) => void;
   addApplication: (a: Application) => void;
   updateApplication: (id: string, patch: Partial<Application>) => void;
+  /** Current (possibly simulated) time = Date.now() + clockOffset. */
+  now: () => number;
+  advanceClock: (days: number) => void;
+  resetClock: () => void;
 }
 
 const StoreContext = createContext<StoreValue | null>(null);
@@ -59,6 +66,7 @@ const INITIAL: AppState = {
   matchGaps: [],
   endorsements: [],
   applications: SEED_APPLICATIONS,
+  clockOffset: 0,
 };
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {
@@ -121,6 +129,20 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       })),
     [],
   );
+  const now = useCallback(() => Date.now() + state.clockOffset, [state.clockOffset]);
+  const advanceClock = useCallback(
+    (days: number) =>
+      setState((s) => {
+        const clockOffset = s.clockOffset + days * DAY;
+        return {
+          ...s,
+          clockOffset,
+          applications: autoResolveLapsed(s.applications, Date.now() + clockOffset),
+        };
+      }),
+    [],
+  );
+  const resetClock = useCallback(() => setState((s) => ({ ...s, clockOffset: 0 })), []);
 
   return (
     <StoreContext.Provider
@@ -135,6 +157,9 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         removeEndorsement,
         addApplication,
         updateApplication,
+        now,
+        advanceClock,
+        resetClock,
       }}
     >
       {children}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ThemeProvider, themeInitScript } from "@/components/common/ThemeProvider";
 import { ThemeSwitcher } from "@/components/common/ThemeSwitcher";
 import { RoleSwitcher } from "@/components/common/RoleSwitcher";
+import { TimeControls } from "@/components/common/TimeControls";
 import { StoreProvider } from "@/store/store";
 import "./globals.css";
 
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <span className="hidden sm:inline">JobMatch</span>
                   </a>
                   <div className="flex items-center gap-3">
+                    <TimeControls />
                     <RoleSwitcher />
                     <ThemeSwitcher />
                   </div>
