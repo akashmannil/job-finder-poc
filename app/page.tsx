@@ -3,6 +3,7 @@
 import { AnimatePresence } from "framer-motion";
 import { FadeUp, StaggerList, motion } from "@/components/common/Motion";
 import { ProfileBuilder } from "@/components/candidate/ProfileBuilder";
+import { MatchResults } from "@/components/candidate/MatchResults";
 import { useStore } from "@/store/store";
 
 export default function Home() {
@@ -29,9 +30,9 @@ export default function Home() {
 
 function CandidateWorkspace() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <ProfileBuilder />
-      {/* Match results land in the next commit. */}
+      <MatchResults />
     </div>
   );
 }
