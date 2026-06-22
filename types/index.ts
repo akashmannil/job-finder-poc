@@ -127,3 +127,29 @@ export interface MatchResultRaw {
 export interface MatchResult extends MatchResultRaw {
   job: Job;
 }
+
+// ── Assessment ────────────────────────────────────────────────────────────────
+
+export interface AssessmentQuestion {
+  id: string;
+  question: string;
+  options: string[];
+}
+
+export interface Assessment {
+  skill: string;
+  questions: AssessmentQuestion[];
+}
+
+/** One answered question, sent back for grading (no answer key on the client). */
+export interface AnsweredItem {
+  question: string;
+  options: string[];
+  selected: string;
+}
+
+export interface GradeResult {
+  passed: boolean;
+  score: number;
+  rationale: string;
+}

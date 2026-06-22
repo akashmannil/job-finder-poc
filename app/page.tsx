@@ -3,6 +3,7 @@
 import { AnimatePresence } from "framer-motion";
 import { FadeUp, StaggerList, motion } from "@/components/common/Motion";
 import { ProfileBuilder } from "@/components/candidate/ProfileBuilder";
+import { SkillPassport } from "@/components/candidate/SkillPassport";
 import { MatchResults } from "@/components/candidate/MatchResults";
 import { useStore } from "@/store/store";
 
@@ -32,6 +33,7 @@ function CandidateWorkspace() {
   return (
     <div className="space-y-10">
       <ProfileBuilder />
+      <SkillPassport />
       <MatchResults />
     </div>
   );
