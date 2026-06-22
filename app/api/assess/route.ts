@@ -1,4 +1,3 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 import { generateAssessment, gradeAssessment } from "@/lib/assessor";
 import type { AnsweredItem } from "@/types";
@@ -20,21 +19,13 @@ export async function POST(req: Request) {
 
   try {
     if (body.action === "generate") {
-      const assessment = await generateAssessment(body.skill);
-      return NextResponse.json({ assessment });
+      return NextResponse.json({ assessment: generateAssessment(body.skill) });
     }
     if (body.action === "grade") {
-      const result = await gradeAssessment(body.skill, body.items ?? []);
-      return NextResponse.json({ result });
+      return NextResponse.json({ result: gradeAssessment(body.skill, body.items ?? []) });
     }
     return NextResponse.json({ error: "Unknown action." }, { status: 400 });
   } catch (err) {
-    if (err instanceof Anthropic.APIError) {
-      return NextResponse.json(
-        { error: `Anthropic API error: ${err.message}` },
-        { status: err.status ?? 502 },
-      );
-    }
     const message = err instanceof Error ? err.message : "Assessment failed.";
     return NextResponse.json({ error: message }, { status: 500 });
   }
