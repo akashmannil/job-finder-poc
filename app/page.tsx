@@ -1,48 +1,62 @@
 "use client";
 
-import { FadeUp, StaggerList } from "@/components/common/Motion";
-
-const PILLARS = [
-  {
-    title: "Verified profile, not résumé",
-    body: "Trust shifts from gameable marketing copy to evidence-tiered skills the matcher can weight honestly.",
-  },
-  {
-    title: "Accountable hiring",
-    body: "Every application has a response SLA and a public conduct score — ghosting has a cost.",
-  },
-  {
-    title: "Proof over reach",
-    body: "No likes, no followers, no impressions. Reputation comes from verifiable proof, not performance.",
-  },
-];
+import { AnimatePresence } from "framer-motion";
+import { FadeUp, StaggerList, motion } from "@/components/common/Motion";
+import { useStore } from "@/store/store";
 
 export default function Home() {
+  const { role, hydrated } = useStore();
+
+  if (!hydrated) {
+    return <div className="h-40 animate-pulse rounded-2xl bg-surface2" />;
+  }
+
   return (
-    <StaggerList className="space-y-10">
-      <FadeUp className="space-y-4 pt-6 text-center">
-        <h1 className="mx-auto max-w-3xl text-balance text-4xl font-bold tracking-tight sm:text-5xl">
-          Hiring that runs on <span className="text-accent">proof</span>, not performance.
-        </h1>
-        <p className="mx-auto max-w-2xl text-pretty text-muted">
-          A two-sided platform that fixes ghosting, unfit matching, and the gaslit feed — built
-          feature by feature, documented commit by commit.
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={role}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -8 }}
+        transition={{ duration: 0.25 }}
+      >
+        {role === "candidate" ? <CandidateWorkspace /> : <RecruiterWorkspace />}
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+function CandidateWorkspace() {
+  return (
+    <StaggerList className="space-y-6">
+      <FadeUp className="space-y-2">
+        <h1 className="text-3xl font-bold tracking-tight">Your candidate workspace</h1>
+        <p className="text-muted">
+          Build a verified profile, match against roles, prove skills, and apply on your terms.
         </p>
       </FadeUp>
+      <FadeUp>
+        <div className="card p-6 text-sm text-muted">
+          Profile builder and matching arrive in the next commits.
+        </div>
+      </FadeUp>
+    </StaggerList>
+  );
+}
 
-      <StaggerList className="grid gap-4 sm:grid-cols-3">
-        {PILLARS.map((p) => (
-          <FadeUp key={p.title}>
-            <div className="card h-full p-5">
-              <h2 className="font-semibold">{p.title}</h2>
-              <p className="mt-2 text-sm text-muted">{p.body}</p>
-            </div>
-          </FadeUp>
-        ))}
-      </StaggerList>
-
-      <FadeUp className="text-center text-sm text-muted">
-        Scaffold ready. Try the theme picker in the header ↗
+function RecruiterWorkspace() {
+  return (
+    <StaggerList className="space-y-6">
+      <FadeUp className="space-y-2">
+        <h1 className="text-3xl font-bold tracking-tight">Your recruiter workspace</h1>
+        <p className="text-muted">
+          Review consented applicants, decide with one click, and answer on the clock.
+        </p>
+      </FadeUp>
+      <FadeUp>
+        <div className="card p-6 text-sm text-muted">
+          The posting dashboard arrives in a later commit.
+        </div>
       </FadeUp>
     </StaggerList>
   );

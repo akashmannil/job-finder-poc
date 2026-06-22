@@ -96,3 +96,6 @@ export interface Recruiter {
   name: string;
   company: string;
 }
+
+/** Which side of the marketplace the user is currently acting as. */
+export type Role = "candidate" | "recruiter";
