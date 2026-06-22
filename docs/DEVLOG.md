@@ -22,10 +22,16 @@ file in that commit.
 | 14 | [One-click AI decision](14-ai-decision.md) | `feat: one-click AI decision & state machine` | Application state machine + reason codes + a Claude-drafted, editable decision message — humane closure made one click; plus mutual-interest gating. |
 | 15 | [Root documentation](15-root-docs.md) | `docs: root README, ARCHITECTURE, PROMPTS` | The polished top-level docs above this trail, plus a verified production build. |
 
+### Phase 2 — local, no-AI engines (runs anywhere, deterministic)
+
+| # | Feature | Commit | What & why |
+|---|---------|--------|------------|
+| 16 | [Skill catalog & question bank](16-skill-catalog.md) | `feat: predefined skill catalog & question bank` | The expandable knowledge base (skills, aliases, related, question banks) that powers offline engines. |
+
 ## Root documentation
 
 - [README](../README.md) — overview, demo script, setup, limitations
 - [ARCHITECTURE](../ARCHITECTURE.md) — design rationale
-- [PROMPTS](../PROMPTS.md) — the AI prompts & schemas
+- [PROMPTS](../PROMPTS.md) — the engines & question bank
 
-Build complete — all 15 commits landed.
+Phase 2 in progress — replacing the Anthropic API with predefined, expandable skillsets.

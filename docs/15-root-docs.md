@@ -1,7 +1,7 @@
 # 15 — Root documentation
 
 > Commit: `docs: root README, ARCHITECTURE, PROMPTS`
-> Nav: [← Prev](14-ai-decision.md) · [Index](DEVLOG.md)
+> Nav: [← Prev](14-ai-decision.md) · [Index](DEVLOG.md) · [Next →](16-skill-catalog.md)
 
 ## What this adds
 
