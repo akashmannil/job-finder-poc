@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { IdentityPage } from "@/components/common/IdentityPage";
+import { DecisionPanel } from "@/components/recruiter/DecisionPanel";
 import { formatRelative, isTerminal, STATUS_META } from "@/lib/applications";
 import { slaLabel } from "@/lib/sla";
 import { useStore } from "@/store/store";
@@ -58,6 +59,8 @@ export function ApplicantCard({ application }: { application: Application }) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <DecisionPanel application={application} />
     </div>
   );
 }
