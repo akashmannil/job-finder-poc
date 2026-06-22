@@ -1,6 +1,11 @@
-import { callStructured, MODEL, type StructuredRequest } from "@/lib/anthropic";
 import { getJob } from "@/lib/jobs";
 import type { Application, ApplicationStatus } from "@/types";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Local, deterministic decision drafting (no AI). Templates per reason code,
+// personalized from the application's consented data. The recruiter edits before
+// sending — the template removes the effort, the human keeps control.
+// ─────────────────────────────────────────────────────────────────────────────
 
 export const DECISION_REASONS = [
   { code: "moving_forward", label: "Moving forward", outcome: "offer" },
@@ -20,51 +25,35 @@ export interface DraftResult {
   body: string;
 }
 
-const SCHEMA = {
-  type: "object",
-  additionalProperties: false,
-  properties: {
-    subject: { type: "string" },
-    body: { type: "string" },
-  },
-  required: ["subject", "body"],
-} as const;
-
-/** Draft a brief, kind, specific decision message — making closure one click away. */
-export async function draftDecision(
-  application: Application,
-  reasonCode: ReasonCode,
-): Promise<DraftResult> {
+/** Compose a warm, specific decision message from the consented application data. */
+export function draftDecision(application: Application, reasonCode: ReasonCode): DraftResult {
   const job = getJob(application.jobId);
-  const reason = DECISION_REASONS.find((r) => r.code === reasonCode);
-  const skills = application.consent.profile.skills.map((s) => s.name).join(", ");
+  const role = job?.title ?? "the role";
+  const company = job?.company ?? "our team";
+  const name = application.candidateName || "there";
+  const skill = application.consent.profile.skills[0]?.name;
+  const withSkill = skill ? ` in ${skill}` : "";
 
-  const req: StructuredRequest = {
-    model: MODEL,
-    max_tokens: 700,
-    system:
-      "You are a recruiter writing a short, warm, specific decision message to a candidate. " +
-      "2–4 sentences. Reference something concrete from their profile. If it's a rejection, be " +
-      "kind and encouraging and name the reason honestly; if moving forward, be enthusiastic and " +
-      "state the next step. Never be generic or cold. Return a subject and body.",
-    messages: [
-      {
-        role: "user",
-        content: [
-          {
-            type: "text",
-            text: [
-              `Candidate: ${application.candidateName}`,
-              `Role: ${job?.title ?? application.jobId} at ${job?.company ?? ""}`,
-              `Candidate skills: ${skills || "n/a"}`,
-              `Decision: ${reason?.label} (${reason?.outcome})`,
-            ].join("\n"),
-          },
-        ],
-      },
-    ],
-    output_config: { format: { type: "json_schema", schema: SCHEMA } },
-  };
-
-  return callStructured<DraftResult>(req);
+  switch (reasonCode) {
+    case "moving_forward":
+      return {
+        subject: `Next steps for the ${role} role`,
+        body: `Hi ${name}, thanks for applying to ${role} at ${company}. Your experience${withSkill} stood out and we'd love to move forward. We'll reach out shortly to set up a conversation.`,
+      };
+    case "skills_gap":
+      return {
+        subject: `Update on your ${role} application`,
+        body: `Hi ${name}, thank you for applying to ${role} at ${company}. After a careful review we've decided not to move forward this time — the role needs deeper experience in a few must-have areas. We really valued your background${withSkill} and would welcome a future application as you grow those skills.`,
+      };
+    case "role_filled":
+      return {
+        subject: `Update on your ${role} application`,
+        body: `Hi ${name}, thank you for your interest in ${role} at ${company}. We've filled this position, so we won't be moving forward — but we were impressed by your background${withSkill} and will keep you in mind for similar openings.`,
+      };
+    case "seniority_mismatch":
+      return {
+        subject: `Update on your ${role} application`,
+        body: `Hi ${name}, thank you for applying to ${role} at ${company}. The scope of this role didn't quite line up with the level we're hiring for right now. Your background${withSkill} is strong, and we'd genuinely welcome an application for a role that better matches your level.`,
+      };
+  }
 }

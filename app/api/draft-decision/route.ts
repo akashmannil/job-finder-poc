@@ -1,4 +1,3 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 import { draftDecision, type ReasonCode } from "@/lib/decision";
 import type { Application } from "@/types";
@@ -15,15 +14,9 @@ export async function POST(req: Request) {
   }
 
   try {
-    const draft = await draftDecision(body.application, body.reasonCode);
+    const draft = draftDecision(body.application, body.reasonCode);
     return NextResponse.json({ draft });
   } catch (err) {
-    if (err instanceof Anthropic.APIError) {
-      return NextResponse.json(
-        { error: `Anthropic API error: ${err.message}` },
-        { status: err.status ?? 502 },
-      );
-    }
     const message = err instanceof Error ? err.message : "Drafting failed.";
     return NextResponse.json({ error: message }, { status: 500 });
   }

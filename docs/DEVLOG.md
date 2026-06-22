@@ -29,6 +29,7 @@ file in that commit.
 | 16 | [Skill catalog & question bank](16-skill-catalog.md) | `feat: predefined skill catalog & question bank` | The expandable knowledge base (skills, aliases, related, question banks) that powers offline engines. |
 | 17 | [Local matching engine](17-local-matcher.md) | `feat: local matching engine` | Deterministic, catalog-driven scoring (verified > claims, must-have > nice, transferable credit) replacing the AI matcher — no key needed. |
 | 18 | [Local assessment engine](18-local-assessment.md) | `feat: local assessment engine` | Offline quiz from the question bank with server-side grading (answer key never sent) — earned verification without AI. |
+| 19 | [Local decision engine](19-local-decision.md) | `feat: local decision engine` | Template-based, personalized decision messages replacing the AI draft — humane closure, offline. |
 
 ## Root documentation
 
