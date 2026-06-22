@@ -46,7 +46,7 @@ export function ReskillPanel() {
   return (
     <section className="space-y-4">
       <div>
-        <h2 className="text-xl font-bold tracking-tight">Reskilling</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Reskilling</h2>
         <p className="text-sm text-muted">
           Close your gaps. Marking a skill <em>in progress</em> shows recruiters you’re actively
           growing — a signal a résumé can’t carry.

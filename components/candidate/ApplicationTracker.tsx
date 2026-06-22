@@ -16,7 +16,7 @@ export function ApplicationTracker() {
   return (
     <section className="space-y-4">
       <div>
-        <h2 className="text-xl font-bold tracking-tight">Your applications</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Your applications</h2>
         <p className="text-sm text-muted">
           Live status — recruiters answer on the clock, so you’re never left guessing.
         </p>

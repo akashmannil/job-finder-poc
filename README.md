@@ -54,9 +54,11 @@ grows slower. That's the values choice this POC is making on purpose.
 
 ## Tech stack
 
-Next.js (App Router) · TypeScript (strict) · Tailwind (CSS-variable theming, 5 accents ×
-light/dark) · Framer Motion. Matching, assessments, and decision messages run on **deterministic,
-in-app engines** over a predefined, expandable skill catalog — no external AI, no API keys.
+Next.js (App Router) · TypeScript (strict) · Tailwind + Framer Motion, wrapped in an
+**Apple-inspired design system** (CSS-variable tokens, SF-style type, pill buttons, soft-cornered
+cards; 5 accent themes × light/dark). Matching, assessments, and decision messages run on
+**deterministic, in-app engines** over a predefined, expandable skill catalog — no external AI,
+no API keys.
 
 ## Setup
 

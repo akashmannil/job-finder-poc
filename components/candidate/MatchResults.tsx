@@ -41,7 +41,7 @@ export function MatchResults() {
     <section className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-bold tracking-tight">Matches</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">Matches</h2>
           <p className="text-sm text-muted">
             Ranked by honest fit — verified evidence and must-haves carry the most weight.
           </p>

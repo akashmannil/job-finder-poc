@@ -34,11 +34,10 @@ export function RecruiterDashboard() {
       <FadeUp>
         <div className="card flex flex-wrap items-center justify-between gap-4 p-5">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">
-              {recruiter?.company ?? "Recruiter"} — hiring dashboard
-            </h1>
-            <p className="text-sm text-muted">
-              {recruiter?.name}. Answer on the clock — your response score is public.
+            <h1 className="h-display">{recruiter?.company ?? "Recruiter"}</h1>
+            <p className="mt-1 text-muted">
+              Hiring dashboard · {recruiter?.name}. Answer on the clock — your response score is
+              public.
             </p>
           </div>
           <ConductScore score={conduct.score} label="Your response score" detail={detail} />

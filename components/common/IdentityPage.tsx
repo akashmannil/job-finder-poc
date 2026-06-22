@@ -29,9 +29,9 @@ export function IdentityPage({
   return (
     <StaggerList className="space-y-6">
       <FadeUp>
-        <header className="card p-6">
-          <h1 className="text-2xl font-bold tracking-tight">{profile.name || "Unnamed candidate"}</h1>
-          {profile.headline && <p className="mt-1 text-muted">{profile.headline}</p>}
+        <header className="card p-8">
+          <h1 className="h-display">{profile.name || "Unnamed candidate"}</h1>
+          {profile.headline && <p className="mt-2 text-lg text-muted">{profile.headline}</p>}
           <p className="mt-2 text-sm text-muted">
             {profile.location || "Location not set"} · prefers {profile.remotePref}
           </p>

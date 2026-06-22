@@ -1,6 +1,7 @@
 // Theme catalog shared by the ThemeProvider and the ThemeSwitcher UI.
+// Apple-style restrained accents over neutral surfaces (see app/globals.css).
 
-export type ThemeId = "indigo" | "emerald" | "rose" | "amber" | "violet";
+export type ThemeId = "blue" | "purple" | "green" | "orange" | "pink";
 export type Mode = "light" | "dark";
 
 export interface ThemeMeta {
@@ -10,14 +11,14 @@ export interface ThemeMeta {
 }
 
 export const THEMES: ThemeMeta[] = [
-  { id: "indigo", label: "Indigo", swatch: "#4f46e5" },
-  { id: "emerald", label: "Emerald", swatch: "#059669" },
-  { id: "rose", label: "Rose", swatch: "#e11d48" },
-  { id: "amber", label: "Amber", swatch: "#d97706" },
-  { id: "violet", label: "Violet", swatch: "#7c3aed" },
+  { id: "blue", label: "Blue", swatch: "#0071e3" },
+  { id: "purple", label: "Purple", swatch: "#8944ab" },
+  { id: "green", label: "Green", swatch: "#1d8a4e" },
+  { id: "orange", label: "Orange", swatch: "#c9510c" },
+  { id: "pink", label: "Pink", swatch: "#d6206e" },
 ];
 
-export const DEFAULT_THEME: ThemeId = "indigo";
+export const DEFAULT_THEME: ThemeId = "blue";
 export const DEFAULT_MODE: Mode = "light";
 
 export const STORAGE_KEYS = { theme: "jm-theme", mode: "jm-mode" } as const;

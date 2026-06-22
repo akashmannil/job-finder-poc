@@ -1,7 +1,7 @@
 # 20 — Retire the Anthropic dependency
 
 > Commit: `chore: retire Anthropic dependency; docs for offline engines`
-> Nav: [← Prev](19-local-decision.md) · [Index](DEVLOG.md)
+> Nav: [← Prev](19-local-decision.md) · [Index](DEVLOG.md) · [Next →](21-visual-overhaul.md)
 
 ## What this adds
 

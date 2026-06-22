@@ -43,19 +43,19 @@ function CandidateWorkspace() {
 
   return (
     <div className="space-y-6">
-      <div className="inline-flex rounded-xl border border-border bg-surface2 p-1">
+      <div className="inline-flex rounded-[11px] bg-surface2 p-1">
         {(["workspace", "profile"] as const).map((v) => (
           <button
             key={v}
             onClick={() => setView(v)}
-            className={`relative z-10 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-              view === v ? "text-accent-contrast" : "text-muted hover:text-fg"
+            className={`relative z-10 rounded-[8px] px-3.5 py-1.5 text-[13px] font-medium transition-colors ${
+              view === v ? "text-fg" : "text-muted hover:text-fg"
             }`}
           >
             {view === v && (
               <motion.span
                 layoutId="cand-view-pill"
-                className="absolute inset-0 -z-10 rounded-lg bg-accent"
+                className="absolute inset-0 -z-10 rounded-[8px] bg-surface shadow-sm"
                 transition={{ type: "spring", stiffness: 380, damping: 30 }}
               />
             )}

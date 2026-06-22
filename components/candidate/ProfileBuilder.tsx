@@ -43,8 +43,8 @@ export function ProfileBuilder() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Your verified profile</h1>
-          <p className="text-sm text-muted">
+          <h1 className="h-display">Your verified profile</h1>
+          <p className="mt-1 text-muted">
             This — not a résumé — is what gets matched. Evidence beats claims.
           </p>
         </div>

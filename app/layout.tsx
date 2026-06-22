@@ -22,22 +22,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <StoreProvider>
             <div className="min-h-screen">
-              <header className="sticky top-0 z-30 border-b border-border bg-bg/80 backdrop-blur">
-                <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-                  <a href="/" className="flex items-center gap-2 font-semibold">
-                    <span className="grid h-7 w-7 place-items-center rounded-lg bg-accent text-accent-contrast">
+              <header className="sticky top-0 z-30 border-b border-border/60 bg-bg/70 backdrop-blur-xl backdrop-saturate-150">
+                <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-5">
+                  <a
+                    href="/"
+                    className="flex items-center gap-2 text-[17px] font-semibold tracking-tight"
+                  >
+                    <span className="grid h-6 w-6 place-items-center rounded-[7px] bg-accent text-[13px] text-accent-contrast">
                       J
                     </span>
                     <span className="hidden sm:inline">JobMatch</span>
                   </a>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2.5">
                     <TimeControls />
                     <RoleSwitcher />
                     <ThemeSwitcher />
                   </div>
                 </div>
               </header>
-              <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
+              <main className="mx-auto max-w-6xl px-5 py-12">{children}</main>
             </div>
           </StoreProvider>
         </ThemeProvider>

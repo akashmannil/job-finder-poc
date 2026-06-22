@@ -86,10 +86,17 @@ a recruiter score (decide, on time?) and a candidate score (engage when courted?
 applications, so reputation always reflects current behavior. This conduct score is the *only*
 score on a profile — there are deliberately no vanity metrics anywhere in the UI.
 
-## Theming & motion
+## Design system, theming & motion
 
-Colors are CSS variables swapped via `data-theme` / `data-mode` on `<html>`
-([`app/globals.css`](app/globals.css)), so a theme change is one attribute write with no
-per-element class churn; an inline script applies the saved theme before first paint. Animations
-use shared Framer Motion presets ([`components/common/Motion.tsx`](components/common/Motion.tsx))
-and respect `prefers-reduced-motion`.
+The UI uses an **Apple-inspired design system** defined entirely in
+[`app/globals.css`](app/globals.css): neutral surface tokens, the system "SF" type stack with
+tight heading tracking, and shared component classes (`.card`, `.btn*`, `.input`, `.chip`,
+`.h-display`). Because every surface reads CSS variables, the whole look is retuned by editing
+tokens rather than components.
+
+Colors are CSS variables swapped via `data-theme` / `data-mode` on `<html>`, so a theme change is
+one attribute write with no per-element class churn; an inline script applies the saved theme
+before first paint. Accent **tints are derived with `color-mix`**, so each of the five accent
+themes (`blue`/`purple`/`green`/`orange`/`pink`) declares only its base color. Animations use
+shared Framer Motion presets ([`components/common/Motion.tsx`](components/common/Motion.tsx)) and
+respect `prefers-reduced-motion`. See [docs/21](docs/21-visual-overhaul.md) for the overhaul.

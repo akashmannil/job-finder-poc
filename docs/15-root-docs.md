@@ -2,6 +2,8 @@
 
 > Commit: `docs: root README, ARCHITECTURE, PROMPTS`
 > Nav: [← Prev](14-ai-decision.md) · [Index](DEVLOG.md) · [Next →](16-skill-catalog.md)
+>
+> (Phase 1 closeout — Phase 2 continues at commit 16.)
 
 ## What this adds
 
