@@ -4,6 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { FadeUp, StaggerList, motion } from "@/components/common/Motion";
 import { ProfileBuilder } from "@/components/candidate/ProfileBuilder";
 import { SkillPassport } from "@/components/candidate/SkillPassport";
+import { Endorsements } from "@/components/candidate/Endorsements";
 import { MatchResults } from "@/components/candidate/MatchResults";
 import { ReskillPanel } from "@/components/candidate/ReskillPanel";
 import { useStore } from "@/store/store";
@@ -35,6 +36,7 @@ function CandidateWorkspace() {
     <div className="space-y-10">
       <ProfileBuilder />
       <SkillPassport />
+      <Endorsements />
       <MatchResults />
       <ReskillPanel />
     </div>

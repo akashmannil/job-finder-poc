@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import type { GapItem, Profile, Role } from "@/types";
+import type { Endorsement, GapItem, Profile, Role } from "@/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // The single client-side store both sides of the marketplace read and write.
@@ -32,6 +32,7 @@ interface AppState {
   profile: Profile;
   /** Deduped gaps from the latest match — feeds the reskilling recommendations. */
   matchGaps: GapItem[];
+  endorsements: Endorsement[];
 }
 
 interface StoreValue extends AppState {
@@ -41,12 +42,19 @@ interface StoreValue extends AppState {
   setProfile: (profile: Profile) => void;
   updateProfile: (patch: Partial<Profile>) => void;
   setMatchGaps: (gaps: GapItem[]) => void;
+  addEndorsement: (e: Endorsement) => void;
+  removeEndorsement: (id: string) => void;
 }
 
 const StoreContext = createContext<StoreValue | null>(null);
 const STORAGE_KEY = "jm-state-v1";
 
-const INITIAL: AppState = { role: "candidate", profile: EMPTY_PROFILE, matchGaps: [] };
+const INITIAL: AppState = {
+  role: "candidate",
+  profile: EMPTY_PROFILE,
+  matchGaps: [],
+  endorsements: [],
+};
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AppState>(INITIAL);
@@ -87,10 +95,28 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     (matchGaps: GapItem[]) => setState((s) => ({ ...s, matchGaps })),
     [],
   );
+  const addEndorsement = useCallback(
+    (e: Endorsement) => setState((s) => ({ ...s, endorsements: [e, ...s.endorsements] })),
+    [],
+  );
+  const removeEndorsement = useCallback(
+    (id: string) =>
+      setState((s) => ({ ...s, endorsements: s.endorsements.filter((e) => e.id !== id) })),
+    [],
+  );
 
   return (
     <StoreContext.Provider
-      value={{ ...state, hydrated, setRole, setProfile, updateProfile, setMatchGaps }}
+      value={{
+        ...state,
+        hydrated,
+        setRole,
+        setProfile,
+        updateProfile,
+        setMatchGaps,
+        addEndorsement,
+        removeEndorsement,
+      }}
     >
       {children}
     </StoreContext.Provider>

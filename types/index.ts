@@ -153,3 +153,23 @@ export interface GradeResult {
   score: number;
   rationale: string;
 }
+
+// ── Endorsements ──────────────────────────────────────────────────────────────
+
+export type EndorsementRelationship =
+  | "manager"
+  | "colleague"
+  | "report"
+  | "client"
+  | "mentor"
+  | "other";
+
+/** An endorsement requires a stated relationship and specific evidence — no one-tap skills. */
+export interface Endorsement {
+  id: string;
+  skill: string;
+  endorserName: string;
+  relationship: EndorsementRelationship;
+  evidence: string;
+  createdAt: number;
+}
