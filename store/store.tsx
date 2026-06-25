@@ -38,6 +38,8 @@ interface AppState {
   applications: Application[];
   /** Job ids the candidate has liked — a market-demand signal on postings (not on people). */
   likedJobs: string[];
+  /** Wall-clock of the last session, used for an honest "since you were here" digest. */
+  lastSeenAt: number;
   /** Simulated-clock offset (ms) so SLA expiry can be demoed in seconds. */
   clockOffset: number;
 }
@@ -45,6 +47,8 @@ interface AppState {
 interface StoreValue extends AppState {
   /** True once persisted state has been loaded — gate UI on this to avoid hydration flicker. */
   hydrated: boolean;
+  /** The previous session's `lastSeenAt` (0 on first ever visit) — drives the digest. */
+  previousSeenAt: number;
   setRole: (role: Role) => void;
   setProfile: (profile: Profile) => void;
   updateProfile: (patch: Partial<Profile>) => void;
@@ -71,21 +75,27 @@ const INITIAL: AppState = {
   endorsements: [],
   applications: SEED_APPLICATIONS,
   likedJobs: [],
+  lastSeenAt: 0,
   clockOffset: 0,
 };
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AppState>(INITIAL);
   const [hydrated, setHydrated] = useState(false);
+  const [previousSeenAt, setPreviousSeenAt] = useState(0);
   const loaded = useRef(false);
 
   useEffect(() => {
+    let next = INITIAL;
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setState({ ...INITIAL, ...(JSON.parse(raw) as Partial<AppState>) });
+      if (raw) next = { ...INITIAL, ...(JSON.parse(raw) as Partial<AppState>) };
     } catch {
       /* ignore corrupt state */
     }
+    // Remember the prior session, then stamp this one — the digest reads the gap.
+    setPreviousSeenAt(next.lastSeenAt ?? 0);
+    setState({ ...next, lastSeenAt: Date.now() });
     loaded.current = true;
     setHydrated(true);
   }, []);
@@ -164,6 +174,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       value={{
         ...state,
         hydrated,
+        previousSeenAt,
         setRole,
         setProfile,
         updateProfile,

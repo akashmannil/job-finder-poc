@@ -45,7 +45,8 @@ file in that commit.
 
 | # | Feature | Commit | What & why |
 |---|---------|--------|------------|
-| 25 | [Discover, reskilling reel & posting likes](25-discover-reskill-reel-likes.md) | `feat: discover landing, infinite reskilling reel & posting likes` *(staged, not yet committed)* | Lead with the market (Discover landing + most-attractive offer), split Reskilling into its own infinite reels-style feed, and add likes as a market-demand signal on postings (not on people). |
+| 25 | [Discover, reskilling reel & posting likes](25-discover-reskill-reel-likes.md) | `feat: discover landing, infinite reskilling reel & posting likes` *(committed in `394341e`)* | Lead with the market (Discover landing + most-attractive offer), split Reskilling into its own infinite reels-style feed, and add likes as a market-demand signal on postings (not on people). |
+| 26 | [Candidate retention (no baiting)](26-candidate-retention.md) | `feat: candidate retention — activity digest, saved roles & reskilling progress` | Honest reasons to return: a "while you were away" digest (only real decisions), a saved-roles watchlist, and a private reskilling-progress snapshot — no streaks, counts, or FOMO. |
 
 ## Root documentation
 
@@ -53,7 +54,6 @@ file in that commit.
 - [ARCHITECTURE](../ARCHITECTURE.md) — design rationale (incl. the design system)
 - [PROMPTS](../PROMPTS.md) — the engines & question bank
 
-Through 24 (display-first profile) is committed (`ce9da2b`). Commit 25 (Discover landing, reskilling
-reel & posting likes) plus this doc batch is staged in the working tree, ready to commit. Note 24
-supersedes 22's section menu; 25 splits Reskilling out of Matches into its own infinite feed and
-makes Discover the landing tab.
+Through 25 (Discover landing, reskilling reel & posting likes) is committed (`394341e`). Commit 26
+(candidate retention) is staged in the working tree, ready to commit. Phase 4 continues with the
+recruiter-side experience (market, talent, standing) in commits 27+.

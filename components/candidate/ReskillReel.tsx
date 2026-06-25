@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FadeUp } from "@/components/common/Motion";
+import { ReskillProgress } from "@/components/candidate/ReskillProgress";
 import { reskillPage } from "@/lib/reskill";
 import { useStore } from "@/store/store";
 import type { ReskillItem } from "@/lib/reskill";
@@ -73,6 +74,8 @@ export function ReskillReel() {
           wants. Marking one <em>in progress</em> shows recruiters you’re actively leveling up.
         </p>
       </div>
+
+      <ReskillProgress />
 
       {items.length === 0 ? (
         <div className="card p-8 text-center">

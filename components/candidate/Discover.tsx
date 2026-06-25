@@ -4,6 +4,9 @@ import { useState } from "react";
 import { FadeUp, StaggerList } from "@/components/common/Motion";
 import { LikeButton } from "@/components/candidate/LikeButton";
 import { ConsentShare } from "@/components/candidate/ConsentShare";
+import { ActivityDigest } from "@/components/candidate/ActivityDigest";
+import { SavedRoles } from "@/components/candidate/SavedRoles";
+import { getJob } from "@/lib/jobs";
 import { marketStats, topSkillsInDemand, trendingJobs } from "@/lib/likes";
 import { useStore } from "@/store/store";
 import type { Job } from "@/types";
@@ -26,6 +29,8 @@ export function Discover({ onGoReskill }: { onGoReskill: () => void }) {
 
   return (
     <div className="space-y-10">
+      <ActivityDigest />
+
       {/* Industry highlight */}
       <section className="space-y-4">
         <div>
@@ -113,6 +118,9 @@ export function Discover({ onGoReskill }: { onGoReskill: () => void }) {
           ))}
         </StaggerList>
       </section>
+
+      {/* Saved roles (watchlist) */}
+      <SavedRoles onApply={(id) => setApplyJob(getJob(id) ?? null)} />
 
       {/* Reskill teaser → reel tab */}
       <section>
