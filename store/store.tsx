@@ -36,6 +36,8 @@ interface AppState {
   matchGaps: GapItem[];
   endorsements: Endorsement[];
   applications: Application[];
+  /** Job ids the candidate has liked — a market-demand signal on postings (not on people). */
+  likedJobs: string[];
   /** Simulated-clock offset (ms) so SLA expiry can be demoed in seconds. */
   clockOffset: number;
 }
@@ -51,6 +53,8 @@ interface StoreValue extends AppState {
   removeEndorsement: (id: string) => void;
   addApplication: (a: Application) => void;
   updateApplication: (id: string, patch: Partial<Application>) => void;
+  /** Toggle a like on a job posting. */
+  toggleLike: (jobId: string) => void;
   /** Current (possibly simulated) time = Date.now() + clockOffset. */
   now: () => number;
   advanceClock: (days: number) => void;
@@ -66,6 +70,7 @@ const INITIAL: AppState = {
   matchGaps: [],
   endorsements: [],
   applications: SEED_APPLICATIONS,
+  likedJobs: [],
   clockOffset: 0,
 };
 
@@ -129,6 +134,16 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       })),
     [],
   );
+  const toggleLike = useCallback(
+    (jobId: string) =>
+      setState((s) => ({
+        ...s,
+        likedJobs: s.likedJobs.includes(jobId)
+          ? s.likedJobs.filter((id) => id !== jobId)
+          : [jobId, ...s.likedJobs],
+      })),
+    [],
+  );
   const now = useCallback(() => Date.now() + state.clockOffset, [state.clockOffset]);
   const advanceClock = useCallback(
     (days: number) =>
@@ -157,6 +172,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         removeEndorsement,
         addApplication,
         updateApplication,
+        toggleLike,
         now,
         advanceClock,
         resetClock,

@@ -39,7 +39,13 @@ file in that commit.
 | 21 | [Apple-style visual overhaul](21-visual-overhaul.md) | `style: apple-inspired visual overhaul` *(staged, not yet committed)* | Premium redesign — neutral surfaces, SF-style type, pill buttons, soft-cornered cards, frosted header, refined accents — all from the design tokens. |
 | 22 | [Section navigation & Applications tab](22-section-navigation.md) | `feat: candidate section menu + dedicated Applications tab` *(committed in `caf71cf`; section menu later superseded by 24)* | Replace the long candidate scroll with a section menu (one section at a time) and promote Applications to its own top-level tab with a live count badge. |
 | 23 | [Swipe reels](23-swipe-reels.md) | *committed in `caf71cf`* | A Tinder-style swipe deck as an alternative to the lists: swipe to apply/skip (candidate) or shortlist/pass (recruiter), behind a List / Reel toggle — same consent & decision logic underneath. |
-| 24 | [Display-first candidate profile](24-display-first-profile.md) | `feat: display-first candidate profile (edit on click)` *(staged, not yet committed)* | Replace the edit-first section forms with a LinkedIn-style profile that shows the data and reveals editors only on Edit; folds in Skill passport, Endorsements, and the public-profile preview. Supersedes 22's section menu. |
+| 24 | [Display-first candidate profile](24-display-first-profile.md) | `feat: display-first candidate profile (edit on click)` *(committed in `ce9da2b`)* | Replace the edit-first section forms with a LinkedIn-style profile that shows the data and reveals editors only on Edit; folds in Skill passport, Endorsements, and the public-profile preview. Supersedes 22's section menu. |
+
+### Phase 4 — discovery, growth & market signal
+
+| # | Feature | Commit | What & why |
+|---|---------|--------|------------|
+| 25 | [Discover, reskilling reel & posting likes](25-discover-reskill-reel-likes.md) | `feat: discover landing, infinite reskilling reel & posting likes` *(staged, not yet committed)* | Lead with the market (Discover landing + most-attractive offer), split Reskilling into its own infinite reels-style feed, and add likes as a market-demand signal on postings (not on people). |
 
 ## Root documentation
 
@@ -47,6 +53,7 @@ file in that commit.
 - [ARCHITECTURE](../ARCHITECTURE.md) — design rationale (incl. the design system)
 - [PROMPTS](../PROMPTS.md) — the engines & question bank
 
-Through 23 (swipe reels) is committed — 22 and 23 landed together in `caf71cf`. Commit 24
-(display-first profile) plus this doc batch is staged in the working tree, ready to commit. Note 24
-supersedes 22's section menu — the display-first profile replaces the edit-first section components.
+Through 24 (display-first profile) is committed (`ce9da2b`). Commit 25 (Discover landing, reskilling
+reel & posting likes) plus this doc batch is staged in the working tree, ready to commit. Note 24
+supersedes 22's section menu; 25 splits Reskilling out of Matches into its own infinite feed and
+makes Discover the landing tab.

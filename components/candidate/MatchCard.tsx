@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ScoreBadge } from "@/components/common/ScoreBadge";
 import { ConsentShare } from "@/components/candidate/ConsentShare";
+import { LikeButton } from "@/components/candidate/LikeButton";
 import { useStore } from "@/store/store";
 import type { MatchResult } from "@/types";
 
@@ -32,13 +33,16 @@ export function MatchCard({ result, top = false }: { result: MatchResult; top?: 
           </p>
           <p className="mt-2 text-sm">{result.summary}</p>
         </div>
-        <button
-          className={applied ? "btn-ghost text-sm" : "btn-primary text-sm"}
-          disabled={applied}
-          onClick={() => setApplying(true)}
-        >
-          {applied ? "Applied ✓" : "Apply"}
-        </button>
+        <div className="flex flex-col items-end gap-2">
+          <button
+            className={applied ? "btn-ghost text-sm" : "btn-primary text-sm"}
+            disabled={applied}
+            onClick={() => setApplying(true)}
+          >
+            {applied ? "Applied ✓" : "Apply"}
+          </button>
+          <LikeButton job={job} size="sm" />
+        </div>
       </div>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">

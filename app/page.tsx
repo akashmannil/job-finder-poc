@@ -3,9 +3,10 @@
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { motion } from "@/components/common/Motion";
+import { Discover } from "@/components/candidate/Discover";
 import { CandidateProfile } from "@/components/candidate/CandidateProfile";
 import { MatchResults } from "@/components/candidate/MatchResults";
-import { ReskillPanel } from "@/components/candidate/ReskillPanel";
+import { ReskillReel } from "@/components/candidate/ReskillReel";
 import { ApplicationTracker } from "@/components/candidate/ApplicationTracker";
 import { RecruiterDashboard } from "@/components/recruiter/RecruiterDashboard";
 import { candidateConduct } from "@/lib/conductScore";
@@ -33,23 +34,25 @@ export default function Home() {
   );
 }
 
-type TopView = "profile" | "matches" | "applications";
+type TopView = "discover" | "profile" | "matches" | "reskill" | "applications";
 
 function CandidateWorkspace() {
   const { applications } = useStore();
-  const [view, setView] = useState<TopView>("profile");
+  const [view, setView] = useState<TopView>("discover");
   const myConduct = candidateConduct(applications.filter((a) => a.own)).score;
   const openApps = applications.filter((a) => a.own).length;
 
   const tabs: { id: TopView; label: string; badge?: number }[] = [
+    { id: "discover", label: "Discover" },
     { id: "profile", label: "Profile" },
     { id: "matches", label: "Matches" },
+    { id: "reskill", label: "Reskilling" },
     { id: "applications", label: "Applications", badge: openApps || undefined },
   ];
 
   return (
     <div className="space-y-6">
-      <div className="inline-flex rounded-[11px] bg-surface2 p-1">
+      <div className="flex flex-wrap gap-1 rounded-[11px] bg-surface2 p-1">
         {tabs.map((t) => (
           <button
             key={t.id}
@@ -83,13 +86,14 @@ function CandidateWorkspace() {
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.2 }}
         >
-          {view === "profile" ? (
+          {view === "discover" ? (
+            <Discover onGoReskill={() => setView("reskill")} />
+          ) : view === "profile" ? (
             <CandidateProfile conduct={myConduct} />
           ) : view === "matches" ? (
-            <div className="space-y-8">
-              <MatchResults />
-              <ReskillPanel />
-            </div>
+            <MatchResults />
+          ) : view === "reskill" ? (
+            <ReskillReel />
           ) : (
             <ApplicationTracker />
           )}

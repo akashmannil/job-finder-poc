@@ -84,7 +84,29 @@ it and grading looks it up from the bank. There are no secrets or API keys in th
 runs whenever the simulated clock advances. [`lib/conductScore.ts`](lib/conductScore.ts) derives
 a recruiter score (decide, on time?) and a candidate score (engage when courted?) purely from the
 applications, so reputation always reflects current behavior. This conduct score is the *only*
-score on a profile — there are deliberately no vanity metrics anywhere in the UI.
+score on a **person** — there are deliberately no vanity metrics on profiles (no likes, followers,
+or impressions on humans). The one place a popularity count exists is on postings — see below.
+
+## Discovery & market signal
+
+The candidate side leads with **Discover**
+([`components/candidate/Discover.tsx`](components/candidate/Discover.tsx)), not the user's own
+profile — a storefront, not a mirror. It ranks postings by an `attractiveness` score
+(pay + popularity + remote) and surfaces market stats and in-demand skills, all computed from the
+seed jobs in [`lib/likes.ts`](lib/likes.ts).
+
+**Likes are the deliberate exception to the no-vanity-metrics rule.** They attach to *postings*, not
+people — a demand signal on a role, persisted in the store as `likedJobs`. Base counts are seeded
+deterministically (a hash of the job id plus a small pay boost) so the market looks alive without a
+backend; the candidate's own like adds one. This keeps the people-side principle intact while giving
+the marketplace a sense of life.
+
+**Reskilling is its own infinite feed**
+([`components/candidate/ReskillReel.tsx`](components/candidate/ReskillReel.tsx)), separate from
+matching. `reskillPage` in [`lib/reskill.ts`](lib/reskill.ts) builds a pool from the last match's
+gaps, then skills *adjacent* to what the candidate has (via the catalog's `related`), then the most
+in-demand skills they lack — and cycles that pool with rotating "advertising" copy so the feed never
+runs dry, even before a match has been run.
 
 ## Design system, theming & motion
 

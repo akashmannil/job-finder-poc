@@ -6,8 +6,9 @@ matching unfit, and professional identity is gaslit by vanity-metric feeds.
 
 JobMatch's answer: shift the unit of trust from the résumé to a **verified, candidate-owned
 profile**; make the marketplace **accountable** (response SLAs + a public conduct score); and
-build identity to optimize for **proof, not reach** (no likes, followers, or impressions
-anywhere).
+build identity to optimize for **proof, not reach** — no likes, followers, or impressions on
+*people*. (Postings can be liked — that's a market-demand signal on a role, not a vanity metric on
+a human.)
 
 > **Follow the build:** this app was built feature-by-feature with a documented commit trail.
 > Start at **[docs/DEVLOG.md](docs/DEVLOG.md)** and read top to bottom — each entry explains the
@@ -17,13 +18,16 @@ anywhere).
 
 **Candidate side**
 
+- **Discover landing** that leads with the market — live stats, the most attractive offer of the
+  moment, and trending roles you can **like** (a demand signal on *postings*, not on people).
 - **Display-first profile** that replaces the résumé — a LinkedIn-style page that *shows* your
   details and reveals an editor only on **Edit**; every skill carries an evidence tier.
 - **Requirement-level matching** that weights verified evidence over claims and must-haves over
   fluff, with explainable "why it fits" and gaps — browsable as a list or a **swipe reel**.
 - **Prove a skill** inline — pass an assessment to *earn* verified evidence.
-- **Reskilling loop** — gaps become course recommendations; "currently reskilling" is a positive
-  signal a résumé can't carry.
+- **Reskilling reel** — an infinite, advertising-style feed of skills to grow (from your gaps,
+  adjacent skills, and market demand); "currently reskilling" is a positive signal a résumé can't
+  carry.
 - **Evidence-backed endorsements** — relationship + specific evidence required (no one-tap skills).
 - **Preview as recruiter** — the exact consented view, with **zero vanity metrics**, plus
   consent-controlled applying.
@@ -39,17 +43,20 @@ anywhere).
 
 ## Try it (the demo script)
 
-The candidate side has three tabs — **Profile · Matches · Applications**. **Profile** is
-*display-first*: it shows your details and reveals an editor only when you click **Edit** on a
-section (LinkedIn/Facebook style).
+The candidate side has five tabs — **Discover · Profile · Matches · Reskilling · Applications**.
+The app opens on **Discover** (the market); **Profile** is *display-first* — it shows your details
+and reveals an editor only when you click **Edit** on a section (LinkedIn/Facebook style).
 
-1. **Candidate** → **Profile** → *Load sample profile*. Each section (Identity, Skills, Experience,
-   Projects, Endorsements) shows its data; click **Edit** on one to change it, **Done** to return.
-2. On a skill, click **Prove** to take an assessment; pass it, then **Matches** → *Re-run match* —
-   the score moves. Hit **Preview as recruiter** to see exactly what recruiters get.
-3. In **Matches**, *Find matches*, mark a gap *in progress* in Reskilling. Flip the **List / Reel**
-   toggle and **swipe right to apply / left to skip** — right-swipe still opens the consent dialog.
-4. *Apply* to a Northwind Labs role; tune what you share in the consent dialog.
+1. **Candidate** opens on **Discover** — market stats, the "Offer of the moment", and trending
+   roles. **Like** a posting (♡) and the count ticks up; the teaser jumps to the reskilling reel.
+2. **Profile** → *Load sample profile*. Each section (Identity, Skills, Experience, Projects,
+   Endorsements) shows its data; click **Edit** on one to change it, **Done** to return. On a skill,
+   click **Prove** to take an assessment and *earn* verified evidence; **Preview as recruiter** shows
+   exactly what recruiters get.
+3. **Matches** → *Find matches*. Flip the **List / Reel** toggle and **swipe right to apply / left
+   to skip** — right-swipe opens the consent dialog. Each card also has a like button.
+4. **Reskilling** is an endless feed of skills to grow (your gaps + adjacent + in-demand). Scroll for
+   more; **Start reskilling** on one to flag it on your profile.
 5. Switch to **Recruiter** (header toggle). Use **List** to expand an applicant → *Start reviewing*
    → pick a reason → send the drafted decision, or **Review reel** to swipe right to shortlist /
    left to pass.
@@ -58,10 +65,12 @@ section (LinkedIn/Facebook style).
 
 ## Proof over reach (a deliberate trade-off)
 
-There is no feed, and no like/follower/impression/view counter anywhere — by design. Reputation
-comes only from evidence (verified skills, earned assessments, weighted endorsements) and
-behavior (the conduct score). The honest cost: without vanity loops the product is calmer but
-grows slower. That's the values choice this POC is making on purpose.
+There is no like/follower/impression/view counter on **people** — by design. A person's reputation
+comes only from evidence (verified skills, earned assessments, weighted endorsements) and behavior
+(the conduct score), never from popularity. Likes exist **only on postings**, where they're a
+demand signal on a *role* rather than a vanity metric on a *human* — the line the platform draws on
+purpose. The honest cost: without people-side vanity loops the product is calmer but grows slower.
+That's the values choice this POC is making.
 
 ## Tech stack
 

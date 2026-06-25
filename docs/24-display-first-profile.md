@@ -1,7 +1,7 @@
 # 24 — Display-first candidate profile
 
 > Commit: `feat: display-first candidate profile (edit on click)` *(changes staged — not yet committed)*
-> Nav: [← Prev](23-swipe-reels.md) · [Index](DEVLOG.md)
+> Nav: [← Prev](23-swipe-reels.md) · [Index](DEVLOG.md) · [Next →](25-discover-reskill-reel-likes.md)
 >
 > **Supersedes [22 — Section navigation](22-section-navigation.md).** The section menu and the
 > separate edit-first section components are removed here.
