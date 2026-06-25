@@ -126,3 +126,8 @@ export function matchProfileToJobs(profile: Profile): MatchResult[] {
     .map((job) => scoreJob(job, cand))
     .sort((a, b) => b.fitScore - a.fitScore);
 }
+
+/** Score a single profile against a single job — used by the recruiter talent view. */
+export function matchProfileToJob(profile: Profile, job: Job): MatchResult {
+  return scoreJob(job, candidateMap(profile));
+}

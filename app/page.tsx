@@ -10,6 +10,7 @@ import { ReskillReel } from "@/components/candidate/ReskillReel";
 import { ApplicationTracker } from "@/components/candidate/ApplicationTracker";
 import { RecruiterDashboard } from "@/components/recruiter/RecruiterDashboard";
 import { RecruiterMarket } from "@/components/recruiter/RecruiterMarket";
+import { RecruiterTalent } from "@/components/recruiter/RecruiterTalent";
 import { candidateConduct } from "@/lib/conductScore";
 import { useStore } from "@/store/store";
 
@@ -104,13 +105,14 @@ function CandidateWorkspace() {
   );
 }
 
-type RecruiterView = "market" | "postings";
+type RecruiterView = "market" | "talent" | "postings";
 
 function RecruiterWorkspace() {
   const [view, setView] = useState<RecruiterView>("market");
 
   const tabs: { id: RecruiterView; label: string }[] = [
     { id: "market", label: "Market" },
+    { id: "talent", label: "Talent" },
     { id: "postings", label: "Postings" },
   ];
 
@@ -145,7 +147,13 @@ function RecruiterWorkspace() {
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.2 }}
         >
-          {view === "market" ? <RecruiterMarket /> : <RecruiterDashboard />}
+          {view === "market" ? (
+            <RecruiterMarket />
+          ) : view === "talent" ? (
+            <RecruiterTalent />
+          ) : (
+            <RecruiterDashboard />
+          )}
         </motion.div>
       </AnimatePresence>
     </div>

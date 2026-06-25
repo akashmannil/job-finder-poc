@@ -48,6 +48,7 @@ file in that commit.
 | 25 | [Discover, reskilling reel & posting likes](25-discover-reskill-reel-likes.md) | `feat: discover landing, infinite reskilling reel & posting likes` *(committed in `394341e`)* | Lead with the market (Discover landing + most-attractive offer), split Reskilling into its own infinite reels-style feed, and add likes as a market-demand signal on postings (not on people). |
 | 26 | [Candidate retention (no baiting)](26-candidate-retention.md) | `feat: candidate retention — activity digest, saved roles & reskilling progress` | Honest reasons to return: a "while you were away" digest (only real decisions), a saved-roles watchlist, and a private reskilling-progress snapshot — no streaks, counts, or FOMO. |
 | 27 | [Recruiter market & competition](27-recruiter-market.md) | `feat: recruiter workspace tabs + market & competition view` | Give the recruiter side a tabbed workspace and a Market view (your standing vs market, popular postings, competitor postings) — the recruiter mirror of Discover. |
+| 28 | [Recruiter talent & development](28-recruiter-talent.md) | `feat: recruiter talent matches & development view` | A Talent tab: possible candidate matches per posting (reverse matcher), double-opt-in invites, and a talent-development view (scarce skills + courses to sponsor). |
 
 ## Root documentation
 
