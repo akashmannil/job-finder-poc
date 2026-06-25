@@ -2,6 +2,11 @@
 
 > Commit: `feat: skill assessment & passport`
 > Nav: [← Prev](06-match-results.md) · [Index](DEVLOG.md) · [Next →](08-reskilling.md)
+>
+> **Note:** the standalone `SkillPassport.tsx` was later removed in
+> [24 — Display-first candidate profile](24-display-first-profile.md); "Prove a skill" is now an
+> inline action on each unverified skill in `components/candidate/CandidateProfile.tsx`. The
+> assessment engine (`lib/assessor`, `app/api/assess`, `SkillAssessment`) is unchanged.
 
 ## What this adds
 

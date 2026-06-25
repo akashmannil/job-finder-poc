@@ -2,6 +2,11 @@
 
 > Commit: `feat: candidate profile builder & evidence tiers`
 > Nav: [← Prev](04-matcher.md) · [Index](DEVLOG.md) · [Next →](06-match-results.md)
+>
+> **Note:** `ProfileBuilder.tsx` was later removed in
+> [24 — Display-first candidate profile](24-display-first-profile.md); its edit logic now lives,
+> gated behind an explicit *Edit*, in `components/candidate/CandidateProfile.tsx`. The evidence
+> tiers and `EvidenceBadge` are unchanged.
 
 ## What this adds
 

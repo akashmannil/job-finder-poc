@@ -2,6 +2,11 @@
 
 > Commit: `feat: evidence-backed endorsements`
 > Nav: [← Prev](08-reskilling.md) · [Index](DEVLOG.md) · [Next →](10-identity-page.md)
+>
+> **Note:** the standalone `Endorsements.tsx` was later removed in
+> [24 — Display-first candidate profile](24-display-first-profile.md); the same add/validate logic
+> now lives in the Endorsements section of `components/candidate/CandidateProfile.tsx`. The
+> validation/weighting rules (`lib/endorsements`) are unchanged.
 
 ## What this adds
 

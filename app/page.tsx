@@ -3,10 +3,7 @@
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { motion } from "@/components/common/Motion";
-import { IdentityPage } from "@/components/common/IdentityPage";
-import { ProfileBuilder } from "@/components/candidate/ProfileBuilder";
-import { SkillPassport } from "@/components/candidate/SkillPassport";
-import { Endorsements } from "@/components/candidate/Endorsements";
+import { CandidateProfile } from "@/components/candidate/CandidateProfile";
 import { MatchResults } from "@/components/candidate/MatchResults";
 import { ReskillPanel } from "@/components/candidate/ReskillPanel";
 import { ApplicationTracker } from "@/components/candidate/ApplicationTracker";
@@ -36,29 +33,18 @@ export default function Home() {
   );
 }
 
-type TopView = "workspace" | "applications" | "profile";
-
-const SECTIONS = [
-  { id: "profile", label: "Profile", node: <ProfileBuilder /> },
-  { id: "passport", label: "Skill passport", node: <SkillPassport /> },
-  { id: "endorsements", label: "Endorsements", node: <Endorsements /> },
-  { id: "matches", label: "Matches", node: <MatchResults /> },
-  { id: "reskill", label: "Reskilling", node: <ReskillPanel /> },
-] as const;
-
-type SectionId = (typeof SECTIONS)[number]["id"];
+type TopView = "profile" | "matches" | "applications";
 
 function CandidateWorkspace() {
-  const { profile, endorsements, applications } = useStore();
-  const [view, setView] = useState<TopView>("workspace");
-  const [section, setSection] = useState<SectionId>("profile");
+  const { applications } = useStore();
+  const [view, setView] = useState<TopView>("profile");
   const myConduct = candidateConduct(applications.filter((a) => a.own)).score;
   const openApps = applications.filter((a) => a.own).length;
 
   const tabs: { id: TopView; label: string; badge?: number }[] = [
-    { id: "workspace", label: "Workspace" },
+    { id: "profile", label: "Profile" },
+    { id: "matches", label: "Matches" },
     { id: "applications", label: "Applications", badge: openApps || undefined },
-    { id: "profile", label: "Public profile" },
   ];
 
   return (
@@ -97,66 +83,16 @@ function CandidateWorkspace() {
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.2 }}
         >
-          {view === "workspace" ? (
-            <WorkspaceSections section={section} setSection={setSection} />
-          ) : view === "applications" ? (
-            <ApplicationTracker />
+          {view === "profile" ? (
+            <CandidateProfile conduct={myConduct} />
+          ) : view === "matches" ? (
+            <div className="space-y-8">
+              <MatchResults />
+              <ReskillPanel />
+            </div>
           ) : (
-            <IdentityPage profile={profile} endorsements={endorsements} conduct={myConduct} />
+            <ApplicationTracker />
           )}
-        </motion.div>
-      </AnimatePresence>
-    </div>
-  );
-}
-
-function WorkspaceSections({
-  section,
-  setSection,
-}: {
-  section: SectionId;
-  setSection: (id: SectionId) => void;
-}) {
-  const active = SECTIONS.find((s) => s.id === section) ?? SECTIONS[0];
-
-  return (
-    <div className="grid gap-6 md:grid-cols-[200px_minmax(0,1fr)]">
-      <nav className="md:sticky md:top-20 md:self-start">
-        <ul className="flex gap-1 overflow-x-auto pb-1 md:flex-col md:overflow-visible md:pb-0">
-          {SECTIONS.map((s) => {
-            const isActive = s.id === active.id;
-            return (
-              <li key={s.id} className="shrink-0">
-                <button
-                  onClick={() => setSection(s.id)}
-                  className={`relative w-full whitespace-nowrap rounded-[10px] px-3.5 py-2 text-left text-[14px] font-medium transition-colors ${
-                    isActive ? "text-accent" : "text-muted hover:text-fg"
-                  }`}
-                >
-                  {isActive && (
-                    <motion.span
-                      layoutId="cand-section-pill"
-                      className="absolute inset-0 -z-10 rounded-[10px] bg-accent-soft"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  {s.label}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={active.id}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.2 }}
-        >
-          {active.node}
         </motion.div>
       </AnimatePresence>
     </div>

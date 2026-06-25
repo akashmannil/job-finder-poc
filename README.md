@@ -17,35 +17,42 @@ anywhere).
 
 **Candidate side**
 
-- **Verified profile** that replaces the résumé — every skill carries an evidence tier.
+- **Display-first profile** that replaces the résumé — a LinkedIn-style page that *shows* your
+  details and reveals an editor only on **Edit**; every skill carries an evidence tier.
 - **Requirement-level matching** that weights verified evidence over claims and must-haves over
-  fluff, with explainable "why it fits" and gaps.
-- **Skill passport** — pass an assessment to *earn* verified evidence.
+  fluff, with explainable "why it fits" and gaps — browsable as a list or a **swipe reel**.
+- **Prove a skill** inline — pass an assessment to *earn* verified evidence.
 - **Reskilling loop** — gaps become course recommendations; "currently reskilling" is a positive
   signal a résumé can't carry.
 - **Evidence-backed endorsements** — relationship + specific evidence required (no one-tap skills).
-- **Public identity page** with **zero vanity metrics**, plus consent-controlled applying.
+- **Preview as recruiter** — the exact consented view, with **zero vanity metrics**, plus
+  consent-controlled applying.
 
 **Recruiter side**
 
 - **Dashboard** of postings with applicant/overdue counts and a **public response score**.
-- **Consented applicant view** — only what the candidate chose to share.
+- **Consented applicant view** — only what the candidate chose to share; review as a list or a
+  **swipe reel** (right to shortlist, left to pass).
 - **Application SLA + auto-close** — ghosting is penalized, not free.
 - **One-click decision** — pick a reason, get a kind, specific, editable message; send.
 - **Mutual-interest gating** — contact unlocks only when both sides opt in.
 
 ## Try it (the demo script)
 
-The candidate **Workspace** uses a left **section menu** (Profile · Skill passport · Endorsements ·
-Matches · Reskilling — one section at a time, no long scroll), and **Applications** is its own
-top-level tab.
+The candidate side has three tabs — **Profile · Matches · Applications**. **Profile** is
+*display-first*: it shows your details and reveals an editor only when you click **Edit** on a
+section (LinkedIn/Facebook style).
 
-1. **Candidate** → **Profile** section → *Load sample profile*, then **Matches** → *Find matches*.
-2. Open **Skill passport**, *Assess* a skill, pass it, and *Re-run match* — the score moves.
-3. Check **Reskilling**, mark a gap *in progress*.
-4. In **Matches**, *Apply* to a Northwind Labs role; tune what you share in the consent dialog.
-5. Switch to **Recruiter** (header toggle) → expand the applicant → *Start reviewing* → pick a
-   reason → send the drafted decision.
+1. **Candidate** → **Profile** → *Load sample profile*. Each section (Identity, Skills, Experience,
+   Projects, Endorsements) shows its data; click **Edit** on one to change it, **Done** to return.
+2. On a skill, click **Prove** to take an assessment; pass it, then **Matches** → *Re-run match* —
+   the score moves. Hit **Preview as recruiter** to see exactly what recruiters get.
+3. In **Matches**, *Find matches*, mark a gap *in progress* in Reskilling. Flip the **List / Reel**
+   toggle and **swipe right to apply / left to skip** — right-swipe still opens the consent dialog.
+4. *Apply* to a Northwind Labs role; tune what you share in the consent dialog.
+5. Switch to **Recruiter** (header toggle). Use **List** to expand an applicant → *Start reviewing*
+   → pick a reason → send the drafted decision, or **Review reel** to swipe right to shortlist /
+   left to pass.
 6. Switch back to **Candidate** → the **Applications** tab shows the decision. Or use **⏱ +3d** in
    the header to let an SLA lapse and watch the recruiter's response score drop.
 

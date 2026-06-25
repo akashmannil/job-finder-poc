@@ -1,7 +1,12 @@
 # 22 — Section navigation & Applications tab
 
 > Commit: `feat: candidate section menu + dedicated Applications tab` *(changes staged — not yet committed)*
-> Nav: [← Prev](21-visual-overhaul.md) · [Index](DEVLOG.md)
+> Nav: [← Prev](21-visual-overhaul.md) · [Index](DEVLOG.md) · [Next →](23-swipe-reels.md)
+>
+> **⚠️ Superseded by [24 — Display-first candidate profile](24-display-first-profile.md).** The
+> section menu and the per-section edit-first components described below were replaced by a
+> display-first profile. The **Applications** top-level tab (and its count badge) introduced here
+> still stands. Kept for narrative continuity.
 
 ## What this adds
 
