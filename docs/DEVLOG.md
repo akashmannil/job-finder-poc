@@ -51,6 +51,7 @@ file in that commit.
 | 28 | [Recruiter talent & development](28-recruiter-talent.md) | `feat: recruiter talent matches & development view` | A Talent tab: possible candidate matches per posting (reverse matcher), double-opt-in invites, and a talent-development view (scarce skills + courses to sponsor). |
 | 29 | [Recruiter standing](29-recruiter-standing.md) | `feat: recruiter standing tab — identity, response score & decisions owed` | A Standing tab mirroring the candidate profile: company identity, public response score with breakdown, snapshot stats, and an SLA-sorted "needs your decision" list. |
 | 30 | [Root docs sweep](30-docs-sweep.md) | `docs: update root docs for recruiter experience & retention` | Bring README / ARCHITECTURE / PROMPTS in line with the recruiter workspace and the honest, no-baiting retention layer. |
+| 31 | [Fix blank page on role switch](31-fix-role-switch-blank.md) | `fix: blank page when switching recruiter → candidate (nested AnimatePresence)` *(staged, not yet committed)* | De-nest the role-level `AnimatePresence` (which deadlocked against each workspace's inner tab presence), so returning to the candidate view no longer renders blank. |
 
 ## Root documentation
 
@@ -58,6 +59,6 @@ file in that commit.
 - [ARCHITECTURE](../ARCHITECTURE.md) — design rationale (incl. the design system)
 - [PROMPTS](../PROMPTS.md) — the engines & question bank
 
-Phase 4 is complete through commit 29 (committed): candidate retention (26) and the full recruiter
-workspace — Market (27), Talent (28), Standing (29). Commit 30 (this root-docs sweep) is staged in
-the working tree, ready to commit.
+Phase 4 is committed through commit 30: candidate retention (26) and the full recruiter workspace —
+Market (27), Talent (28), Standing (29) — plus the root-docs sweep (30). Commit 31 (the role-switch
+blank-page fix) is staged in the working tree, ready to commit.

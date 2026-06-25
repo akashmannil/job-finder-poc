@@ -22,18 +22,21 @@ export default function Home() {
     return <div className="h-40 animate-pulse rounded-2xl bg-surface2" />;
   }
 
+  // NOTE: no AnimatePresence here. Each workspace has its own inner
+  // `AnimatePresence mode="wait"` for tab switching; nesting another
+  // `mode="wait"` around them deadlocks the outer exit promise on a role
+  // switch, leaving a blank page when returning to the candidate view. A
+  // key-ed motion.div remounts the workspace and plays its enter animation
+  // on every role change without that nesting hazard.
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={role}
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -8 }}
-        transition={{ duration: 0.25 }}
-      >
-        {role === "candidate" ? <CandidateWorkspace /> : <RecruiterWorkspace />}
-      </motion.div>
-    </AnimatePresence>
+    <motion.div
+      key={role}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25 }}
+    >
+      {role === "candidate" ? <CandidateWorkspace /> : <RecruiterWorkspace />}
+    </motion.div>
   );
 }
 

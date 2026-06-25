@@ -1,7 +1,7 @@
 # 30 — Root documentation sweep
 
 > Commit: `docs: update root docs for recruiter experience & retention`
-> Nav: [← Prev](29-recruiter-standing.md) · [Index](DEVLOG.md)
+> Nav: [← Prev](29-recruiter-standing.md) · [Index](DEVLOG.md) · [Next →](31-fix-role-switch-blank.md)
 
 ## What this adds
 
