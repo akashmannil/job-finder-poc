@@ -11,8 +11,6 @@ export function ApplicationTracker() {
   const t = now();
   const mine = applications.filter((a) => a.own);
 
-  if (mine.length === 0) return null;
-
   return (
     <section className="space-y-4">
       <div>
@@ -21,6 +19,15 @@ export function ApplicationTracker() {
           Live status — recruiters answer on the clock, so you’re never left guessing.
         </p>
       </div>
+      {mine.length === 0 && (
+        <div className="card p-8 text-center">
+          <p className="font-medium">No applications yet</p>
+          <p className="mt-1 text-sm text-muted">
+            Head to <span className="text-fg">Workspace → Matches</span> and apply to a role — it
+            will appear here with a live SLA countdown.
+          </p>
+        </div>
+      )}
       <StaggerList className="space-y-3">
         {mine.map((a) => {
           const job = getJob(a.jobId);

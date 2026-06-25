@@ -36,14 +36,18 @@ anywhere).
 
 ## Try it (the demo script)
 
-1. **Candidate** → *Load sample profile* → *Find matches*.
-2. Open the **Skill passport**, *Assess* a skill, pass it, and *Re-run match* — the score moves.
+The candidate **Workspace** uses a left **section menu** (Profile · Skill passport · Endorsements ·
+Matches · Reskilling — one section at a time, no long scroll), and **Applications** is its own
+top-level tab.
+
+1. **Candidate** → **Profile** section → *Load sample profile*, then **Matches** → *Find matches*.
+2. Open **Skill passport**, *Assess* a skill, pass it, and *Re-run match* — the score moves.
 3. Check **Reskilling**, mark a gap *in progress*.
-4. *Apply* to a Northwind Labs role; tune what you share in the consent dialog.
+4. In **Matches**, *Apply* to a Northwind Labs role; tune what you share in the consent dialog.
 5. Switch to **Recruiter** (header toggle) → expand the applicant → *Start reviewing* → pick a
-   reason → send the AI-drafted decision.
-6. Switch back to **Candidate** — the tracker shows the decision. Or use **⏱ +3d** in the header
-   to let an SLA lapse and watch the recruiter's response score drop.
+   reason → send the drafted decision.
+6. Switch back to **Candidate** → the **Applications** tab shows the decision. Or use **⏱ +3d** in
+   the header to let an SLA lapse and watch the recruiter's response score drop.
 
 ## Proof over reach (a deliberate trade-off)
 

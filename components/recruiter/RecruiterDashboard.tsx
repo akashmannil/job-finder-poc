@@ -1,14 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import { FadeUp, StaggerList } from "@/components/common/Motion";
 import { ConductScore } from "@/components/common/ConductScore";
 import { PostingCard } from "@/components/recruiter/PostingCard";
+import { ReviewReel } from "@/components/recruiter/ReviewReel";
 import { recruiterConduct } from "@/lib/conductScore";
 import { ACTIVE_RECRUITER_ID, getRecruiter, getRecruiterJobs } from "@/lib/jobs";
 import { useStore } from "@/store/store";
 
 export function RecruiterDashboard() {
   const { applications, now } = useStore();
+  const [mode, setMode] = useState<"list" | "reel">("list");
   const recruiter = getRecruiter(ACTIVE_RECRUITER_ID);
   const jobs = getRecruiterJobs(ACTIVE_RECRUITER_ID);
   const myApps = applications.filter((a) => a.recruiterId === ACTIVE_RECRUITER_ID);
@@ -52,13 +55,40 @@ export function RecruiterDashboard() {
           </div>
         </FadeUp>
       ) : (
-        <StaggerList className="space-y-3">
-          {postings.map(({ job, apps }) => (
-            <FadeUp key={job.id}>
-              <PostingCard job={job} applications={apps} />
+        <>
+          <FadeUp>
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-lg font-semibold tracking-tight">Applicants</h2>
+              <div className="inline-flex rounded-[11px] bg-surface2 p-1">
+                {(["list", "reel"] as const).map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => setMode(m)}
+                    className={`rounded-[8px] px-3 py-1.5 text-[13px] font-medium capitalize transition-colors ${
+                      mode === m ? "bg-surface text-fg shadow-sm" : "text-muted hover:text-fg"
+                    }`}
+                  >
+                    {m === "reel" ? "Review reel" : "List"}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </FadeUp>
+
+          {mode === "reel" ? (
+            <FadeUp>
+              <ReviewReel recruiterId={ACTIVE_RECRUITER_ID} />
             </FadeUp>
-          ))}
-        </StaggerList>
+          ) : (
+            <StaggerList className="space-y-3">
+              {postings.map(({ job, apps }) => (
+                <FadeUp key={job.id}>
+                  <PostingCard job={job} applications={apps} />
+                </FadeUp>
+              ))}
+            </StaggerList>
+          )}
+        </>
       )}
     </StaggerList>
   );

@@ -32,11 +32,12 @@ file in that commit.
 | 19 | [Local decision engine](19-local-decision.md) | `feat: local decision engine` | Template-based, personalized decision messages replacing the AI draft — humane closure, offline. |
 | 20 | [Retire Anthropic dependency](20-retire-ai.md) | `chore: retire Anthropic dependency` | Remove the unused SDK + key requirement and update the root docs — the app now runs fully offline. |
 
-### Phase 3 — visual design
+### Phase 3 — UI/UX refinements
 
 | # | Feature | Commit | What & why |
 |---|---------|--------|------------|
 | 21 | [Apple-style visual overhaul](21-visual-overhaul.md) | `style: apple-inspired visual overhaul` *(staged, not yet committed)* | Premium redesign — neutral surfaces, SF-style type, pill buttons, soft-cornered cards, frosted header, refined accents — all from the design tokens. |
+| 22 | [Section navigation & Applications tab](22-section-navigation.md) | `feat: candidate section menu + dedicated Applications tab` *(staged, not yet committed)* | Replace the long candidate scroll with a section menu (one section at a time) and promote Applications to its own top-level tab with a live count badge. |
 
 ## Root documentation
 
@@ -44,4 +45,5 @@ file in that commit.
 - [ARCHITECTURE](../ARCHITECTURE.md) — design rationale (incl. the design system)
 - [PROMPTS](../PROMPTS.md) — the engines & question bank
 
-20 commits landed; commit 21 (visual overhaul) is staged in the working tree, ready to commit.
+20 commits landed; commits 21 (visual overhaul) and 22 (section navigation) are staged in the
+working tree, ready to commit.

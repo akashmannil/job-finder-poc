@@ -1,7 +1,7 @@
 # 21 — Apple-style visual overhaul
 
 > Commit: `style: apple-inspired visual overhaul` *(changes staged — not yet committed)*
-> Nav: [← Prev](20-retire-ai.md) · [Index](DEVLOG.md)
+> Nav: [← Prev](20-retire-ai.md) · [Index](DEVLOG.md) · [Next →](22-section-navigation.md)
 
 ## What this adds
 

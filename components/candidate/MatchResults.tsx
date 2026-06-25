@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { FadeUp, StaggerList } from "@/components/common/Motion";
 import { MatchCard } from "@/components/candidate/MatchCard";
+import { MatchReel } from "@/components/candidate/MatchReel";
 import { aggregateGaps } from "@/lib/reskill";
 import { useStore } from "@/store/store";
 import type { MatchResult } from "@/types";
@@ -13,6 +14,7 @@ export function MatchResults() {
   const [results, setResults] = useState<MatchResult[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [mode, setMode] = useState<"list" | "reel">("list");
 
   const canMatch = profile.skills.length > 0;
 
@@ -46,9 +48,26 @@ export function MatchResults() {
             Ranked by honest fit — verified evidence and must-haves carry the most weight.
           </p>
         </div>
-        <button className="btn-primary" onClick={runMatch} disabled={!canMatch || loading}>
-          {loading ? "Matching…" : results ? "Re-run match" : "Find matches"}
-        </button>
+        <div className="flex items-center gap-2">
+          {results && results.length > 0 && (
+            <div className="inline-flex rounded-[11px] bg-surface2 p-1">
+              {(["list", "reel"] as const).map((m) => (
+                <button
+                  key={m}
+                  onClick={() => setMode(m)}
+                  className={`rounded-[8px] px-3 py-1.5 text-[13px] font-medium capitalize transition-colors ${
+                    mode === m ? "bg-surface text-fg shadow-sm" : "text-muted hover:text-fg"
+                  }`}
+                >
+                  {m}
+                </button>
+              ))}
+            </div>
+          )}
+          <button className="btn-primary" onClick={runMatch} disabled={!canMatch || loading}>
+            {loading ? "Matching…" : results ? "Re-run match" : "Find matches"}
+          </button>
+        </div>
       </div>
 
       {!canMatch && (
@@ -76,16 +95,21 @@ export function MatchResults() {
         </div>
       )}
 
-      {results && !loading && (
+      {results && !loading && results.length === 0 && (
+        <p className="text-sm text-muted">No matches returned.</p>
+      )}
+
+      {results && !loading && results.length > 0 && mode === "reel" && (
+        <MatchReel results={results} />
+      )}
+
+      {results && !loading && results.length > 0 && mode === "list" && (
         <StaggerList className="space-y-3">
           {results.map((r, i) => (
             <FadeUp key={r.jobId}>
               <MatchCard result={r} top={i === 0} />
             </FadeUp>
           ))}
-          {results.length === 0 && (
-            <p className="text-sm text-muted">No matches returned.</p>
-          )}
         </StaggerList>
       )}
     </section>
