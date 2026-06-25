@@ -9,6 +9,7 @@ import { MatchResults } from "@/components/candidate/MatchResults";
 import { ReskillReel } from "@/components/candidate/ReskillReel";
 import { ApplicationTracker } from "@/components/candidate/ApplicationTracker";
 import { RecruiterDashboard } from "@/components/recruiter/RecruiterDashboard";
+import { RecruiterMarket } from "@/components/recruiter/RecruiterMarket";
 import { candidateConduct } from "@/lib/conductScore";
 import { useStore } from "@/store/store";
 
@@ -103,6 +104,50 @@ function CandidateWorkspace() {
   );
 }
 
+type RecruiterView = "market" | "postings";
+
 function RecruiterWorkspace() {
-  return <RecruiterDashboard />;
+  const [view, setView] = useState<RecruiterView>("market");
+
+  const tabs: { id: RecruiterView; label: string }[] = [
+    { id: "market", label: "Market" },
+    { id: "postings", label: "Postings" },
+  ];
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-wrap gap-1 rounded-[11px] bg-surface2 p-1">
+        {tabs.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setView(t.id)}
+            className={`relative z-10 inline-flex items-center gap-1.5 rounded-[8px] px-3.5 py-1.5 text-[13px] font-medium transition-colors ${
+              view === t.id ? "text-fg" : "text-muted hover:text-fg"
+            }`}
+          >
+            {view === t.id && (
+              <motion.span
+                layoutId="rec-view-pill"
+                className="absolute inset-0 -z-10 rounded-[8px] bg-surface shadow-sm"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              />
+            )}
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={view}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.2 }}
+        >
+          {view === "market" ? <RecruiterMarket /> : <RecruiterDashboard />}
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
 }
