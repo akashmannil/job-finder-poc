@@ -31,15 +31,24 @@ a human.)
 - **Evidence-backed endorsements** — relationship + specific evidence required (no one-tap skills).
 - **Preview as recruiter** — the exact consented view, with **zero vanity metrics**, plus
   consent-controlled applying.
+- **Honest retention (no baiting)** — a saved-roles watchlist, a private reskilling-progress
+  snapshot, and a "while you were away" digest that surfaces *only* real decisions since your last
+  visit. No streaks, attention counts, or FOMO.
 
-**Recruiter side**
+**Recruiter side** (a tabbed workspace mirroring the candidate's — **Market · Talent · Postings ·
+Standing**)
 
-- **Dashboard** of postings with applicant/overdue counts and a **public response score**.
-- **Consented applicant view** — only what the candidate chose to share; review as a list or a
-  **swipe reel** (right to shortlist, left to pass).
-- **Application SLA + auto-close** — ghosting is penalized, not free.
-- **One-click decision** — pick a reason, get a kind, specific, editable message; send.
-- **Mutual-interest gating** — contact unlocks only when both sides opt in.
+- **Market** — the recruiter's Discover: market stats, **your standing vs the market** (pay/interest
+  deltas, per-posting market rank), **popular postings**, and **competitor postings** to benchmark.
+- **Talent** — **possible candidate matches** for a chosen posting (same matcher, run in reverse),
+  double-opt-in **Invite to apply**, and a **talent-development** view (scarce required skills +
+  courses to sponsor).
+- **Postings** — the dashboard: postings with applicant/overdue counts; **consented applicant view**
+  (only what the candidate shared), as a list or a **swipe reel**; **one-click decision** (pick a
+  reason → kind, editable message); **mutual-interest gating**.
+- **Standing** — the recruiter's profile: company identity, the **public response score** with a
+  breakdown, and an SLA-sorted **"needs your decision"** list. **Application SLA + auto-close** means
+  ghosting is penalized, not free.
 
 ## Try it (the demo script)
 
@@ -57,10 +66,13 @@ and reveals an editor only when you click **Edit** on a section (LinkedIn/Facebo
    to skip** — right-swipe opens the consent dialog. Each card also has a like button.
 4. **Reskilling** is an endless feed of skills to grow (your gaps + adjacent + in-demand). Scroll for
    more; **Start reskilling** on one to flag it on your profile.
-5. Switch to **Recruiter** (header toggle). Use **List** to expand an applicant → *Start reviewing*
-   → pick a reason → send the drafted decision, or **Review reel** to swipe right to shortlist /
-   left to pass.
-6. Switch back to **Candidate** → the **Applications** tab shows the decision. Or use **⏱ +3d** in
+5. Switch to **Recruiter** (header toggle) — its own tabbed workspace (**Market · Talent · Postings ·
+   Standing**) opens on **Market**: your standing vs the market, popular and competitor postings.
+   **Talent** ranks sourcing candidates for a posting (with double-opt-in *Invite to apply*) and
+   shows scarce skills to train. **Standing** is your response score + the decisions you owe.
+6. **Postings** → expand an applicant → *Start reviewing* → pick a reason → send the drafted
+   decision (or **Review reel** to swipe shortlist/pass).
+7. Switch back to **Candidate** → the **Applications** tab shows the decision. Or use **⏱ +3d** in
    the header to let an SLA lapse and watch the recruiter's response score drop.
 
 ## Proof over reach (a deliberate trade-off)

@@ -108,6 +108,37 @@ gaps, then skills *adjacent* to what the candidate has (via the catalog's `relat
 in-demand skills they lack — and cycles that pool with rotating "advertising" copy so the feed never
 runs dry, even before a match has been run.
 
+## The recruiter workspace (mirror of the candidate side)
+
+The recruiter side is a tabbed workspace — **Market · Talent · Postings · Standing** — symmetric
+with the candidate's:
+
+- **Market** ([`components/recruiter/RecruiterMarket.tsx`](components/recruiter/RecruiterMarket.tsx),
+  [`lib/recruiterMarket.ts`](lib/recruiterMarket.ts)) is the recruiter's Discover: market stats, the
+  recruiter's **standing** (pay/interest vs market, each posting's market rank via the shared
+  `attractiveness` score), **popular** postings, and **competitor** postings. Likes are *read-only*
+  here — recruiters observe demand, candidates express it.
+- **Talent** ([`components/recruiter/RecruiterTalent.tsx`](components/recruiter/RecruiterTalent.tsx),
+  [`lib/talent.ts`](lib/talent.ts)) is the inverse of candidate Matches: a sourcing pool scored
+  against a chosen posting with the **same matcher** (`matchProfileToJob`), so a pairing reads the
+  same fit to both sides. **Invite to apply** is a double-opt-in gesture (no consent bypass).
+  **Talent development** surfaces required skills that are scarce in the pool, with courses to
+  sponsor — the recruiter's view of the reskilling loop.
+- **Postings** is the original dashboard (consented applicant view, swipe reel, one-click decision).
+- **Standing** ([`components/recruiter/RecruiterStanding.tsx`](components/recruiter/RecruiterStanding.tsx))
+  is the recruiter's display-first profile: company identity, the public conduct/response score with
+  a breakdown, and an SLA-sorted "needs your decision" list. Reputation here is behavior, not reach —
+  no vanity metrics on recruiters either.
+
+## Retention (honest, by design)
+
+Both sides have reasons to return that are built on delivered value, never dark patterns — an
+explicit product constraint. The candidate's "while you were away" digest
+([`lib/activity.ts`](lib/activity.ts)) reports *only* real decisions since `previousSeenAt` (it
+renders nothing otherwise); saved roles and the reskilling-progress snapshot are factual and private.
+The recruiter's pull is the Market lens and the Standing decisions-owed list. There are deliberately
+no streaks, attention counters, "someone viewed you" nudges, or manufactured urgency anywhere.
+
 ## Design system, theming & motion
 
 The UI uses an **Apple-inspired design system** defined entirely in

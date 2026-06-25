@@ -32,6 +32,9 @@ For each job, the matcher scores requirements against the candidate's skills:
   the evidence that satisfied each) and `gaps` (tagged by severity), then sort by score.
 
 The thesis lives in the constants at the top of the file — tuning is a one-line change.
+`matchProfileToJobs(profile)` scores one candidate against every job (candidate Matches);
+`matchProfileToJob(profile, job)` scores one candidate against one job and powers the recruiter's
+**Talent** view, so a given pairing reads the *same* fit score to both sides.
 
 ## 2. Assessment — [`lib/assessor.ts`](lib/assessor.ts)
 
@@ -50,6 +53,22 @@ One template per reason code (`moving_forward`, `skills_gap`, `role_filled`,
 company, a shared skill). The recruiter edits the draft before sending — the template removes the
 effort, the human keeps control. `outcomeFor` maps each reason to the terminal status
 (`offer` / `rejected`).
+
+## 4. Market, talent & growth signals
+
+The discovery and retention surfaces are the same kind of inspectable, deterministic helpers:
+
+- **Likes & attractiveness** ([`lib/likes.ts`](lib/likes.ts)) — a posting's base popularity is a
+  stable hash of its id plus a small pay boost; `attractiveness` (pay + popularity + remote) ranks
+  postings consistently for both the candidate Discover and the recruiter Market.
+- **Recruiter standing** ([`lib/recruiterMarket.ts`](lib/recruiterMarket.ts)) — a recruiter's
+  postings placed against the whole market by the same `attractiveness` score, plus competitor lists.
+- **Talent** ([`lib/talent.ts`](lib/talent.ts)) — a seed sourcing pool ranked per posting with the
+  matcher; `talentDevelopment` compares required-skill demand to pool supply and attaches courses.
+- **Reskilling feed** ([`lib/reskill.ts`](lib/reskill.ts)) — `reskillPage` cycles a pool of
+  gaps → adjacent → in-demand skills with rotating copy for an endless, deterministic feed.
+- **Activity digest** ([`lib/activity.ts`](lib/activity.ts)) — reports only real application status
+  changes since the last visit; no fabricated counts.
 
 ## Why deterministic
 
