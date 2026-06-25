@@ -11,6 +11,7 @@ import { ApplicationTracker } from "@/components/candidate/ApplicationTracker";
 import { RecruiterDashboard } from "@/components/recruiter/RecruiterDashboard";
 import { RecruiterMarket } from "@/components/recruiter/RecruiterMarket";
 import { RecruiterTalent } from "@/components/recruiter/RecruiterTalent";
+import { RecruiterStanding } from "@/components/recruiter/RecruiterStanding";
 import { candidateConduct } from "@/lib/conductScore";
 import { useStore } from "@/store/store";
 
@@ -105,7 +106,7 @@ function CandidateWorkspace() {
   );
 }
 
-type RecruiterView = "market" | "talent" | "postings";
+type RecruiterView = "market" | "talent" | "postings" | "standing";
 
 function RecruiterWorkspace() {
   const [view, setView] = useState<RecruiterView>("market");
@@ -114,6 +115,7 @@ function RecruiterWorkspace() {
     { id: "market", label: "Market" },
     { id: "talent", label: "Talent" },
     { id: "postings", label: "Postings" },
+    { id: "standing", label: "Standing" },
   ];
 
   return (
@@ -151,8 +153,10 @@ function RecruiterWorkspace() {
             <RecruiterMarket />
           ) : view === "talent" ? (
             <RecruiterTalent />
-          ) : (
+          ) : view === "postings" ? (
             <RecruiterDashboard />
+          ) : (
+            <RecruiterStanding onReview={() => setView("postings")} />
           )}
         </motion.div>
       </AnimatePresence>
