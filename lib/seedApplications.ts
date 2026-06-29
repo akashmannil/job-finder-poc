@@ -10,7 +10,7 @@ function snapshot(profile: Profile, endorsements: ConsentSnapshot["endorsements"
 
 /**
  * A few applications from other candidates so the recruiter dashboard (rec-1) is
- * populated on first load — including one nearing its SLA, to demo auto-close.
+ * populated on first load - including one nearing its SLA, to demo auto-close.
  */
 export const SEED_APPLICATIONS: Application[] = [
   {
@@ -81,7 +81,7 @@ export const SEED_APPLICATIONS: Application[] = [
     ),
   },
   {
-    // The candidate user's own application that reached mutual interest — gives the
+    // The candidate user's own application that reached mutual interest - gives the
     // candidate side a live message thread on first load (see lib/seedMessages.ts).
     id: "app-seed-own",
     jobId: "job-002",

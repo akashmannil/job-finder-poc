@@ -42,7 +42,7 @@ export const EMPTY_PROFILE: Profile = {
 interface AppState {
   role: Role;
   profile: Profile;
-  /** Deduped gaps from the latest match — feeds the reskilling recommendations. */
+  /** Deduped gaps from the latest match - feeds the reskilling recommendations. */
   matchGaps: GapItem[];
   endorsements: Endorsement[];
   applications: Application[];
@@ -54,7 +54,7 @@ interface AppState {
   networkVisibility: Record<string, boolean>;
   /** Per-viewer read marks, keyed `${userId}:${threadId}` → last-read timestamp. */
   threadReads: Record<string, number>;
-  /** Job ids the candidate has liked — a market-demand signal on postings (not on people). */
+  /** Job ids the candidate has liked - a market-demand signal on postings (not on people). */
   likedJobs: string[];
   /** Wall-clock of the last session, used for an honest "since you were here" digest. */
   lastSeenAt: number;
@@ -63,9 +63,9 @@ interface AppState {
 }
 
 interface StoreValue extends AppState {
-  /** True once persisted state has been loaded — gate UI on this to avoid hydration flicker. */
+  /** True once persisted state has been loaded - gate UI on this to avoid hydration flicker. */
   hydrated: boolean;
-  /** The previous session's `lastSeenAt` (0 on first ever visit) — drives the digest. */
+  /** The previous session's `lastSeenAt` (0 on first ever visit) - drives the digest. */
   previousSeenAt: number;
   setRole: (role: Role) => void;
   setProfile: (profile: Profile) => void;
@@ -126,7 +126,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     } catch {
       /* ignore corrupt state */
     }
-    // Remember the prior session, then stamp this one — the digest reads the gap.
+    // Remember the prior session, then stamp this one - the digest reads the gap.
     setPreviousSeenAt(next.lastSeenAt ?? 0);
     setState({ ...next, lastSeenAt: Date.now() });
     loaded.current = true;
@@ -138,7 +138,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch {
-      /* storage full / unavailable — non-fatal for a POC */
+      /* storage full / unavailable - non-fatal for a POC */
     }
   }, [state]);
 

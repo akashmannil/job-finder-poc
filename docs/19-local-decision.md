@@ -1,4 +1,4 @@
-# 19 — Local decision engine (no AI)
+# 19 - Local decision engine (no AI)
 
 > Commit: `feat: local decision engine`
 > Nav: [← Prev](18-local-assessment.md) · [Index](DEVLOG.md) · [Next →](20-retire-ai.md)
@@ -18,9 +18,9 @@ recruiter edits the draft before sending, so the human stays in control either w
 
 ## Files in this commit
 
-- [`lib/decision.ts`](../lib/decision.ts) — rewritten as per-reason templates (same
+- [`lib/decision.ts`](../lib/decision.ts) - rewritten as per-reason templates (same
   `DECISION_REASONS` / `outcomeFor` / `draftDecision` surface, no Anthropic).
-- [`app/api/draft-decision/route.ts`](../app/api/draft-decision/route.ts) — calls the local
+- [`app/api/draft-decision/route.ts`](../app/api/draft-decision/route.ts) - calls the local
   drafter; no Anthropic import.
 
 ## How to verify
@@ -31,5 +31,5 @@ personalized message appears instantly (no key) → send. The candidate sees it 
 ## Decisions & notes
 
 - The `DECISION_REASONS` / `outcomeFor` / `DraftResult` surface is unchanged, so the
-  `DecisionPanel` UI didn't change — only the implementation behind it.
+  `DecisionPanel` UI didn't change - only the implementation behind it.
 - After this commit, no active code calls Anthropic; the dependency is removed next.

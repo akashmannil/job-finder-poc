@@ -2,7 +2,7 @@
 
 JobMatch is a Next.js (App Router) app where **both sides of the marketplace run in one client
 store**, and matching / assessment / decision logic runs in **deterministic, in-app engines**
-behind API routes — no external AI, no API keys. This document explains the load-bearing
+behind API routes - no external AI, no API keys. This document explains the load-bearing
 decisions.
 
 ## The shared store + role switcher
@@ -17,7 +17,7 @@ This is what makes a two-sided platform demoable solo: an action taken as a recr
 immediately visible when you switch back to the candidate, because there's one source of truth
 underneath both.
 
-## The Application — the pivot object
+## The Application - the pivot object
 
 ```text
 Candidate                         Shared store                         Recruiter
@@ -34,14 +34,14 @@ build verified profile
 ```
 
 An `Application` captures the candidate's **consent snapshot** (the exact, filtered profile they
-chose to share) at apply time. The recruiter only ever sees that snapshot — selective disclosure,
+chose to share) at apply time. The recruiter only ever sees that snapshot - selective disclosure,
 end to end. The recruiter advances it through a small state machine
 (`received → reviewing → offer | rejected`), or the SLA lapses and it `auto_closes`.
 
 ## Why verified profile over résumé
 
 A résumé is gameable marketing copy, and AI tailoring made it noise. The matcher never reads a
-résumé — it reads a **structured profile** whose skills carry ordered evidence tiers
+résumé - it reads a **structured profile** whose skills carry ordered evidence tiers
 (`self_asserted < portfolio < assessment_passed < reference_verified`). The model is told to
 weight verified evidence above claims, so inflation stops paying. Assessment-passed evidence is
 *earned* server-side (the answer key never reaches the client), making "verified" mean something.
@@ -51,22 +51,22 @@ weight verified evidence above claims, so inflation stops paying. Assessment-pas
 Jobs store **classified requirements** (`must_have | nice_to_have | disqualifier`), not prose.
 The matcher compares requirements against evidence and weights must-haves heavily, instead of
 fuzzy text-vs-text similarity. Results are explainable: each met requirement cites the evidence
-that satisfied it, and gaps are tagged by severity — which then drive the reskilling loop.
+that satisfied it, and gaps are tagged by severity - which then drive the reskilling loop.
 
 ## Deterministic engines (no AI)
 
 Matching, assessment, and decision drafting are pure, in-app engines driven by a predefined
 **skill catalog** and **question bank** ([`lib/skills/`](lib/skills/)). They take no API key,
-make no network calls, and produce the same output for the same input — so the app runs in any
+make no network calls, and produce the same output for the same input - so the app runs in any
 dev/CI/test environment and is trivial to reason about. See [PROMPTS.md](PROMPTS.md) for how each
 engine works.
 
-- **Matcher** ([`lib/matcher.ts`](lib/matcher.ts)) — scores a profile against each job using
+- **Matcher** ([`lib/matcher.ts`](lib/matcher.ts)) - scores a profile against each job using
   weighted requirements (must-have > nice-to-have) and evidence factors (verified > claimed),
   with transferable credit from `related` skills in the catalog.
-- **Assessor** ([`lib/assessor.ts`](lib/assessor.ts)) — serves bank questions with options
+- **Assessor** ([`lib/assessor.ts`](lib/assessor.ts)) - serves bank questions with options
   shuffled and the answer key withheld; grades by matching selected text server-side.
-- **Decision** ([`lib/decision.ts`](lib/decision.ts)) — composes a personalized message per
+- **Decision** ([`lib/decision.ts`](lib/decision.ts)) - composes a personalized message per
   reason code from the consented application data.
 
 Each engine sits behind a small, stable function signature, so an AI-backed implementation could
@@ -75,7 +75,7 @@ later replace any one of them without changing the routes or UI.
 ## Server-side boundary
 
 The engines run inside the `/api/*` route handlers (`runtime = "nodejs"`). The one thing that
-must not reach the browser — the **assessment answer key** — stays server-side: generation strips
+must not reach the browser - the **assessment answer key** - stays server-side: generation strips
 it and grading looks it up from the bank. There are no secrets or API keys in the app.
 
 ## SLA & conduct score
@@ -84,19 +84,19 @@ it and grading looks it up from the bank. There are no secrets or API keys in th
 runs whenever the simulated clock advances. [`lib/conductScore.ts`](lib/conductScore.ts) derives
 a recruiter score (decide, on time?) and a candidate score (engage when courted?) purely from the
 applications, so reputation always reflects current behavior. This conduct score is the *only*
-score on a **person** — there are deliberately no vanity metrics on profiles (no likes, followers,
-or impressions on humans). The one place a popularity count exists is on postings — see below.
+score on a **person** - there are deliberately no vanity metrics on profiles (no likes, followers,
+or impressions on humans). The one place a popularity count exists is on postings - see below.
 
 ## Discovery & market signal
 
 The candidate side leads with **Discover**
 ([`components/candidate/Discover.tsx`](components/candidate/Discover.tsx)), not the user's own
-profile — a storefront, not a mirror. It ranks postings by an `attractiveness` score
+profile - a storefront, not a mirror. It ranks postings by an `attractiveness` score
 (pay + popularity + remote) and surfaces market stats and in-demand skills, all computed from the
 seed jobs in [`lib/likes.ts`](lib/likes.ts).
 
 **Likes are the deliberate exception to the no-vanity-metrics rule.** They attach to *postings*, not
-people — a demand signal on a role, persisted in the store as `likedJobs`. Base counts are seeded
+people - a demand signal on a role, persisted in the store as `likedJobs`. Base counts are seeded
 deterministically (a hash of the job id plus a small pay boost) so the market looks alive without a
 backend; the candidate's own like adds one. This keeps the people-side principle intact while giving
 the marketplace a sense of life.
@@ -105,34 +105,34 @@ the marketplace a sense of life.
 ([`components/candidate/ReskillReel.tsx`](components/candidate/ReskillReel.tsx)), separate from
 matching. `reskillPage` in [`lib/reskill.ts`](lib/reskill.ts) builds a pool from the last match's
 gaps, then skills *adjacent* to what the candidate has (via the catalog's `related`), then the most
-in-demand skills they lack — and cycles that pool with rotating "advertising" copy so the feed never
+in-demand skills they lack - and cycles that pool with rotating "advertising" copy so the feed never
 runs dry, even before a match has been run.
 
 ## The recruiter workspace (mirror of the candidate side)
 
-The recruiter side is a tabbed workspace — **Market · Talent · Postings · Standing** — symmetric
+The recruiter side is a tabbed workspace - **Market · Talent · Postings · Standing** - symmetric
 with the candidate's:
 
 - **Market** ([`components/recruiter/RecruiterMarket.tsx`](components/recruiter/RecruiterMarket.tsx),
   [`lib/recruiterMarket.ts`](lib/recruiterMarket.ts)) is the recruiter's Discover: market stats, the
   recruiter's **standing** (pay/interest vs market, each posting's market rank via the shared
   `attractiveness` score), **popular** postings, and **competitor** postings. Likes are *read-only*
-  here — recruiters observe demand, candidates express it.
+  here - recruiters observe demand, candidates express it.
 - **Talent** ([`components/recruiter/RecruiterTalent.tsx`](components/recruiter/RecruiterTalent.tsx),
   [`lib/talent.ts`](lib/talent.ts)) is the inverse of candidate Matches: a sourcing pool scored
   against a chosen posting with the **same matcher** (`matchProfileToJob`), so a pairing reads the
   same fit to both sides. **Invite to apply** is a double-opt-in gesture (no consent bypass).
   **Talent development** surfaces required skills that are scarce in the pool, with courses to
-  sponsor — the recruiter's view of the reskilling loop.
+  sponsor - the recruiter's view of the reskilling loop.
 - **Postings** is the original dashboard (consented applicant view, swipe reel, one-click decision).
 - **Standing** ([`components/recruiter/RecruiterStanding.tsx`](components/recruiter/RecruiterStanding.tsx))
   is the recruiter's display-first profile: company identity, the public conduct/response score with
-  a breakdown, and an SLA-sorted "needs your decision" list. Reputation here is behavior, not reach —
+  a breakdown, and an SLA-sorted "needs your decision" list. Reputation here is behavior, not reach -
   no vanity metrics on recruiters either.
 
 ## Retention (honest, by design)
 
-Both sides have reasons to return that are built on delivered value, never dark patterns — an
+Both sides have reasons to return that are built on delivered value, never dark patterns - an
 explicit product constraint. The candidate's "while you were away" digest
 ([`lib/activity.ts`](lib/activity.ts)) reports *only* real decisions since `previousSeenAt` (it
 renders nothing otherwise); saved roles and the reskilling-progress snapshot are factual and private.
@@ -141,7 +141,7 @@ no streaks, attention counters, "someone viewed you" nudges, or manufactured urg
 
 ## Messaging (consent-gated)
 
-Messaging exists on both sides but is **gated by construction**, never an open inbox — the same line
+Messaging exists on both sides but is **gated by construction**, never an open inbox - the same line
 the platform draws on contact everywhere.
 
 - **Candidate ↔ recruiter** threads are *derived* from applications with mutual interest
@@ -152,10 +152,10 @@ the platform draws on contact everywhere.
   ([`lib/peers.ts`](lib/peers.ts)): a `PeerThread` starts `pending` with a required reason and only
   becomes `active` (chat-enabled) when the recipient accepts. No cold or bulk DMs. Discovery is by
   **search** (no browsable directory dump), and each person controls their own findability via a
-  `networkVisibility` consent flag — hidden people don't surface in search.
+  `networkVisibility` consent flag - hidden people don't surface in search.
 - One shared surface ([`components/common/Messages.tsx`](components/common/Messages.tsx)) renders
   both, with the viewer's identity (`currentUserId(role)`) deciding which threads exist and which
-  bubbles are "mine". The Messages-tab badge is a plain unread + requests-to-act count — not an
+  bubbles are "mine". The Messages-tab badge is a plain unread + requests-to-act count - not an
   attention metric.
 
 It's all client state (store + localStorage), consistent with the rest of the POC; there's no

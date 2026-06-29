@@ -10,7 +10,7 @@ import type { Application } from "@/types";
 
 // Swipe-to-decide triage over the recruiter's open applicants. Right = shortlist
 // (moving forward), left = pass. Each swipe sends the same templated decision the
-// list view's DecisionPanel would — recruiters still answer on the clock, just faster.
+// list view's DecisionPanel would - recruiters still answer on the clock, just faster.
 const REASON: Record<"left" | "right", ReasonCode> = {
   right: "moving_forward",
   left: "skills_gap",
@@ -101,7 +101,7 @@ function ReelApplicantCard({ application }: { application: Application }) {
               {consent.endorsements.slice(0, 3).map((e) => (
                 <li key={e.id} className="text-sm">
                   <span className="font-medium">{e.skill}</span>
-                  <span className="text-muted"> — {e.endorserName} ({e.relationship})</span>
+                  <span className="text-muted"> - {e.endorserName} ({e.relationship})</span>
                 </li>
               ))}
             </ul>

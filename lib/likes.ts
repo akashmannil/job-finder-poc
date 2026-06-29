@@ -2,8 +2,8 @@ import { JOBS } from "@/lib/jobs";
 import type { Job } from "@/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Likes are a market-demand signal on *postings* — how much interest a role is
-// drawing — deliberately distinct from the no-vanity-metrics rule that governs
+// Likes are a market-demand signal on *postings* - how much interest a role is
+// drawing - deliberately distinct from the no-vanity-metrics rule that governs
 // people/profiles. Each posting gets a stable, seeded base count so the demo
 // looks alive; the candidate's own like adds one on top.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -20,7 +20,7 @@ function hash(s: string): number {
 
 /** Seeded base like count for a posting (higher pay trends a little more popular). */
 export function baseLikes(job: Job): number {
-  const payBoost = Math.round(job.salaryMax / 12000); // ~8–18 for typical bands
+  const payBoost = Math.round(job.salaryMax / 12000); // ~8-18 for typical bands
   return 40 + (hash(job.id) % 260) + payBoost;
 }
 
@@ -30,12 +30,12 @@ export function likeCount(job: Job, liked: boolean): number {
 }
 
 /**
- * Market attractiveness — how eye-catching a posting is on the Discover page.
+ * Market attractiveness - how eye-catching a posting is on the Discover page.
  * Combines pay, popularity, and a remote bonus into a single sortable score.
  * `likedJobs` nudges roles the candidate liked toward the top.
  */
 export function attractiveness(job: Job, likedJobs: string[]): number {
-  const pay = job.salaryMax / 1000; // ~120–320
+  const pay = job.salaryMax / 1000; // ~120-320
   const popularity = baseLikes(job) / 2;
   const remote = job.remote ? 25 : 0;
   const mine = likedJobs.includes(job.id) ? 40 : 0;
@@ -55,7 +55,7 @@ export interface MarketStat {
   value: string;
 }
 
-/** Headline market facts for the Discover banner — computed from the seed jobs. */
+/** Headline market facts for the Discover banner - computed from the seed jobs. */
 export function marketStats(): MarketStat[] {
   const count = JOBS.length;
   const remote = JOBS.filter((j) => j.remote).length;
@@ -65,7 +65,7 @@ export function marketStats(): MarketStat[] {
     { label: "Open roles", value: String(count) },
     { label: "Remote-friendly", value: `${Math.round((remote / count) * 100)}%` },
     { label: "Median top pay", value: `$${Math.round(medianMax / 1000)}k` },
-    { label: "Most-wanted skill", value: top?.skill ?? "—" },
+    { label: "Most-wanted skill", value: top?.skill ?? "-" },
   ];
 }
 

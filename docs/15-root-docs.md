@@ -1,9 +1,9 @@
-# 15 — Root documentation
+# 15 - Root documentation
 
 > Commit: `docs: root README, ARCHITECTURE, PROMPTS`
 > Nav: [← Prev](14-ai-decision.md) · [Index](DEVLOG.md) · [Next →](16-skill-catalog.md)
 >
-> (Phase 1 closeout — Phase 2 continues at commit 16.)
+> (Phase 1 closeout - Phase 2 continues at commit 16.)
 
 ## What this adds
 
@@ -19,13 +19,13 @@ history, they let someone follow the project by code *and* by meaning.
 
 ## Files in this commit
 
-- [`README.md`](../README.md) — thesis, what each side demonstrates, the demo script, setup,
+- [`README.md`](../README.md) - thesis, what each side demonstrates, the demo script, setup,
   structure, and honest POC limitations.
-- [`ARCHITECTURE.md`](../ARCHITECTURE.md) — shared store + role switcher, the Application pivot,
+- [`ARCHITECTURE.md`](../ARCHITECTURE.md) - shared store + role switcher, the Application pivot,
   why verified-profile / requirement-level matching / structured outputs, caching, the trust
   boundary, SLA & conduct.
-- [`PROMPTS.md`](../PROMPTS.md) — the three prompts and schemas, with the reasoning behind each.
-- [`docs/DEVLOG.md`](DEVLOG.md) — links the root docs from the trail.
+- [`PROMPTS.md`](../PROMPTS.md) - the three prompts and schemas, with the reasoning behind each.
+- [`docs/DEVLOG.md`](DEVLOG.md) - links the root docs from the trail.
 
 ## How to verify
 

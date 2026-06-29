@@ -20,7 +20,7 @@ export const STATUS_META: Record<
   },
 };
 
-/** Terminal statuses — a decision has been reached (or forced). */
+/** Terminal statuses - a decision has been reached (or forced). */
 export const TERMINAL: ApplicationStatus[] = ["offer", "rejected", "auto_closed"];
 
 export function isTerminal(status: ApplicationStatus): boolean {

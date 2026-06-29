@@ -7,7 +7,7 @@ import { StoreProvider } from "@/store/store";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "JobMatch — proof over reach",
+  title: "JobMatch - proof over reach",
   description:
     "A two-sided hiring platform built on verified profiles, accountable recruiting, and proof over reach.",
 };

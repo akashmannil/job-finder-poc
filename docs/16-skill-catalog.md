@@ -1,4 +1,4 @@
-# 16 — Predefined skill catalog & question bank
+# 16 - Predefined skill catalog & question bank
 
 > Commit: `feat: predefined skill catalog & question bank`
 > Nav: [← Prev](15-root-docs.md) · [Index](DEVLOG.md) · [Next →](17-local-matcher.md)
@@ -22,13 +22,13 @@ test environment offline and behaves identically every run.
   text so options can be shuffled for display without breaking grading. Unknown skills get generic
   competence questions, so everything stays assessable.
 
-Both are deliberately small and additive — growing coverage is just appending entries.
+Both are deliberately small and additive - growing coverage is just appending entries.
 
 ## Files in this commit
 
-- [`lib/skills/catalog.ts`](../lib/skills/catalog.ts) — `SKILL_CATALOG` + `normalizeSkill`,
+- [`lib/skills/catalog.ts`](../lib/skills/catalog.ts) - `SKILL_CATALOG` + `normalizeSkill`,
   `relatedOf`, `areRelated`.
-- [`lib/skills/questionBank.ts`](../lib/skills/questionBank.ts) — `QUESTION_BANK`,
+- [`lib/skills/questionBank.ts`](../lib/skills/questionBank.ts) - `QUESTION_BANK`,
   `genericQuestions`, `questionsForSkill`.
 
 ## How to verify
@@ -40,5 +40,5 @@ land next.
 
 - Answers are stored as the correct option's **text**, not an index, so display-time shuffling is
   safe and grading stays correct.
-- Unknown skills pass through `normalizeSkill` unchanged and fall back to generic questions —
+- Unknown skills pass through `normalizeSkill` unchanged and fall back to generic questions -
   nothing breaks when the catalog doesn't cover a skill yet.

@@ -1,4 +1,4 @@
-# 02 — Domain types & seed data
+# 02 - Domain types & seed data
 
 > Commit: `feat: domain types & seed data`
 > Nav: [← Prev](01-scaffold.md) · [Index](DEVLOG.md) · [Next →](03-store-role-switcher.md)
@@ -15,7 +15,7 @@ Two modelling choices encode the thesis directly into the type system:
 
 - **`EvidenceTier` + `EVIDENCE_RANK`** make "verified vs. self-asserted" a first-class,
   *ordered* concept. The matcher and UI both lean on this ranking so that verified evidence can
-  outweigh claims — inflation stops paying.
+  outweigh claims - inflation stops paying.
 - **`Requirement.kind` (`must_have | nice_to_have | disqualifier`)** turns a job description
   into structured requirements, so matching can weight must-haves over fluff instead of
   comparing prose to prose.
@@ -26,12 +26,12 @@ across recruiters (`rec-1`..`rec-4`) so the recruiter dashboard has real posting
 
 ## Files in this commit
 
-- [`types/index.ts`](../types/index.ts) — `EvidenceTier`, `Skill`, `Profile`, `Requirement`,
+- [`types/index.ts`](../types/index.ts) - `EvidenceTier`, `Skill`, `Profile`, `Requirement`,
   `Job`, `Course`, `Recruiter`, and the evidence ranking/labels.
-- [`data/jobs.json`](../data/jobs.json) — 30 seed jobs with classified requirements.
-- [`data/courses.json`](../data/courses.json) — 30 skill-tagged courses (feeds the reskill loop).
-- [`lib/jobs.ts`](../lib/jobs.ts) — typed accessors + the recruiter roster.
-- [`lib/courses.ts`](../lib/courses.ts) — typed accessors + `coursesForSkill`.
+- [`data/jobs.json`](../data/jobs.json) - 30 seed jobs with classified requirements.
+- [`data/courses.json`](../data/courses.json) - 30 skill-tagged courses (feeds the reskill loop).
+- [`lib/jobs.ts`](../lib/jobs.ts) - typed accessors + the recruiter roster.
+- [`lib/courses.ts`](../lib/courses.ts) - typed accessors + `coursesForSkill`.
 
 ## How to verify
 

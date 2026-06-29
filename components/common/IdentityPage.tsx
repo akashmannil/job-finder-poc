@@ -10,7 +10,7 @@ import { EVIDENCE_RANK, type Endorsement, type Profile } from "@/types";
 
 /**
  * The proof-over-reach public profile. Reused for the candidate's own preview and
- * the recruiter's consented view. There are deliberately NO vanity metrics here —
+ * the recruiter's consented view. There are deliberately NO vanity metrics here -
  * no views, followers, likes, or connection counts.
  */
 export function IdentityPage({
@@ -20,7 +20,7 @@ export function IdentityPage({
 }: {
   profile: Profile;
   endorsements: Endorsement[];
-  /** Optional candidate conduct score (0–100 or null) — shown when provided. */
+  /** Optional candidate conduct score (0-100 or null) - shown when provided. */
   conduct?: number | null;
 }) {
   const skills = [...profile.skills].sort(

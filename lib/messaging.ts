@@ -3,7 +3,7 @@ import type { Application, Message, Role } from "@/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Messaging is consent-gated by construction. Candidate ↔ recruiter threads exist
-// ONLY for applications where both sides opted in (mutual interest) — there is no
+// ONLY for applications where both sides opted in (mutual interest) - there is no
 // cold-outreach path. Threads are derived from that state; only the messages (and
 // per-viewer read marks) are stored.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -26,7 +26,7 @@ export interface ThreadView {
   applicationId?: string;
 }
 
-/** Threads available to the current viewer — application threads with mutual interest. */
+/** Threads available to the current viewer - application threads with mutual interest. */
 export function applicationThreads(apps: Application[], role: Role): ThreadView[] {
   return apps
     .filter((a) => a.candidateInterested && a.recruiterInterested)
@@ -68,7 +68,7 @@ export function unreadCount(
   ).length;
 }
 
-/** Total unread across the viewer's threads — for the Messages tab badge. */
+/** Total unread across the viewer's threads - for the Messages tab badge. */
 export function totalUnread(
   threadIds: string[],
   messages: Message[],

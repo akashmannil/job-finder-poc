@@ -75,7 +75,7 @@ function scoreJob(job: Job, cand: Map<string, CandSkill>): MatchResult {
       if (req.kind === "must_have") mustMet++;
       metRequirements.push({
         requirement: req.skill,
-        evidence: `${reqCanon} — ${EVIDENCE_LABEL[direct.tier]}${
+        evidence: `${reqCanon} - ${EVIDENCE_LABEL[direct.tier]}${
           direct.reskilling ? " · reskilling" : ""
         }`,
       });
@@ -113,10 +113,10 @@ function summarize(
   mustTotal: number,
   disqualified: boolean,
 ): string {
-  if (disqualified) return "Not a fit — a disqualifying requirement applies.";
+  if (disqualified) return "Not a fit - a disqualifying requirement applies.";
   const band =
     score >= 80 ? "Strong fit" : score >= 60 ? "Good fit" : score >= 40 ? "Partial fit" : "Weak fit";
-  return `${band} — meets ${mustMet}/${mustTotal} must-have${mustTotal === 1 ? "" : "s"} for this ${job.seniority} role.`;
+  return `${band} - meets ${mustMet}/${mustTotal} must-have${mustTotal === 1 ? "" : "s"} for this ${job.seniority} role.`;
 }
 
 /** Score the profile against every job and return ranked, joined matches. */
@@ -127,7 +127,7 @@ export function matchProfileToJobs(profile: Profile): MatchResult[] {
     .sort((a, b) => b.fitScore - a.fitScore);
 }
 
-/** Score a single profile against a single job — used by the recruiter talent view. */
+/** Score a single profile against a single job - used by the recruiter talent view. */
 export function matchProfileToJob(profile: Profile, job: Job): MatchResult {
   return scoreJob(job, candidateMap(profile));
 }

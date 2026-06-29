@@ -5,7 +5,7 @@ import { likeCount } from "@/lib/likes";
 import { useStore } from "@/store/store";
 import type { Job } from "@/types";
 
-// A like on a *posting* — a market-demand signal, not a profile vanity metric.
+// A like on a *posting* - a market-demand signal, not a profile vanity metric.
 export function LikeButton({ job, size = "md" }: { job: Job; size?: "sm" | "md" }) {
   const { likedJobs, toggleLike } = useStore();
   const liked = likedJobs.includes(job.id);

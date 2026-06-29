@@ -1,6 +1,6 @@
 import type { Endorsement, EndorsementRelationship } from "@/types";
 
-/** How much a relationship lends credibility — verifiable, close relationships weigh more. */
+/** How much a relationship lends credibility - verifiable, close relationships weigh more. */
 export const RELATIONSHIP_WEIGHT: Record<
   EndorsementRelationship,
   { label: string; weight: "strong" | "moderate" | "light" }

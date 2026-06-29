@@ -12,7 +12,7 @@ import { EVIDENCE_RANK } from "@/types";
 
 // The recruiter's "possible matches": who in the sourcing pool fits a chosen
 // posting, plus where required skills are scarce (the case for offering training).
-// Contact stays double-opt-in — the recruiter signals interest; the candidate
+// Contact stays double-opt-in - the recruiter signals interest; the candidate
 // chooses to apply. Nothing is shared without consent.
 export function RecruiterTalent() {
   const jobs = getRecruiterJobs(ACTIVE_RECRUITER_ID);

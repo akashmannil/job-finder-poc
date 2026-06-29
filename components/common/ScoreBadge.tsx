@@ -9,7 +9,7 @@ function scoreColor(score: number): string {
   return "var(--danger)";
 }
 
-/** Animated circular fit-score indicator (0–100). */
+/** Animated circular fit-score indicator (0-100). */
 export function ScoreBadge({ score, size = 56 }: { score: number; size?: number }) {
   const clamped = Math.max(0, Math.min(100, Math.round(score)));
   const stroke = 5;

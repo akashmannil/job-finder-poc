@@ -67,7 +67,7 @@ export function DecisionPanel({ application }: { application: Application }) {
     <div className="mt-3 space-y-3 border-t border-border pt-3">
       <div className="flex flex-wrap items-center gap-2">
         {mutual ? (
-          <span className="chip !text-success">Mutual interest ✓ — contact unlocked</span>
+          <span className="chip !text-success">Mutual interest ✓ - contact unlocked</span>
         ) : (
           <button
             className="btn-ghost text-xs"

@@ -9,7 +9,7 @@ import { useVariant } from "@/lib/copy/useVariant";
 import { useStore } from "@/store/store";
 import type { Job } from "@/types";
 
-// The recruiter's market lens — the mirror of the candidate's Discover. It shows
+// The recruiter's market lens - the mirror of the candidate's Discover. It shows
 // where the recruiter's postings stand, what's popular, and what competitors are
 // offering, so they can benchmark. Likes are read-only here: recruiters observe
 // demand, candidates express it.
@@ -166,7 +166,7 @@ function MarketJobCard({ job, mine }: { job: Job; mine: boolean }) {
   );
 }
 
-/** Read-only popularity badge — recruiters observe demand, they don't cast likes. */
+/** Read-only popularity badge - recruiters observe demand, they don't cast likes. */
 function popularityLabel(job: Job): string {
   return `♥ ${baseLikes(job).toLocaleString()}`;
 }

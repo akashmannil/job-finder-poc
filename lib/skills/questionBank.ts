@@ -1,7 +1,7 @@
 import { normalizeSkill } from "@/lib/skills/catalog";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Predefined assessment questions per skill — the no-AI replacement for generated
+// Predefined assessment questions per skill - the no-AI replacement for generated
 // quizzes. `answer` is the correct option's text (position-independent, so options
 // can be shuffled for display without breaking grading). Expand by adding entries.
 // Skills without a bank fall back to generic competence questions.

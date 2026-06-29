@@ -1,8 +1,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// Predefined skill catalog — the knowledge that powers the local (no-AI) engines.
+// Predefined skill catalog - the knowledge that powers the local (no-AI) engines.
 // `aliases` let synonyms match (TS ↔ TypeScript); `related` gives transferable
 // partial credit in matching (a React dev partly covers a Next.js requirement).
-// This is intentionally small and easy to expand — add entries to grow coverage.
+// This is intentionally small and easy to expand - add entries to grow coverage.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface SkillDef {
@@ -77,7 +77,7 @@ export function relatedOf(name: string): string[] {
   return BY_NAME.get(normalizeSkill(name))?.related?.map(normalizeSkill) ?? [];
 }
 
-/** True if `a` lists `b` as related (or vice-versa) — a transferable connection. */
+/** True if `a` lists `b` as related (or vice-versa) - a transferable connection. */
 export function areRelated(a: string, b: string): boolean {
   const ca = normalizeSkill(a);
   const cb = normalizeSkill(b);

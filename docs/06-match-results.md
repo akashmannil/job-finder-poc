@@ -1,4 +1,4 @@
-# 06 — Match results UI
+# 06 - Match results UI
 
 > Commit: `feat: match results UI`
 > Nav: [← Prev](05-profile-builder.md) · [Index](DEVLOG.md) · [Next →](07-assessment-passport.md)
@@ -14,18 +14,18 @@ severity. The top match is highlighted.
 
 This closes the candidate matching loop and makes the thesis legible to a human: fit is
 **explained**, not just scored. "Why it fits" cites the evidence behind each met requirement, and
-gaps are visually separated into must-have (red) vs. nice-to-have (amber) — the same distinction
+gaps are visually separated into must-have (red) vs. nice-to-have (amber) - the same distinction
 the matcher weights. Re-running after strengthening evidence (commit 07) visibly changes results.
 
 ## Files in this commit
 
-- [`components/common/ScoreBadge.tsx`](../components/common/ScoreBadge.tsx) — animated SVG fit
+- [`components/common/ScoreBadge.tsx`](../components/common/ScoreBadge.tsx) - animated SVG fit
   ring, color-coded by score band.
-- [`components/candidate/MatchCard.tsx`](../components/candidate/MatchCard.tsx) — one job: score,
+- [`components/candidate/MatchCard.tsx`](../components/candidate/MatchCard.tsx) - one job: score,
   summary, met requirements, gaps; top-match emphasis.
-- [`components/candidate/MatchResults.tsx`](../components/candidate/MatchResults.tsx) — fetches
+- [`components/candidate/MatchResults.tsx`](../components/candidate/MatchResults.tsx) - fetches
   `/api/match`, with loading skeletons, an error state, and staggered result reveal.
-- [`app/page.tsx`](../app/page.tsx) — renders matches under the profile builder.
+- [`app/page.tsx`](../app/page.tsx) - renders matches under the profile builder.
 
 ## How to verify
 

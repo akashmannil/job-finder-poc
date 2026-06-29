@@ -4,7 +4,7 @@
 // in the commit that introduces the feature.
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** How well a skill claim is backed — the matcher weights these very differently. */
+/** How well a skill claim is backed - the matcher weights these very differently. */
 export type EvidenceTier =
   | "self_asserted"
   | "portfolio"
@@ -28,7 +28,7 @@ export const EVIDENCE_LABEL: Record<EvidenceTier, string> = {
 export interface Skill {
   name: string;
   evidence: EvidenceTier;
-  /** Set when the candidate is actively reskilling this — a positive growth signal. */
+  /** Set when the candidate is actively reskilling this - a positive growth signal. */
   currentlyReskilling?: boolean;
 }
 
@@ -164,7 +164,7 @@ export type EndorsementRelationship =
   | "mentor"
   | "other";
 
-/** An endorsement requires a stated relationship and specific evidence — no one-tap skills. */
+/** An endorsement requires a stated relationship and specific evidence - no one-tap skills. */
 export interface Endorsement {
   id: string;
   skill: string;
@@ -185,7 +185,7 @@ export interface ConsentChoices {
   projects: boolean;
 }
 
-/** The exact, filtered view a recruiter receives — the candidate's consented data. */
+/** The exact, filtered view a recruiter receives - the candidate's consented data. */
 export interface ConsentSnapshot {
   profile: Profile;
   endorsements: Endorsement[];
@@ -245,7 +245,7 @@ export interface Application {
   consent: ConsentSnapshot;
   status: ApplicationStatus;
   createdAt: number;
-  /** When the recruiter first moved it past "received" — used for the conduct score. */
+  /** When the recruiter first moved it past "received" - used for the conduct score. */
   respondedAt?: number;
   decisionReason?: string;
   decisionMessage?: string;

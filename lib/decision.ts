@@ -4,7 +4,7 @@ import type { Application, ApplicationStatus } from "@/types";
 // ─────────────────────────────────────────────────────────────────────────────
 // Local, deterministic decision drafting (no AI). Templates per reason code,
 // personalized from the application's consented data. The recruiter edits before
-// sending — the template removes the effort, the human keeps control.
+// sending - the template removes the effort, the human keeps control.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const DECISION_REASONS = [
@@ -43,12 +43,12 @@ export function draftDecision(application: Application, reasonCode: ReasonCode):
     case "skills_gap":
       return {
         subject: `Update on your ${role} application`,
-        body: `Hi ${name}, thank you for applying to ${role} at ${company}. After a careful review we've decided not to move forward this time — the role needs deeper experience in a few must-have areas. We really valued your background${withSkill} and would welcome a future application as you grow those skills.`,
+        body: `Hi ${name}, thank you for applying to ${role} at ${company}. After a careful review we've decided not to move forward this time - the role needs deeper experience in a few must-have areas. We really valued your background${withSkill} and would welcome a future application as you grow those skills.`,
       };
     case "role_filled":
       return {
         subject: `Update on your ${role} application`,
-        body: `Hi ${name}, thank you for your interest in ${role} at ${company}. We've filled this position, so we won't be moving forward — but we were impressed by your background${withSkill} and will keep you in mind for similar openings.`,
+        body: `Hi ${name}, thank you for your interest in ${role} at ${company}. We've filled this position, so we won't be moving forward - but we were impressed by your background${withSkill} and will keep you in mind for similar openings.`,
       };
     case "seniority_mismatch":
       return {

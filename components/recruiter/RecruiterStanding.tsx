@@ -10,7 +10,7 @@ import { standingCopy as RS } from "@/lib/copy/recruiter";
 import { useVariant } from "@/lib/copy/useVariant";
 import { useStore } from "@/store/store";
 
-// The recruiter's own "profile" — how they currently stand. Mirrors the candidate's
+// The recruiter's own "profile" - how they currently stand. Mirrors the candidate's
 // display-first identity: company identity, the public conduct/response score with a
 // factual breakdown, and the decisions they owe (anti-ghosting, not a vanity wall).
 export function RecruiterStanding({ onReview }: { onReview: () => void }) {

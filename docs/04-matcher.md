@@ -1,4 +1,4 @@
-# 04 — Requirement-level matcher
+# 04 - Requirement-level matcher
 
 > Commit: `feat: requirement-level matcher`
 > Nav: [← Prev](03-store-role-switcher.md) · [Index](DEVLOG.md) · [Next →](05-profile-builder.md)
@@ -15,7 +15,7 @@ This is where the thesis becomes code:
 
 - **Requirement-vs-evidence, not text-vs-text.** The prompt sends the profile and the jobs'
   *classified requirements*, and instructs the model to weight `must_have` over `nice_to_have`
-  and **verified evidence over self-asserted claims** — so résumé keyword-stuffing can't win.
+  and **verified evidence over self-asserted claims** - so résumé keyword-stuffing can't win.
 - **Structured outputs.** The response is constrained by [`MATCH_RESULT_SCHEMA`](../lib/schema.ts)
   via `output_config.format`, so we parse guaranteed-valid JSON instead of scraping prose.
 - **Prompt caching.** The large, stable job list is the first content block and carries
@@ -25,14 +25,14 @@ This is where the thesis becomes code:
 
 ## Files in this commit
 
-- [`types/index.ts`](../types/index.ts) — match types (`MetRequirement`, `GapItem`,
+- [`types/index.ts`](../types/index.ts) - match types (`MetRequirement`, `GapItem`,
   `MatchResultRaw`, `MatchResult`).
-- [`lib/anthropic.ts`](../lib/anthropic.ts) — lazy client, model id, and `callStructured()`
+- [`lib/anthropic.ts`](../lib/anthropic.ts) - lazy client, model id, and `callStructured()`
   (handles refusals + extracts the JSON text block).
-- [`lib/schema.ts`](../lib/schema.ts) — the match JSON schema (mirrors `MatchResultRaw`).
-- [`lib/matcher.ts`](../lib/matcher.ts) — system prompt, cached job block, validation, and the
+- [`lib/schema.ts`](../lib/schema.ts) - the match JSON schema (mirrors `MatchResultRaw`).
+- [`lib/matcher.ts`](../lib/matcher.ts) - system prompt, cached job block, validation, and the
   sort + join back to full jobs.
-- [`app/api/match/route.ts`](../app/api/match/route.ts) — POST handler with typed error handling.
+- [`app/api/match/route.ts`](../app/api/match/route.ts) - POST handler with typed error handling.
 
 ## How to verify
 

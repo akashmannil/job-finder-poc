@@ -1,4 +1,4 @@
-# 03 — Shared store & role switcher
+# 03 - Shared store & role switcher
 
 > Commit: `feat: shared store & role switcher`
 > Nav: [← Prev](02-domain-types.md) · [Index](DEVLOG.md) · [Next →](04-matcher.md)
@@ -23,17 +23,17 @@ The `hydrated` flag gates UI until persisted state has loaded, avoiding a server
 
 ## Files in this commit
 
-- [`types/index.ts`](../types/index.ts) — adds the `Role` type.
-- [`store/store.tsx`](../store/store.tsx) — the Context store: `role`, `profile`, persistence,
+- [`types/index.ts`](../types/index.ts) - adds the `Role` type.
+- [`store/store.tsx`](../store/store.tsx) - the Context store: `role`, `profile`, persistence,
   `hydrated`, and actions (`setRole`, `setProfile`, `updateProfile`).
-- [`components/common/RoleSwitcher.tsx`](../components/common/RoleSwitcher.tsx) — animated
+- [`components/common/RoleSwitcher.tsx`](../components/common/RoleSwitcher.tsx) - animated
   segmented toggle (shared `layoutId` pill).
-- [`app/layout.tsx`](../app/layout.tsx) — wraps the tree in `StoreProvider`; adds the switcher.
-- [`app/page.tsx`](../app/page.tsx) — role-aware workspace with an `AnimatePresence` cross-fade.
+- [`app/layout.tsx`](../app/layout.tsx) - wraps the tree in `StoreProvider`; adds the switcher.
+- [`app/page.tsx`](../app/page.tsx) - role-aware workspace with an `AnimatePresence` cross-fade.
 
 ## How to verify
 
-Run the app, flip Candidate ⇄ Recruiter in the header — the pill animates and the workspace
+Run the app, flip Candidate ⇄ Recruiter in the header - the pill animates and the workspace
 cross-fades. Reload: the selected role persists. `npx tsc --noEmit` passes.
 
 ## Decisions & notes

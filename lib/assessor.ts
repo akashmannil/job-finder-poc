@@ -4,7 +4,7 @@ import type { AnsweredItem, Assessment, GradeResult } from "@/types";
 // ─────────────────────────────────────────────────────────────────────────────
 // Local, deterministic assessment engine (no AI). Pulls questions from the
 // predefined bank, shuffles options for display, and grades by matching the
-// selected option's text against the known answer — so the answer key never
+// selected option's text against the known answer - so the answer key never
 // leaves the server.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -44,7 +44,7 @@ export function gradeAssessment(skill: string, items: AnsweredItem[]): GradeResu
     passed,
     score,
     rationale: passed
-      ? `Answered ${correct}/${total} correctly — a solid grasp of ${skill}.`
-      : `Answered ${correct}/${total} correctly — review ${skill} fundamentals and try again.`,
+      ? `Answered ${correct}/${total} correctly - a solid grasp of ${skill}.`
+      : `Answered ${correct}/${total} correctly - review ${skill} fundamentals and try again.`,
   };
 }

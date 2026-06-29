@@ -30,7 +30,7 @@ export function slaLabel(app: Application, now: number): string {
 }
 
 /**
- * Auto-resolve any application whose SLA has lapsed without a decision — the ghost
+ * Auto-resolve any application whose SLA has lapsed without a decision - the ghost
  * path, made explicit. Returns a new array (pure); penalizes the recruiter's conduct.
  */
 export function autoResolveLapsed(apps: Application[], now: number): Application[] {

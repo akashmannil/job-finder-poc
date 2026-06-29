@@ -10,7 +10,7 @@ import { useStore } from "@/store/store";
 import type { Job, MatchResult } from "@/types";
 
 // Swipe-to-decide view over the same match results the list shows. Right = apply
-// (opens the consent modal — the candidate still controls what they share), left
+// (opens the consent modal - the candidate still controls what they share), left
 // = skip. The deck works on a stable snapshot, so applying never reshuffles it.
 export function MatchReel({ results }: { results: MatchResult[] }) {
   const { applications } = useStore();

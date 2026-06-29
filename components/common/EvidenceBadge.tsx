@@ -1,6 +1,6 @@
 import { EVIDENCE_LABEL, type EvidenceTier } from "@/types";
 
-// Visual weight tracks the evidence rank — verified tiers read stronger than claims.
+// Visual weight tracks the evidence rank - verified tiers read stronger than claims.
 const STYLES: Record<EvidenceTier, { className: string; dot: string }> = {
   self_asserted: { className: "bg-surface2 text-muted border border-border", dot: "var(--muted)" },
   portfolio: { className: "bg-accent-soft text-accent", dot: "var(--accent)" },

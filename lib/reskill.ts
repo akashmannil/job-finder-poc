@@ -59,23 +59,23 @@ const BADGE: Record<ReskillSource, string> = {
 // Several pitches per source so cycling the pool keeps the feed feeling fresh.
 const PITCHES: Record<ReskillSource, string[]> = {
   gap_must: [
-    "Recruiters mark this as required — owning it flips a “no” into a “yes”.",
+    "Recruiters mark this as required - owning it flips a “no” into a “yes”.",
     "A must-have you’re missing on real roles. Close it and unlock matches.",
     "This is the gate on roles you almost qualify for. Walk through it.",
   ],
   gap_nice: [
-    "Not required — but it’s the tie-breaker on great roles.",
+    "Not required - but it’s the tie-breaker on great roles.",
     "A nice-to-have that tips close calls your way.",
     "Small lift, real edge: this is what separates two equal candidates.",
   ],
   adjacent: [
-    "You’re one step away — it builds right on what you already know.",
+    "You’re one step away - it builds right on what you already know.",
     "Adjacent to your stack: the fastest new skill you’ll ever pick up.",
     "Natural next move from your current skills. Low effort, high payoff.",
   ],
   trending: [
     "One of the most-requested skills on the market right now.",
-    "Hot in postings this quarter — get ahead of the demand.",
+    "Hot in postings this quarter - get ahead of the demand.",
     "Employers are competing for this one. Be what they’re searching for.",
   ],
 };

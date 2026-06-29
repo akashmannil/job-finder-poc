@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 // A reusable Tinder-style swipe deck. The top card is draggable horizontally:
 // fling/drag right to take the positive action, left to dismiss. Also driven by
 // the ← → keys and the tap buttons, so it works on desktop and for keyboard users.
-// Presentation only — callers own what a swipe *means* via onSwipe.
+// Presentation only - callers own what a swipe *means* via onSwipe.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface SwipeMeta {

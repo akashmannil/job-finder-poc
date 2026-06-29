@@ -2,7 +2,7 @@ import { deadlineOf, isOverdue } from "@/lib/sla";
 import type { Application } from "@/types";
 
 export interface ConductResult {
-  /** 0–100, or null when there isn't enough activity to judge. */
+  /** 0-100, or null when there isn't enough activity to judge. */
   score: number | null;
   total: number;
   timely: number;

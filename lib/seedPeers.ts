@@ -2,7 +2,7 @@ import type { PeerThread } from "@/types";
 
 // Seed peer connections so both roles have something to act on: one active thread
 // (chat already open) and one incoming request (accept/decline). Outgoing requests
-// the user sends during the demo stay pending — honest, since the seed peers can't
+// the user sends during the demo stay pending - honest, since the seed peers can't
 // reply in a single-user POC.
 
 const DAY = 86_400_000;
@@ -12,7 +12,7 @@ const ME = { id: "me", name: "You", role: "candidate" as const };
 const REC1 = { id: "rec-1", name: "Dana Okafor", role: "recruiter" as const, subtitle: "Northwind Labs" };
 
 export const SEED_PEER_THREADS: PeerThread[] = [
-  // Candidate ↔ candidate — active connection.
+  // Candidate ↔ candidate - active connection.
   {
     id: "peer:maya",
     participants: [
@@ -20,11 +20,11 @@ export const SEED_PEER_THREADS: PeerThread[] = [
       { id: "tal-1", name: "Maya Rao", role: "candidate", subtitle: "Senior frontend engineer" },
     ],
     requestedById: "tal-1",
-    reason: "Loved your portfolio — would value swapping feedback on design-system work.",
+    reason: "Loved your portfolio - would value swapping feedback on design-system work.",
     status: "active",
     createdAt: now - 3 * DAY,
   },
-  // Candidate ↔ candidate — incoming request to accept/decline.
+  // Candidate ↔ candidate - incoming request to accept/decline.
   {
     id: "peer:req-diego",
     participants: [
@@ -37,11 +37,11 @@ export const SEED_PEER_THREADS: PeerThread[] = [
       },
     ],
     requestedById: "tal-2",
-    reason: "Saw you're reskilling into platform work — would love to compare notes.",
+    reason: "Saw you're reskilling into platform work - would love to compare notes.",
     status: "pending",
     createdAt: now - 6 * 3_600_000,
   },
-  // Recruiter ↔ recruiter — active connection.
+  // Recruiter ↔ recruiter - active connection.
   {
     id: "peer:rec2",
     participants: [
@@ -53,7 +53,7 @@ export const SEED_PEER_THREADS: PeerThread[] = [
     status: "active",
     createdAt: now - 2 * DAY,
   },
-  // Recruiter ↔ recruiter — incoming request to accept/decline.
+  // Recruiter ↔ recruiter - incoming request to accept/decline.
   {
     id: "peer:req-rec3",
     participants: [

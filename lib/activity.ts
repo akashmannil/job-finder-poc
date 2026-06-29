@@ -3,7 +3,7 @@ import type { Application } from "@/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // An honest "since you were last here" digest. It only reports things that
-// actually changed (recruiter decisions on your applications) — never invented
+// actually changed (recruiter decisions on your applications) - never invented
 // counts, urgency, or "people viewed you" bait. Empty when nothing happened.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -15,7 +15,7 @@ export interface DigestItem {
 
 /** Updates to the candidate's own applications since their previous session. */
 export function activityDigest(apps: Application[], since: number): DigestItem[] {
-  if (since <= 0) return []; // first visit — nothing to recap
+  if (since <= 0) return []; // first visit - nothing to recap
   const items: DigestItem[] = [];
 
   for (const a of apps) {

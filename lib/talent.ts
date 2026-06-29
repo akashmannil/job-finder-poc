@@ -6,7 +6,7 @@ import type { Course, Endorsement, Job, MatchResult, Profile } from "@/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // A small sourcing directory: candidate profiles the recruiter could reach out to,
-// independent of who has applied. Mirrors the candidate's "possible matches" — the
+// independent of who has applied. Mirrors the candidate's "possible matches" - the
 // recruiter sees who fits their open roles. Seed data, easy to expand.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -94,7 +94,7 @@ export interface SkillSupplyGap {
 }
 
 /**
- * Where the recruiter's required skills are scarce in the talent pool — the case
+ * Where the recruiter's required skills are scarce in the talent pool - the case
  * for offering training. High demand + low supply rises to the top, with the
  * courses that would build that skill in candidates.
  */

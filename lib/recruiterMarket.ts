@@ -5,7 +5,7 @@ import type { Job } from "@/types";
 // ─────────────────────────────────────────────────────────────────────────────
 // The recruiter-side market lens: how a recruiter's own postings stack up against
 // the rest of the market, plus the competing and popular postings they should be
-// aware of. All derived from the seed jobs — the mirror of the candidate Discover.
+// aware of. All derived from the seed jobs - the mirror of the candidate Discover.
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** Postings owned by other recruiters, ranked by market attractiveness. */
@@ -15,7 +15,7 @@ export function competitorJobs(recruiterId: string, likedJobs: string[] = []): J
   );
 }
 
-/** Every posting ranked by attractiveness — used to place a recruiter's roles. */
+/** Every posting ranked by attractiveness - used to place a recruiter's roles. */
 function rankedMarket(likedJobs: string[] = []): Job[] {
   return [...JOBS].sort((a, b) => attractiveness(b, likedJobs) - attractiveness(a, likedJobs));
 }

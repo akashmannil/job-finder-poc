@@ -10,7 +10,7 @@ function tone(score: number): string {
 }
 
 /**
- * Reputation as behavior, not reach. This is the only "score" on a profile — there
+ * Reputation as behavior, not reach. This is the only "score" on a profile - there
  * are no vanity metrics anywhere else.
  */
 export function ConductScore({
