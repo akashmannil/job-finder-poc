@@ -108,6 +108,13 @@ gaps, then skills *adjacent* to what the candidate has (via the catalog's `relat
 in-demand skills they lack - and cycles that pool with rotating "advertising" copy so the feed never
 runs dry, even before a match has been run.
 
+**Incentives make the payoff concrete.** Reskilling cards show what a skill unlocks
+([`lib/skillImpact.ts`](lib/skillImpact.ts): roles requiring it, market demand, median pay, and the
+pay premium over the market median), and match cards show pay plus a *projected fit lift*
+([`projectedFit`](lib/matcher.ts) re-scores the role with the gap skill added). Both are derived from
+the live job set with the real matcher, so the numbers a candidate sees on the reskilling side and
+the matching side always agree.
+
 ## The recruiter workspace (mirror of the candidate side)
 
 The recruiter side is a tabbed workspace - **Market · Talent · Postings · Standing** - symmetric

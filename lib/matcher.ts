@@ -131,3 +131,15 @@ export function matchProfileToJobs(profile: Profile): MatchResult[] {
 export function matchProfileToJob(profile: Profile, job: Job): MatchResult {
   return scoreJob(job, candidateMap(profile));
 }
+
+/**
+ * The fit score this job would show if `skill` were added (assessment-verified) to
+ * the profile. Drives the "close this gap to reach ~Y%" incentive on match cards.
+ */
+export function projectedFit(profile: Profile, job: Job, skill: string): number {
+  const augmented: Profile = {
+    ...profile,
+    skills: [...profile.skills, { name: skill, evidence: "assessment_passed" as const }],
+  };
+  return matchProfileToJob(augmented, job).fitScore;
+}

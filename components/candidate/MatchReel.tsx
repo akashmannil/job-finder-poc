@@ -6,6 +6,7 @@ import { SwipeDeck } from "@/components/common/SwipeDeck";
 import { ConsentShare } from "@/components/candidate/ConsentShare";
 import { matchReelCopy as R, matchesCopy as M } from "@/lib/copy/candidate";
 import { useVariant } from "@/lib/copy/useVariant";
+import { projectedFit } from "@/lib/matcher";
 import { useStore } from "@/store/store";
 import type { Job, MatchResult } from "@/types";
 
@@ -47,9 +48,13 @@ export function MatchReel({ results }: { results: MatchResult[] }) {
 
 function ReelJobCard({ result, applied }: { result: MatchResult; applied: boolean }) {
   const { job } = result;
+  const { profile } = useStore();
   const whyItFits = useVariant(M.whyItFits);
   const skillGaps = useVariant(M.skillGaps);
   const noneMet = useVariant(M.noneMet);
+  const topGap = result.gaps.find((g) => g.severity === "must_have") ?? result.gaps[0];
+  const projected = topGap ? projectedFit(profile, job, topGap.skill) : result.fitScore;
+  const showLift = !!topGap && projected > result.fitScore;
   return (
     <article className="card flex h-full flex-col gap-4 overflow-hidden p-6">
       <header className="flex items-start gap-4">
@@ -102,6 +107,14 @@ function ReelJobCard({ result, applied }: { result: MatchResult; applied: boolea
               ))}
             </ul>
           </>
+        )}
+
+        {showLift && topGap && (
+          <div className="mt-3 rounded-xl bg-accent-soft px-3 py-2 text-sm text-accent">
+            {M.liftLearn} <span className="font-semibold">{topGap.skill}</span> {M.liftTo}{" "}
+            <span className="font-semibold">{projected}%</span> {M.liftFit} (+
+            {projected - result.fitScore})
+          </div>
         )}
       </div>
     </article>

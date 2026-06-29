@@ -52,6 +52,9 @@ export const matchesCopy = {
   topMatch: ["Top match", "Best fit", "Strongest match"],
   applied: "Applied",
   apply: "Apply",
+  liftLearn: "Learn",
+  liftTo: "to reach about",
+  liftFit: "fit",
 } as const;
 
 export const matchReelCopy = {

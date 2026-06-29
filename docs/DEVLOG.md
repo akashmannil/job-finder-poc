@@ -76,6 +76,7 @@ file in that commit.
 | # | Feature | Commit | What & why |
 |---|---------|--------|------------|
 | 40 | [Reskilling incentives](40-reskilling-impact.md) | `feat: reskilling impact stats (roles unlocked, demand, pay)` | Show what each skill unlocks (roles, demand %, median pay, pay premium) on every reskilling card, computed live from the job set. |
+| 41 | [Matching incentives](41-matching-incentives.md) | `feat: matching incentives - salary and projected fit lift on match cards` | Show salary on match cards and a projected "close this gap to reach ~Y% fit" callout (real matcher re-score) in the list and reel. |
 
 ## Root documentation
 
@@ -83,6 +84,6 @@ file in that commit.
 - [ARCHITECTURE](../ARCHITECTURE.md) - design rationale (incl. the design system)
 - [PROMPTS](../PROMPTS.md) - the engines & question bank
 
-Phase 6 is committed (36-38) and centralizes UI copy into editable random-variant constants under
-`lib/copy/`. Commit 39 (the repo-wide em/en dash cleanup) is staged in the working tree, ready to
-commit; once it lands the repo carries no AI-style long dashes.
+Phase 6 (editable copy + dash cleanup, 36-39) is committed. Phase 7 adds concrete incentives:
+reskilling cards show what a skill unlocks (40) and match cards show pay plus a projected fit lift
+(41). Commit 41 is staged in the working tree, ready to commit.

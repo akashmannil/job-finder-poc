@@ -6,12 +6,13 @@ import { ConsentShare } from "@/components/candidate/ConsentShare";
 import { LikeButton } from "@/components/candidate/LikeButton";
 import { matchesCopy as M } from "@/lib/copy/candidate";
 import { useVariant } from "@/lib/copy/useVariant";
+import { projectedFit } from "@/lib/matcher";
 import { useStore } from "@/store/store";
 import type { MatchResult } from "@/types";
 
 export function MatchCard({ result, top = false }: { result: MatchResult; top?: boolean }) {
   const { job } = result;
-  const { applications } = useStore();
+  const { applications, profile } = useStore();
   const [applying, setApplying] = useState(false);
   const applied = applications.some((a) => a.jobId === job.id && a.own);
   const topMatch = useVariant(M.topMatch);
@@ -19,6 +20,11 @@ export function MatchCard({ result, top = false }: { result: MatchResult; top?: 
   const skillGaps = useVariant(M.skillGaps);
   const noneMet = useVariant(M.noneMet);
   const noGaps = useVariant(M.noGaps);
+
+  // The single most valuable gap to close, and where it would take the fit score.
+  const topGap = result.gaps.find((g) => g.severity === "must_have") ?? result.gaps[0];
+  const projected = topGap ? projectedFit(profile, job, topGap.skill) : result.fitScore;
+  const showLift = !!topGap && projected > result.fitScore;
 
   return (
     <article
@@ -37,6 +43,9 @@ export function MatchCard({ result, top = false }: { result: MatchResult; top?: 
           <p className="text-sm text-muted">
             {job.company} · {job.location}
             {job.remote ? " · Remote" : ""}
+          </p>
+          <p className="mt-0.5 text-sm font-medium text-accent">
+            ${Math.round(job.salaryMin / 1000)}k-${Math.round(job.salaryMax / 1000)}k
           </p>
           <p className="mt-2 text-sm">{result.summary}</p>
         </div>
@@ -90,6 +99,13 @@ export function MatchCard({ result, top = false }: { result: MatchResult; top?: 
           </ul>
         </div>
       </div>
+
+      {showLift && topGap && (
+        <div className="mt-4 rounded-xl bg-accent-soft px-3.5 py-2.5 text-sm text-accent">
+          {M.liftLearn} <span className="font-semibold">{topGap.skill}</span> {M.liftTo}{" "}
+          <span className="font-semibold">{projected}%</span> {M.liftFit} (+{projected - result.fitScore})
+        </div>
+      )}
 
       {applying && <ConsentShare job={job} onClose={() => setApplying(false)} />}
     </article>

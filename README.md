@@ -23,11 +23,12 @@ a human.)
 - **Display-first profile** that replaces the résumé - a LinkedIn-style page that *shows* your
   details and reveals an editor only on **Edit**; every skill carries an evidence tier.
 - **Requirement-level matching** that weights verified evidence over claims and must-haves over
-  fluff, with explainable "why it fits" and gaps - browsable as a list or a **swipe reel**.
+  fluff, with explainable "why it fits" and gaps - browsable as a list or a **swipe reel**. Each
+  match shows **pay** and a **projected fit lift** ("learn X to reach ~Y%").
 - **Prove a skill** inline - pass an assessment to *earn* verified evidence.
 - **Reskilling reel** - an infinite, advertising-style feed of skills to grow (from your gaps,
-  adjacent skills, and market demand); "currently reskilling" is a positive signal a résumé can't
-  carry.
+  adjacent skills, and market demand); each card shows **what the skill unlocks** (roles, demand,
+  pay), and "currently reskilling" is a positive signal a résumé can't carry.
 - **Evidence-backed endorsements** - relationship + specific evidence required (no one-tap skills).
 - **Preview as recruiter** - the exact consented view, with **zero vanity metrics**, plus
   consent-controlled applying.
