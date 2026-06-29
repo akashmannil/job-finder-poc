@@ -15,8 +15,12 @@ responsive three-column workspace shell:
 - **Right: a context panel.** On `xl+` a sticky rail of compact cards summarizes the
   current state and offers one-tap jumps into the relevant tab. Hidden below `xl`, so it
   only appears where there is genuinely room.
-- The page container widens to `xl:max-w-[84rem]` so the rails consume the gutters instead
-  of squeezing the reading column.
+- The page container widens to `xl:max-w-[84rem]` (and `2xl:max-w-[96rem]` on very large
+  monitors) so the rails consume the gutters instead of squeezing the reading column, and
+  page padding tightens on phones (`px-4`, was a flat `px-5`).
+- The **reskilling reel** drops its `max-w-xl` single-column cap (which left the cards
+  marooned in the middle of the section) for an inline grid that flows 1 -> 2 -> 3 columns
+  with width, filling the space it's given.
 
 ### Candidate context rail
 
@@ -53,7 +57,10 @@ metric, a streak, or a manufactured-urgency nudge.
 - `lib/copy/sidebar.ts` - new `railCopy` (variant headings + stable labels).
 - `app/page.tsx` - both workspaces mount on `WorkspaceShell`; exports `TopView` /
   `RecruiterView` for the rails to type their navigation callback.
-- `app/layout.tsx` - header + main widen to `xl:max-w-[84rem]`.
+- `app/layout.tsx` - header + main widen to `xl:max-w-[84rem]` / `2xl:max-w-[96rem]`, with
+  tighter phone padding (`px-4 sm:px-5`).
+- `components/candidate/ReskillReel.tsx` - the feed flows as an inline 1/2/3-column grid
+  instead of a centered `max-w-xl` single column.
 
 ## How to verify
 

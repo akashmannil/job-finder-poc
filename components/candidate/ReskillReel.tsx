@@ -89,19 +89,21 @@ export function ReskillReel() {
           <p className="mt-1 text-sm text-muted">{emptyBody}</p>
         </div>
       ) : (
-        <div className="mx-auto max-w-xl space-y-4">
-          {items.map((item) => (
-            <FadeUp key={item.key}>
-              <ReelCard
-                item={item}
-                reskilling={isReskilling(item.skill)}
-                onToggle={() => toggleReskilling(item.skill)}
-              />
-            </FadeUp>
-          ))}
+        <>
+          <div className="grid items-start gap-4 sm:grid-cols-2 2xl:grid-cols-3">
+            {items.map((item) => (
+              <FadeUp key={item.key}>
+                <ReelCard
+                  item={item}
+                  reskilling={isReskilling(item.skill)}
+                  onToggle={() => toggleReskilling(item.skill)}
+                />
+              </FadeUp>
+            ))}
+          </div>
           <div ref={sentinel} className="h-10" aria-hidden />
           <p className="pb-4 text-center text-xs text-muted">{footer}</p>
-        </div>
+        </>
       )}
     </section>
   );

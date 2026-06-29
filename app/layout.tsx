@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <StoreProvider>
             <div className="min-h-screen">
               <header className="sticky top-0 z-30 border-b border-border/60 bg-bg/70 backdrop-blur-xl backdrop-saturate-150">
-                <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-5 xl:max-w-[84rem]">
+                <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:px-5 xl:max-w-[84rem] 2xl:max-w-[96rem]">
                   <a
                     href="/"
                     className="flex items-center gap-2 text-[17px] font-semibold tracking-tight"
@@ -40,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   </div>
                 </div>
               </header>
-              <main className="mx-auto max-w-6xl px-5 py-12 xl:max-w-[84rem]">{children}</main>
+              <main className="mx-auto max-w-6xl px-4 py-12 sm:px-5 xl:max-w-[84rem] 2xl:max-w-[96rem]">{children}</main>
             </div>
           </StoreProvider>
         </ThemeProvider>
