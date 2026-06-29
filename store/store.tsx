@@ -10,8 +10,17 @@ import {
 } from "react";
 import { SEED_APPLICATIONS } from "@/lib/seedApplications";
 import { SEED_MESSAGES } from "@/lib/seedMessages";
+import { SEED_PEER_THREADS } from "@/lib/seedPeers";
 import { autoResolveLapsed, DAY } from "@/lib/sla";
-import type { Application, Endorsement, GapItem, Message, Profile, Role } from "@/types";
+import type {
+  Application,
+  Endorsement,
+  GapItem,
+  Message,
+  PeerThread,
+  Profile,
+  Role,
+} from "@/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // The single client-side store both sides of the marketplace read and write.
@@ -39,6 +48,8 @@ interface AppState {
   applications: Application[];
   /** All messages across consent-gated threads (application + peer). */
   messages: Message[];
+  /** Peer connections (request/accept) between same-role users. */
+  peerThreads: PeerThread[];
   /** Per-viewer read marks, keyed `${userId}:${threadId}` → last-read timestamp. */
   threadReads: Record<string, number>;
   /** Job ids the candidate has liked — a market-demand signal on postings (not on people). */
@@ -66,6 +77,10 @@ interface StoreValue extends AppState {
   sendMessage: (threadId: string, senderId: string, body: string) => void;
   /** Mark a thread read by a viewer up to now. */
   markThreadRead: (threadId: string, userId: string) => void;
+  /** Send a peer connection request (a pending PeerThread). */
+  requestConnection: (thread: PeerThread) => void;
+  /** Accept (→ active) or decline (→ removed) a pending peer request. */
+  respondToConnection: (id: string, accept: boolean) => void;
   /** Toggle a like on a job posting. */
   toggleLike: (jobId: string) => void;
   /** Current (possibly simulated) time = Date.now() + clockOffset. */
@@ -84,6 +99,7 @@ const INITIAL: AppState = {
   endorsements: [],
   applications: SEED_APPLICATIONS,
   messages: SEED_MESSAGES,
+  peerThreads: SEED_PEER_THREADS,
   threadReads: {},
   likedJobs: [],
   lastSeenAt: 0,
@@ -182,6 +198,21 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       })),
     [],
   );
+  const requestConnection = useCallback(
+    (thread: PeerThread) =>
+      setState((s) => ({ ...s, peerThreads: [thread, ...s.peerThreads] })),
+    [],
+  );
+  const respondToConnection = useCallback(
+    (id: string, accept: boolean) =>
+      setState((s) => ({
+        ...s,
+        peerThreads: accept
+          ? s.peerThreads.map((t) => (t.id === id ? { ...t, status: "active" as const } : t))
+          : s.peerThreads.filter((t) => t.id !== id),
+      })),
+    [],
+  );
   const toggleLike = useCallback(
     (jobId: string) =>
       setState((s) => ({
@@ -223,6 +254,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         updateApplication,
         sendMessage,
         markThreadRead,
+        requestConnection,
+        respondToConnection,
         toggleLike,
         now,
         advanceClock,

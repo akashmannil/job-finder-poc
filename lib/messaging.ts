@@ -18,11 +18,12 @@ export function currentUserId(role: Role): string {
 
 export interface ThreadView {
   id: string;
+  kind: "application" | "peer";
   /** The other party's display name, from the current viewer's perspective. */
   otherName: string;
   /** A short context line (the role this conversation is about). */
   context: string;
-  applicationId: string;
+  applicationId?: string;
 }
 
 /** Threads available to the current viewer — application threads with mutual interest. */
@@ -38,7 +39,7 @@ export function applicationThreads(apps: Application[], role: Role): ThreadView[
         role === "recruiter"
           ? `${job?.title ?? a.jobId} · applicant`
           : `${job?.title ?? a.jobId} · ${company}`;
-      return { id: `app:${a.id}`, otherName, context, applicationId: a.id };
+      return { id: `app:${a.id}`, kind: "application" as const, otherName, context, applicationId: a.id };
     });
 }
 

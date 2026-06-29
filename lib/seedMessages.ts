@@ -32,4 +32,20 @@ export const SEED_MESSAGES: Message[] = [
     body: "Hi — thanks for applying. We'd love to set up a first call. What's your availability?",
     createdAt: now - 1 * DAY,
   },
+  // Peer (candidate ↔ candidate) — active connection with Maya Rao.
+  {
+    id: "msg-seed-4",
+    threadId: "peer:maya",
+    senderId: "tal-1",
+    body: "Thanks for connecting! Want to swap portfolio feedback this week?",
+    createdAt: now - 3 * DAY + 2 * HOUR,
+  },
+  // Peer (recruiter ↔ recruiter) — active connection with Sam Rivera.
+  {
+    id: "msg-seed-5",
+    threadId: "peer:rec2",
+    senderId: "rec-2",
+    body: "Hey Dana — are you seeing the same FE salary pressure we are?",
+    createdAt: now - 2 * DAY + 4 * HOUR,
+  },
 ];

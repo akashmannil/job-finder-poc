@@ -214,6 +214,29 @@ export interface Message {
   createdAt: number;
 }
 
+/** A peer connection (candidate↔candidate or recruiter↔recruiter). */
+export type ConnectionStatus = "pending" | "active";
+
+export interface PeerParticipant {
+  id: string;
+  name: string;
+  role: Role;
+  subtitle?: string;
+}
+
+/**
+ * A peer-to-peer thread. Always starts as a `pending` request with a stated
+ * `reason` (no cold/bulk DMs); chat opens only once the recipient accepts.
+ */
+export interface PeerThread {
+  id: string;
+  participants: PeerParticipant[];
+  requestedById: string;
+  reason: string;
+  status: ConnectionStatus;
+  createdAt: number;
+}
+
 export interface Application {
   id: string;
   jobId: string;

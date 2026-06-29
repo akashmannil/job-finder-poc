@@ -14,7 +14,7 @@ import { RecruiterTalent } from "@/components/recruiter/RecruiterTalent";
 import { RecruiterStanding } from "@/components/recruiter/RecruiterStanding";
 import { Messages } from "@/components/common/Messages";
 import { candidateConduct } from "@/lib/conductScore";
-import { applicationThreads, currentUserId, totalUnread } from "@/lib/messaging";
+import { messagesBadge } from "@/lib/peers";
 import { useStore } from "@/store/store";
 
 export default function Home() {
@@ -45,17 +45,11 @@ export default function Home() {
 type TopView = "discover" | "profile" | "matches" | "reskill" | "applications" | "messages";
 
 function CandidateWorkspace() {
-  const { applications, messages, threadReads } = useStore();
+  const { applications, messages, threadReads, peerThreads } = useStore();
   const [view, setView] = useState<TopView>("discover");
   const myConduct = candidateConduct(applications.filter((a) => a.own)).score;
   const openApps = applications.filter((a) => a.own).length;
-  const me = currentUserId("candidate");
-  const unreadMsgs = totalUnread(
-    applicationThreads(applications, "candidate").map((t) => t.id),
-    messages,
-    me,
-    threadReads,
-  );
+  const unreadMsgs = messagesBadge("candidate", applications, peerThreads, messages, threadReads);
 
   const tabs: { id: TopView; label: string; badge?: number }[] = [
     { id: "discover", label: "Discover" },
@@ -124,15 +118,9 @@ function CandidateWorkspace() {
 type RecruiterView = "market" | "talent" | "postings" | "standing" | "messages";
 
 function RecruiterWorkspace() {
-  const { applications, messages, threadReads } = useStore();
+  const { applications, messages, threadReads, peerThreads } = useStore();
   const [view, setView] = useState<RecruiterView>("market");
-  const me = currentUserId("recruiter");
-  const unreadMsgs = totalUnread(
-    applicationThreads(applications, "recruiter").map((t) => t.id),
-    messages,
-    me,
-    threadReads,
-  );
+  const unreadMsgs = messagesBadge("recruiter", applications, peerThreads, messages, threadReads);
 
   const tabs: { id: RecruiterView; label: string; badge?: number }[] = [
     { id: "market", label: "Market" },
