@@ -60,6 +60,7 @@ file in that commit.
 | 32 | [Messaging core](32-messaging-core.md) | `feat: consent-gated messaging — candidate ↔ recruiter threads` | In-app messaging gated on mutual interest: a shared Messages surface + tab (with unread badge) on both sides, threads derived from consented applications only — no cold outreach. |
 | 33 | [Peer connections](33-peer-connections.md) | `feat: peer messaging via connection requests (candidate↔candidate, recruiter↔recruiter)` | Peer messaging gated by request/accept with a stated reason (no cold DMs): incoming/outgoing requests, a peer directory, and accepted peer threads in the same Messages surface. |
 | 34 | [Docs sweep for messaging](34-messaging-docs.md) | `docs: document consent-gated messaging across root docs` | Bring README / ARCHITECTURE / PROMPTS in line with the messaging layer and its consent design. |
+| 35 | [Peer search + visibility consent](35-peer-search-visibility.md) | `feat: peer search bar + network-visibility consent` | Replace the peer dropdown (which exposed the whole directory) with a search bar, and add a per-user Discoverable/Hidden toggle that search respects. |
 
 ## Root documentation
 
@@ -67,5 +68,6 @@ file in that commit.
 - [ARCHITECTURE](../ARCHITECTURE.md) — design rationale (incl. the design system)
 - [PROMPTS](../PROMPTS.md) — the engines & question bank
 
-Phase 5 (consent-gated messaging) is complete and committed: core candidate ↔ recruiter threads
-(32), peer connections (33), and this docs sweep (34). All work through commit 34 is committed.
+Phase 5 (consent-gated messaging) is committed: core candidate ↔ recruiter threads (32), peer
+connections (33), docs sweep (34), and peer search + network-visibility consent (35). Commit 35 is
+staged in the working tree, ready to commit.

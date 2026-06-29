@@ -50,6 +50,8 @@ interface AppState {
   messages: Message[];
   /** Peer connections (request/accept) between same-role users. */
   peerThreads: PeerThread[];
+  /** Network discoverability per participant id; absent = visible. `false` = hidden from search. */
+  networkVisibility: Record<string, boolean>;
   /** Per-viewer read marks, keyed `${userId}:${threadId}` → last-read timestamp. */
   threadReads: Record<string, number>;
   /** Job ids the candidate has liked — a market-demand signal on postings (not on people). */
@@ -81,6 +83,8 @@ interface StoreValue extends AppState {
   requestConnection: (thread: PeerThread) => void;
   /** Accept (→ active) or decline (→ removed) a pending peer request. */
   respondToConnection: (id: string, accept: boolean) => void;
+  /** Set whether a participant is discoverable to the whole network. */
+  setVisibility: (userId: string, visible: boolean) => void;
   /** Toggle a like on a job posting. */
   toggleLike: (jobId: string) => void;
   /** Current (possibly simulated) time = Date.now() + clockOffset. */
@@ -100,6 +104,8 @@ const INITIAL: AppState = {
   applications: SEED_APPLICATIONS,
   messages: SEED_MESSAGES,
   peerThreads: SEED_PEER_THREADS,
+  // Two seed peers opt out of discovery, so search visibly respects the consent.
+  networkVisibility: { "tal-3": false, "rec-4": false },
   threadReads: {},
   likedJobs: [],
   lastSeenAt: 0,
@@ -213,6 +219,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       })),
     [],
   );
+  const setVisibility = useCallback(
+    (userId: string, visible: boolean) =>
+      setState((s) => ({
+        ...s,
+        networkVisibility: { ...s.networkVisibility, [userId]: visible },
+      })),
+    [],
+  );
   const toggleLike = useCallback(
     (jobId: string) =>
       setState((s) => ({
@@ -256,6 +270,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         markThreadRead,
         requestConnection,
         respondToConnection,
+        setVisibility,
         toggleLike,
         now,
         advanceClock,

@@ -150,7 +150,9 @@ the platform draws on contact everywhere.
   stored.
 - **Peer ↔ peer** (candidate↔candidate, recruiter↔recruiter) goes through a request/accept flow
   ([`lib/peers.ts`](lib/peers.ts)): a `PeerThread` starts `pending` with a required reason and only
-  becomes `active` (chat-enabled) when the recipient accepts. No cold or bulk DMs.
+  becomes `active` (chat-enabled) when the recipient accepts. No cold or bulk DMs. Discovery is by
+  **search** (no browsable directory dump), and each person controls their own findability via a
+  `networkVisibility` consent flag — hidden people don't surface in search.
 - One shared surface ([`components/common/Messages.tsx`](components/common/Messages.tsx)) renders
   both, with the viewer's identity (`currentUserId(role)`) deciding which threads exist and which
   bubbles are "mine". The Messages-tab badge is a plain unread + requests-to-act count — not an

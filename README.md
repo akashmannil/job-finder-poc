@@ -35,7 +35,9 @@ a human.)
   snapshot, and a "while you were away" digest that surfaces *only* real decisions since your last
   visit. No streaks, attention counts, or FOMO.
 - **Messaging (consent-gated)** — chat with a recruiter only after **mutual interest**, or connect
-  with **peers** via a request/accept that requires a reason. No cold DMs, no open inbox.
+  with **peers** via a request/accept that requires a reason. Peers are found by **search** (no
+  directory dump) and anyone can set themselves **hidden** from network discovery. No cold DMs, no
+  open inbox.
 
 **Recruiter side** (a tabbed workspace mirroring the candidate's — **Market · Talent · Postings ·
 Standing · Messages**)

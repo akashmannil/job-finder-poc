@@ -13,13 +13,15 @@ import {
   buildPeerRequest,
   connectedPeerIds,
   incomingRequests,
+  isVisible,
   otherOf,
   outgoingRequests,
-  peerDirectory,
+  searchPeers,
   selfParticipant,
 } from "@/lib/peers";
 import { useStore } from "@/store/store";
 import type { ThreadView } from "@/lib/messaging";
+import type { PeerParticipant } from "@/types";
 
 // Shared, consent-gated messaging surface used by both roles. The viewer's identity
 // (and therefore which threads exist and which bubbles are "mine") comes from the
@@ -28,16 +30,18 @@ import type { ThreadView } from "@/lib/messaging";
 export function Messages() {
   const {
     role,
-    profile,
     applications,
     messages,
     threadReads,
     peerThreads,
+    networkVisibility,
     sendMessage,
     markThreadRead,
     respondToConnection,
+    setVisibility,
   } = useStore();
   const me = currentUserId(role);
+  const myVisible = isVisible(me, networkVisibility);
 
   const threads = useMemo<ThreadView[]>(
     () => [...applicationThreads(applications, role), ...activePeerThreadViews(peerThreads, role)],
@@ -60,9 +64,24 @@ export function Messages() {
             outreach, no open inbox.
           </p>
         </div>
-        <button className="btn-soft text-sm" onClick={() => setComposing((v) => !v)}>
-          {composing ? "Close" : "New connection"}
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => setVisibility(me, !myVisible)}
+            aria-pressed={myVisible}
+            title={
+              myVisible
+                ? "You're discoverable — peers can find and request you"
+                : "You're hidden — peers can't find you in search"
+            }
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1.5 text-sm"
+          >
+            <span className={`h-2.5 w-2.5 rounded-full ${myVisible ? "bg-success" : "bg-muted"}`} />
+            {myVisible ? "Discoverable" : "Hidden"}
+          </button>
+          <button className="btn-soft text-sm" onClick={() => setComposing((v) => !v)}>
+            {composing ? "Close" : "New connection"}
+          </button>
+        </div>
       </div>
 
       {composing && <NewConnection onDone={() => setComposing(false)} />}
@@ -177,17 +196,20 @@ export function Messages() {
 }
 
 function NewConnection({ onDone }: { onDone: () => void }) {
-  const { role, profile, peerThreads, requestConnection } = useStore();
+  const { role, profile, peerThreads, networkVisibility, requestConnection } = useStore();
   const connected = connectedPeerIds(peerThreads, role);
-  const directory = peerDirectory(role).filter((p) => !connected.has(p.id));
-  const [targetId, setTargetId] = useState("");
+  const [query, setQuery] = useState("");
+  const [target, setTarget] = useState<PeerParticipant | null>(null);
   const [reason, setReason] = useState("");
   const [error, setError] = useState("");
 
+  const results = searchPeers(role, query, networkVisibility, connected);
+
   function send() {
-    const target = directory.find((p) => p.id === targetId);
-    if (!target) return setError("Pick someone to connect with.");
-    if (reason.trim().length < 10) return setError("Add a real reason (≥ 10 characters) — no cold DMs.");
+    if (!target) return;
+    if (reason.trim().length < 10) {
+      return setError("Add a real reason (≥ 10 characters) — no cold DMs.");
+    }
     requestConnection(buildPeerRequest(selfParticipant(role, profile), target, reason.trim()));
     onDone();
   }
@@ -197,26 +219,61 @@ function NewConnection({ onDone }: { onDone: () => void }) {
       <p className="text-sm font-medium">
         Connect with a {role === "recruiter" ? "fellow recruiter" : "peer"}
       </p>
-      {directory.length === 0 ? (
-        <p className="text-sm text-muted">You&apos;re already connected with everyone available.</p>
-      ) : (
-        <>
-          <div className="grid gap-2 sm:grid-cols-2">
-            <select
-              className="input"
-              value={targetId}
-              onChange={(e) => setTargetId(e.target.value)}
-              aria-label="Who to connect with"
-            >
-              <option value="">Choose someone…</option>
-              {directory.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name}
-                  {p.subtitle ? ` — ${p.subtitle}` : ""}
-                </option>
-              ))}
-            </select>
+
+      {target ? (
+        <div className="flex items-center justify-between gap-2 rounded-xl bg-surface2 px-3 py-2">
+          <div className="min-w-0">
+            <p className="truncate text-sm font-medium">{target.name}</p>
+            {target.subtitle && <p className="truncate text-xs text-muted">{target.subtitle}</p>}
           </div>
+          <button
+            className="btn-ghost text-xs"
+            onClick={() => {
+              setTarget(null);
+              setQuery("");
+            }}
+          >
+            Change
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          <input
+            className="input"
+            placeholder={`Search ${role === "recruiter" ? "recruiters" : "people"} by name…`}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            autoFocus
+          />
+          {query.trim() &&
+            (results.length === 0 ? (
+              <p className="text-sm text-muted">
+                No discoverable matches. People who turn off network visibility don&apos;t appear in
+                search.
+              </p>
+            ) : (
+              <ul className="max-h-48 space-y-1 overflow-auto">
+                {results.map((p) => (
+                  <li key={p.id}>
+                    <button
+                      className="w-full rounded-lg px-3 py-2 text-left hover:bg-surface2"
+                      onClick={() => {
+                        setTarget(p);
+                        setError("");
+                      }}
+                    >
+                      <p className="text-sm font-medium">{p.name}</p>
+                      {p.subtitle && <p className="text-xs text-muted">{p.subtitle}</p>}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ))}
+        </div>
+      )}
+
+      {target && (
+        <>
           <textarea
             className="input"
             rows={2}

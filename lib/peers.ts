@@ -36,6 +36,32 @@ export function selfParticipant(role: Role, profile: Profile): PeerParticipant {
   };
 }
 
+/** Is a participant discoverable to the network? Absent in the map = visible. */
+export function isVisible(id: string, visibility: Record<string, boolean>): boolean {
+  return visibility[id] !== false;
+}
+
+/**
+ * Search the peer directory by name/subtitle. Returns nothing for an empty query
+ * (so the whole network is never just dumped), and excludes peers who opted out of
+ * discovery or whom the viewer is already connected to.
+ */
+export function searchPeers(
+  role: Role,
+  query: string,
+  visibility: Record<string, boolean>,
+  connected: Set<string>,
+): PeerParticipant[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return [];
+  return peerDirectory(role).filter(
+    (p) =>
+      isVisible(p.id, visibility) &&
+      !connected.has(p.id) &&
+      (p.name.toLowerCase().includes(q) || (p.subtitle?.toLowerCase().includes(q) ?? false)),
+  );
+}
+
 /** People the current viewer could connect with (same role, excludes self). */
 export function peerDirectory(role: Role): PeerParticipant[] {
   if (role === "recruiter") {

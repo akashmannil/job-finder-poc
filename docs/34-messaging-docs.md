@@ -1,7 +1,7 @@
 # 34 — Docs sweep for messaging
 
 > Commit: `docs: document consent-gated messaging across root docs`
-> Nav: [← Prev](33-peer-connections.md) · [Index](DEVLOG.md)
+> Nav: [← Prev](33-peer-connections.md) · [Index](DEVLOG.md) · [Next →](35-peer-search-visibility.md)
 
 ## What this adds
 
