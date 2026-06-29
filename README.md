@@ -34,9 +34,11 @@ a human.)
 - **Honest retention (no baiting)** — a saved-roles watchlist, a private reskilling-progress
   snapshot, and a "while you were away" digest that surfaces *only* real decisions since your last
   visit. No streaks, attention counts, or FOMO.
+- **Messaging (consent-gated)** — chat with a recruiter only after **mutual interest**, or connect
+  with **peers** via a request/accept that requires a reason. No cold DMs, no open inbox.
 
 **Recruiter side** (a tabbed workspace mirroring the candidate's — **Market · Talent · Postings ·
-Standing**)
+Standing · Messages**)
 
 - **Market** — the recruiter's Discover: market stats, **your standing vs the market** (pay/interest
   deltas, per-posting market rank), **popular postings**, and **competitor postings** to benchmark.
@@ -49,12 +51,15 @@ Standing**)
 - **Standing** — the recruiter's profile: company identity, the **public response score** with a
   breakdown, and an SLA-sorted **"needs your decision"** list. **Application SLA + auto-close** means
   ghosting is penalized, not free.
+- **Messages** — chat with applicants you have **mutual interest** with, and connect with **fellow
+  recruiters** via request/accept. Same consent gate, no cold outreach.
 
 ## Try it (the demo script)
 
-The candidate side has five tabs — **Discover · Profile · Matches · Reskilling · Applications**.
-The app opens on **Discover** (the market); **Profile** is *display-first* — it shows your details
-and reveals an editor only when you click **Edit** on a section (LinkedIn/Facebook style).
+The candidate side has six tabs — **Discover · Profile · Matches · Reskilling · Applications ·
+Messages**. The app opens on **Discover** (the market); **Profile** is *display-first* — it shows
+your details and reveals an editor only when you click **Edit** on a section (LinkedIn/Facebook
+style).
 
 1. **Candidate** opens on **Discover** — market stats, the "Offer of the moment", and trending
    roles. **Like** a posting (♡) and the count ticks up; the teaser jumps to the reskilling reel.
@@ -74,6 +79,9 @@ and reveals an editor only when you click **Edit** on a section (LinkedIn/Facebo
    decision (or **Review reel** to swipe shortlist/pass).
 7. Switch back to **Candidate** → the **Applications** tab shows the decision. Or use **⏱ +3d** in
    the header to let an SLA lapse and watch the recruiter's response score drop.
+8. **Messages** (either role) — open the seeded thread and reply; accept the **incoming connection
+   request**; or hit **New connection**, pick a peer, write a reason, and send. Threads only exist
+   where both sides opted in.
 
 ## Proof over reach (a deliberate trade-off)
 

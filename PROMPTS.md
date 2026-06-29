@@ -69,6 +69,8 @@ The discovery and retention surfaces are the same kind of inspectable, determini
   gaps → adjacent → in-demand skills with rotating copy for an endless, deterministic feed.
 - **Activity digest** ([`lib/activity.ts`](lib/activity.ts)) — reports only real application status
   changes since the last visit; no fabricated counts.
+- **Messaging** ([`lib/messaging.ts`](lib/messaging.ts), [`lib/peers.ts`](lib/peers.ts)) — not an
+  engine: consent-gated threads derived from application/peer state, pure store logic with no model.
 
 ## Why deterministic
 

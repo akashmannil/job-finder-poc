@@ -59,6 +59,7 @@ file in that commit.
 |---|---------|--------|------------|
 | 32 | [Messaging core](32-messaging-core.md) | `feat: consent-gated messaging — candidate ↔ recruiter threads` | In-app messaging gated on mutual interest: a shared Messages surface + tab (with unread badge) on both sides, threads derived from consented applications only — no cold outreach. |
 | 33 | [Peer connections](33-peer-connections.md) | `feat: peer messaging via connection requests (candidate↔candidate, recruiter↔recruiter)` | Peer messaging gated by request/accept with a stated reason (no cold DMs): incoming/outgoing requests, a peer directory, and accepted peer threads in the same Messages surface. |
+| 34 | [Docs sweep for messaging](34-messaging-docs.md) | `docs: document consent-gated messaging across root docs` | Bring README / ARCHITECTURE / PROMPTS in line with the messaging layer and its consent design. |
 
 ## Root documentation
 
@@ -66,6 +67,5 @@ file in that commit.
 - [ARCHITECTURE](../ARCHITECTURE.md) — design rationale (incl. the design system)
 - [PROMPTS](../PROMPTS.md) — the engines & question bank
 
-Phase 4 (discovery, growth, recruiter experience, retention) and the role-switch fix (31) are
-committed. Phase 5 adds consent-gated messaging: commit 32 (candidate ↔ recruiter) is staged in the
-working tree, with peer connections (33) and a docs sweep (34) to follow.
+Phase 5 (consent-gated messaging) is complete and committed: core candidate ↔ recruiter threads
+(32), peer connections (33), and this docs sweep (34). All work through commit 34 is committed.

@@ -139,6 +139,26 @@ renders nothing otherwise); saved roles and the reskilling-progress snapshot are
 The recruiter's pull is the Market lens and the Standing decisions-owed list. There are deliberately
 no streaks, attention counters, "someone viewed you" nudges, or manufactured urgency anywhere.
 
+## Messaging (consent-gated)
+
+Messaging exists on both sides but is **gated by construction**, never an open inbox — the same line
+the platform draws on contact everywhere.
+
+- **Candidate ↔ recruiter** threads are *derived* from applications with mutual interest
+  (`candidateInterested && recruiterInterested`) in [`lib/messaging.ts`](lib/messaging.ts). A thread
+  literally cannot exist without both opt-ins; only the `messages` and per-viewer read marks are
+  stored.
+- **Peer ↔ peer** (candidate↔candidate, recruiter↔recruiter) goes through a request/accept flow
+  ([`lib/peers.ts`](lib/peers.ts)): a `PeerThread` starts `pending` with a required reason and only
+  becomes `active` (chat-enabled) when the recipient accepts. No cold or bulk DMs.
+- One shared surface ([`components/common/Messages.tsx`](components/common/Messages.tsx)) renders
+  both, with the viewer's identity (`currentUserId(role)`) deciding which threads exist and which
+  bubbles are "mine". The Messages-tab badge is a plain unread + requests-to-act count — not an
+  attention metric.
+
+It's all client state (store + localStorage), consistent with the rest of the POC; there's no
+backend and no notification pressure.
+
 ## Design system, theming & motion
 
 The UI uses an **Apple-inspired design system** defined entirely in
