@@ -3,13 +3,16 @@
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { motion } from "@/components/common/Motion";
+import { WorkspaceShell } from "@/components/common/WorkspaceShell";
 import { Discover } from "@/components/candidate/Discover";
 import { CandidateProfile } from "@/components/candidate/CandidateProfile";
+import { CandidateRail } from "@/components/candidate/CandidateRail";
 import { MatchResults } from "@/components/candidate/MatchResults";
 import { ReskillReel } from "@/components/candidate/ReskillReel";
 import { ApplicationTracker } from "@/components/candidate/ApplicationTracker";
 import { RecruiterDashboard } from "@/components/recruiter/RecruiterDashboard";
 import { RecruiterMarket } from "@/components/recruiter/RecruiterMarket";
+import { RecruiterRail } from "@/components/recruiter/RecruiterRail";
 import { RecruiterTalent } from "@/components/recruiter/RecruiterTalent";
 import { RecruiterStanding } from "@/components/recruiter/RecruiterStanding";
 import { Messages } from "@/components/common/Messages";
@@ -42,7 +45,7 @@ export default function Home() {
   );
 }
 
-type TopView = "discover" | "profile" | "matches" | "reskill" | "applications" | "messages";
+export type TopView = "discover" | "profile" | "matches" | "reskill" | "applications" | "messages";
 
 function CandidateWorkspace() {
   const { applications, messages, threadReads, peerThreads } = useStore();
@@ -61,33 +64,13 @@ function CandidateWorkspace() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap gap-1 rounded-[11px] bg-surface2 p-1">
-        {tabs.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => setView(t.id)}
-            className={`relative z-10 inline-flex items-center gap-1.5 rounded-[8px] px-3.5 py-1.5 text-[13px] font-medium transition-colors ${
-              view === t.id ? "text-fg" : "text-muted hover:text-fg"
-            }`}
-          >
-            {view === t.id && (
-              <motion.span
-                layoutId="cand-view-pill"
-                className="absolute inset-0 -z-10 rounded-[8px] bg-surface shadow-sm"
-                transition={{ type: "spring", stiffness: 380, damping: 30 }}
-              />
-            )}
-            {t.label}
-            {t.badge ? (
-              <span className="rounded-full bg-accent-soft px-1.5 text-[11px] font-semibold text-accent">
-                {t.badge}
-              </span>
-            ) : null}
-          </button>
-        ))}
-      </div>
-
+    <WorkspaceShell
+      tabs={tabs}
+      view={view}
+      onSelect={setView}
+      pillId="cand-view-pill"
+      aside={<CandidateRail onNavigate={setView} />}
+    >
       <AnimatePresence mode="wait">
         <motion.div
           key={view}
@@ -111,11 +94,11 @@ function CandidateWorkspace() {
           )}
         </motion.div>
       </AnimatePresence>
-    </div>
+    </WorkspaceShell>
   );
 }
 
-type RecruiterView = "market" | "talent" | "postings" | "standing" | "messages";
+export type RecruiterView = "market" | "talent" | "postings" | "standing" | "messages";
 
 function RecruiterWorkspace() {
   const { applications, messages, threadReads, peerThreads } = useStore();
@@ -131,33 +114,13 @@ function RecruiterWorkspace() {
   ];
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap gap-1 rounded-[11px] bg-surface2 p-1">
-        {tabs.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => setView(t.id)}
-            className={`relative z-10 inline-flex items-center gap-1.5 rounded-[8px] px-3.5 py-1.5 text-[13px] font-medium transition-colors ${
-              view === t.id ? "text-fg" : "text-muted hover:text-fg"
-            }`}
-          >
-            {view === t.id && (
-              <motion.span
-                layoutId="rec-view-pill"
-                className="absolute inset-0 -z-10 rounded-[8px] bg-surface shadow-sm"
-                transition={{ type: "spring", stiffness: 380, damping: 30 }}
-              />
-            )}
-            {t.label}
-            {t.badge ? (
-              <span className="rounded-full bg-accent-soft px-1.5 text-[11px] font-semibold text-accent">
-                {t.badge}
-              </span>
-            ) : null}
-          </button>
-        ))}
-      </div>
-
+    <WorkspaceShell
+      tabs={tabs}
+      view={view}
+      onSelect={setView}
+      pillId="rec-view-pill"
+      aside={<RecruiterRail onNavigate={setView} />}
+    >
       <AnimatePresence mode="wait">
         <motion.div
           key={view}
@@ -179,6 +142,6 @@ function RecruiterWorkspace() {
           )}
         </motion.div>
       </AnimatePresence>
-    </div>
+    </WorkspaceShell>
   );
 }

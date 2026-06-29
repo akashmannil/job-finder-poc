@@ -78,6 +78,12 @@ file in that commit.
 | 40 | [Reskilling incentives](40-reskilling-impact.md) | `feat: reskilling impact stats (roles unlocked, demand, pay)` | Show what each skill unlocks (roles, demand %, median pay, pay premium) on every reskilling card, computed live from the job set. |
 | 41 | [Matching incentives](41-matching-incentives.md) | `feat: matching incentives - salary and projected fit lift on match cards` | Show salary on match cards and a projected "close this gap to reach ~Y% fit" callout (real matcher re-score) in the list and reel. |
 
+### Phase 8 - layout (use the full width)
+
+| # | Feature | Commit | What & why |
+|---|---------|--------|------------|
+| 42 | [Side rails](42-side-rails.md) | `feat: workspace side rails - vertical nav + right context panel` *(staged, not yet committed)* | Reclaim the empty side gutters: the tab menu becomes a sticky vertical rail on lg+, and a right-hand context panel (glanceable state + one-tap jumps) appears on xl+. Both collapse back to today's layout on smaller screens. |
+
 ## Root documentation
 
 - [README](../README.md) - overview, demo script, setup, limitations

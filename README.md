@@ -64,6 +64,11 @@ Messages**. The app opens on **Discover** (the market); **Profile** is *display-
 your details and reveals an editor only when you click **Edit** on a section (LinkedIn/Facebook
 style).
 
+> **On a wide screen** the tabs sit in a left **nav rail** and a right **context panel** appears
+> (candidate: you + in-demand skills + tracking; recruiter: standing + decisions owed + market
+> pulse) - glanceable state with one-tap jumps. Narrow the window and the panel hides, then the
+> nav folds back to a top strip - the layout adapts to the space it has.
+
 1. **Candidate** opens on **Discover** - market stats, the "Offer of the moment", and trending
    roles. **Like** a posting (♡) and the count ticks up; the teaser jumps to the reskilling reel.
 2. **Profile** → *Load sample profile*. Each section (Identity, Skills, Experience, Projects,

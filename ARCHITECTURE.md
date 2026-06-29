@@ -168,6 +168,21 @@ the platform draws on contact everywhere.
 It's all client state (store + localStorage), consistent with the rest of the POC; there's no
 backend and no notification pressure.
 
+## The workspace shell (using the full width)
+
+Both sides render through one responsive shell
+([`components/common/WorkspaceShell.tsx`](components/common/WorkspaceShell.tsx)) that turns the
+empty side gutters into chrome on large screens. The tab menu is a horizontal segmented control
+on small screens and a **sticky vertical nav rail** on `lg+`; a **right-hand context panel**
+appears on `xl+` and is hidden below it, so the reading column never stretches edge to edge.
+The context rails ([`components/candidate/CandidateRail.tsx`](components/candidate/CandidateRail.tsx),
+[`components/recruiter/RecruiterRail.tsx`](components/recruiter/RecruiterRail.tsx)) are derived,
+read-only summaries with one-tap jumps between tabs - identity + engagement, in-demand skills,
+and tracking on the candidate side; standing, decisions owed, and market pulse on the recruiter
+side. They reuse the existing engines (`topSkillsInDemand`, the conduct scores, the SLA helpers),
+so every number agrees with the tab it links to, and they hold to the people-side rules: the only
+number on a person is the conduct score, nothing here is a vanity metric or an urgency nudge.
+
 ## Design system, theming & motion
 
 The UI uses an **Apple-inspired design system** defined entirely in
