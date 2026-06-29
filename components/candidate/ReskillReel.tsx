@@ -5,10 +5,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { FadeUp } from "@/components/common/Motion";
 import { ReskillProgress } from "@/components/candidate/ReskillProgress";
 import { reskillPage } from "@/lib/reskill";
+import { reskillCopy as C } from "@/lib/copy/candidate";
+import { useVariant } from "@/lib/copy/useVariant";
 import { useStore } from "@/store/store";
 import type { ReskillItem } from "@/lib/reskill";
 
-const MAX_PAGES = 40; // generous cap — the feed feels endless without unbounded growth
+const MAX_PAGES = 40; // generous cap - the feed feels endless without unbounded growth
 
 // A reels-style, infinite-scroll reskilling feed: each card advertises a skill the
 // candidate is missing (from match gaps, adjacent skills, or market demand) with a
@@ -65,25 +67,25 @@ export function ReskillReel() {
     }
   }
 
+  const title = useVariant(C.title);
+  const subtitle = useVariant(C.subtitle);
+  const emptyTitle = useVariant(C.emptyTitle);
+  const emptyBody = useVariant(C.emptyBody);
+  const footer = useVariant(C.footer);
+
   return (
     <section className="space-y-4">
       <div>
-        <h1 className="h-display">Reskilling</h1>
-        <p className="mt-1 text-muted">
-          An endless feed of skills worth growing into — pulled from your gaps and what the market
-          wants. Marking one <em>in progress</em> shows recruiters you’re actively leveling up.
-        </p>
+        <h1 className="h-display">{title}</h1>
+        <p className="mt-1 text-muted">{subtitle}</p>
       </div>
 
       <ReskillProgress />
 
       {items.length === 0 ? (
         <div className="card p-8 text-center">
-          <p className="font-medium">You’re remarkably well-rounded</p>
-          <p className="mt-1 text-sm text-muted">
-            No obvious gaps right now. Run a match from <span className="text-fg">Matches</span> to
-            surface role-specific skills to grow.
-          </p>
+          <p className="font-medium">{emptyTitle}</p>
+          <p className="mt-1 text-sm text-muted">{emptyBody}</p>
         </div>
       ) : (
         <div className="mx-auto max-w-xl space-y-4">
@@ -97,7 +99,7 @@ export function ReskillReel() {
             </FadeUp>
           ))}
           <div ref={sentinel} className="h-10" aria-hidden />
-          <p className="pb-4 text-center text-xs text-muted">Keep scrolling — there’s always more to learn.</p>
+          <p className="pb-4 text-center text-xs text-muted">{footer}</p>
         </div>
       )}
     </section>
@@ -113,6 +115,8 @@ function ReelCard({
   reskilling: boolean;
   onToggle: () => void;
 }) {
+  const noCourse = useVariant(C.noCourse);
+  const onProfileNote = useVariant(C.onProfileNote);
   return (
     <article className="card overflow-hidden p-0">
       <div className="flex items-center justify-between gap-2 bg-accent-soft px-5 py-3">
@@ -148,9 +152,7 @@ function ReelCard({
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-muted">
-            No course on file yet — mark it in progress to flag your intent to grow.
-          </p>
+          <p className="text-sm text-muted">{noCourse}</p>
         )}
 
         <div className="flex items-center justify-between gap-2">
@@ -158,7 +160,7 @@ function ReelCard({
             onClick={onToggle}
             className={reskilling ? "btn-primary text-sm" : "btn-soft text-sm"}
           >
-            {reskilling ? "Reskilling ✓" : "Start reskilling"}
+            {reskilling ? `${C.inProgress} ✓` : C.start}
           </button>
           {reskilling && (
             <motion.span
@@ -166,7 +168,7 @@ function ReelCard({
               animate={{ opacity: 1 }}
               className="text-xs text-accent"
             >
-              Shown on your profile as “currently reskilling”.
+              {onProfileNote}
             </motion.span>
           )}
         </div>

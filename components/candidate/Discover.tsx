@@ -8,6 +8,8 @@ import { ActivityDigest } from "@/components/candidate/ActivityDigest";
 import { SavedRoles } from "@/components/candidate/SavedRoles";
 import { getJob } from "@/lib/jobs";
 import { marketStats, topSkillsInDemand, trendingJobs } from "@/lib/likes";
+import { discoverCopy as C } from "@/lib/copy/candidate";
+import { useVariant } from "@/lib/copy/useVariant";
 import { useStore } from "@/store/store";
 import type { Job } from "@/types";
 
@@ -16,6 +18,15 @@ import type { Job } from "@/types";
 export function Discover({ onGoReskill }: { onGoReskill: () => void }) {
   const { likedJobs, applications } = useStore();
   const [applyJob, setApplyJob] = useState<Job | null>(null);
+
+  const title = useVariant(C.title);
+  const subtitle = useVariant(C.subtitle);
+  const offerKicker = useVariant(C.offerKicker);
+  const heroTag = useVariant(C.heroTag);
+  const trendingHeading = useVariant(C.trendingHeading);
+  const teaserKicker = useVariant(C.reskillTeaserKicker);
+  const teaserTitle = useVariant(C.reskillTeaserTitle);
+  const teaserTail = useVariant(C.reskillTeaserTail);
 
   const ranked = trendingJobs(likedJobs);
   const hero = ranked[0];
@@ -34,10 +45,8 @@ export function Discover({ onGoReskill }: { onGoReskill: () => void }) {
       {/* Industry highlight */}
       <section className="space-y-4">
         <div>
-          <h1 className="h-display">The market, right now</h1>
-          <p className="mt-1 text-muted">
-            Live highlights from open roles — the offers and skills drawing the most interest today.
-          </p>
+          <h1 className="h-display">{title}</h1>
+          <p className="mt-1 text-muted">{subtitle}</p>
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {stats.map((s) => (
@@ -51,15 +60,11 @@ export function Discover({ onGoReskill }: { onGoReskill: () => void }) {
 
       {/* Hero — most attractive offer */}
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
-          Offer of the moment
-        </h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">{offerKicker}</h2>
         <FadeUp>
           <article className="card overflow-hidden p-0">
             <div className="bg-accent-soft px-6 py-5">
-              <p className="text-xs font-semibold uppercase tracking-wide text-accent">
-                Top-rated opening
-              </p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-accent">{heroTag}</p>
               <h3 className="mt-1 text-2xl font-semibold tracking-tight">{hero.title}</h3>
               <p className="text-muted">
                 {hero.company} · {hero.location}
@@ -68,7 +73,7 @@ export function Discover({ onGoReskill }: { onGoReskill: () => void }) {
             </div>
             <div className="space-y-4 p-6">
               <p className="text-xl font-semibold text-accent">
-                ${Math.round(hero.salaryMin / 1000)}k–${Math.round(hero.salaryMax / 1000)}k
+                ${Math.round(hero.salaryMin / 1000)}k-${Math.round(hero.salaryMax / 1000)}k
               </p>
               <p className="text-sm">{hero.description}</p>
               <div className="flex flex-wrap items-center gap-3">
@@ -77,7 +82,7 @@ export function Discover({ onGoReskill }: { onGoReskill: () => void }) {
                   disabled={isApplied(hero.id)}
                   onClick={() => setApplyJob(hero)}
                 >
-                  {isApplied(hero.id) ? "Applied ✓" : "Apply now"}
+                  {isApplied(hero.id) ? `${C.applied} ✓` : C.applyNow}
                 </button>
                 <LikeButton job={hero} />
               </div>
@@ -88,7 +93,9 @@ export function Discover({ onGoReskill }: { onGoReskill: () => void }) {
 
       {/* Trending roles */}
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">Trending roles</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
+          {trendingHeading}
+        </h2>
         <StaggerList className="grid gap-3 sm:grid-cols-2">
           {rest.map((job) => (
             <FadeUp key={job.id}>
@@ -100,7 +107,7 @@ export function Discover({ onGoReskill }: { onGoReskill: () => void }) {
                     {job.remote ? " · Remote" : ""}
                   </p>
                   <p className="mt-2 text-sm font-medium text-accent">
-                    ${Math.round(job.salaryMin / 1000)}k–${Math.round(job.salaryMax / 1000)}k
+                    ${Math.round(job.salaryMin / 1000)}k-${Math.round(job.salaryMax / 1000)}k
                   </p>
                 </div>
                 <div className="flex items-center justify-between gap-2">
@@ -110,7 +117,7 @@ export function Discover({ onGoReskill }: { onGoReskill: () => void }) {
                     disabled={isApplied(job.id)}
                     onClick={() => setApplyJob(job)}
                   >
-                    {isApplied(job.id) ? "Applied ✓" : "Apply"}
+                    {isApplied(job.id) ? `${C.applied} ✓` : C.apply}
                   </button>
                 </div>
               </article>
@@ -131,14 +138,11 @@ export function Discover({ onGoReskill }: { onGoReskill: () => void }) {
           >
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-accent">
-                Stay in demand
+                {teaserKicker}
               </p>
-              <h3 className="mt-1 text-xl font-semibold tracking-tight">
-                Skills the market wants — that you don&apos;t have yet
-              </h3>
+              <h3 className="mt-1 text-xl font-semibold tracking-tight">{teaserTitle}</h3>
               <p className="mt-1 text-sm text-muted">
-                {hotSkills.map((s) => s.skill).slice(0, 4).join(" · ")} … and more. Swipe through a
-                personalized reskilling feed.
+                {hotSkills.map((s) => s.skill).slice(0, 4).join(" · ")} … {teaserTail}
               </p>
             </div>
             <span className="shrink-0 text-2xl text-accent transition-transform group-hover:translate-x-1">

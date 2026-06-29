@@ -6,11 +6,17 @@ import { FadeUp, StaggerList } from "@/components/common/Motion";
 import { MatchCard } from "@/components/candidate/MatchCard";
 import { MatchReel } from "@/components/candidate/MatchReel";
 import { aggregateGaps } from "@/lib/reskill";
+import { matchesCopy as M } from "@/lib/copy/candidate";
+import { useVariant } from "@/lib/copy/useVariant";
 import { useStore } from "@/store/store";
 import type { MatchResult } from "@/types";
 
 export function MatchResults() {
   const { profile, setMatchGaps } = useStore();
+  const title = useVariant(M.title);
+  const subtitle = useVariant(M.subtitle);
+  const needSkill = useVariant(M.needSkill);
+  const noneMsg = useVariant(M.none);
   const [results, setResults] = useState<MatchResult[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,10 +49,8 @@ export function MatchResults() {
     <section className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-semibold tracking-tight">Matches</h2>
-          <p className="text-sm text-muted">
-            Ranked by honest fit — verified evidence and must-haves carry the most weight.
-          </p>
+          <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
+          <p className="text-sm text-muted">{subtitle}</p>
         </div>
         <div className="flex items-center gap-2">
           {results && results.length > 0 && (
@@ -65,14 +69,12 @@ export function MatchResults() {
             </div>
           )}
           <button className="btn-primary" onClick={runMatch} disabled={!canMatch || loading}>
-            {loading ? "Matching…" : results ? "Re-run match" : "Find matches"}
+            {loading ? `${M.matching}…` : results ? M.rerun : M.find}
           </button>
         </div>
       </div>
 
-      {!canMatch && (
-        <p className="text-sm text-muted">Add at least one skill to your profile to match.</p>
-      )}
+      {!canMatch && <p className="text-sm text-muted">{needSkill}</p>}
 
       <AnimatePresence>
         {error && (
@@ -96,7 +98,7 @@ export function MatchResults() {
       )}
 
       {results && !loading && results.length === 0 && (
-        <p className="text-sm text-muted">No matches returned.</p>
+        <p className="text-sm text-muted">{noneMsg}</p>
       )}
 
       {results && !loading && results.length > 0 && mode === "reel" && (

@@ -62,12 +62,19 @@ file in that commit.
 | 34 | [Docs sweep for messaging](34-messaging-docs.md) | `docs: document consent-gated messaging across root docs` | Bring README / ARCHITECTURE / PROMPTS in line with the messaging layer and its consent design. |
 | 35 | [Peer search + visibility consent](35-peer-search-visibility.md) | `feat: peer search bar + network-visibility consent` | Replace the peer dropdown (which exposed the whole directory) with a search bar, and add a per-user Discoverable/Hidden toggle that search respects. |
 
+### Phase 6 - editable copy & AI-style cleanup
+
+| # | Feature | Commit | What & why |
+|---|---------|--------|------------|
+| 36 | [Copy module + candidate copy](36-copy-module-candidate.md) | `refactor: centralize candidate copy into editable variant constants` | A `lib/copy` module (pick + useVariant) and migration of candidate discovery/matches/reskill/applications text into editable arrays of random variants. |
+
 ## Root documentation
 
 - [README](../README.md) — overview, demo script, setup, limitations
 - [ARCHITECTURE](../ARCHITECTURE.md) — design rationale (incl. the design system)
 - [PROMPTS](../PROMPTS.md) — the engines & question bank
 
-Phase 5 (consent-gated messaging) is committed: core candidate ↔ recruiter threads (32), peer
-connections (33), docs sweep (34), and peer search + network-visibility consent (35). Commit 35 is
-staged in the working tree, ready to commit.
+Phase 5 (consent-gated messaging) is committed (32-35). Phase 6 centralizes UI copy into editable
+random-variant constants and removes AI-style em dashes: commit 36 (copy module + candidate copy) is
+staged in the working tree, with candidate profile copy (37), recruiter/messaging/shared copy (38),
+and the repo-wide dash cleanup (39) to follow.

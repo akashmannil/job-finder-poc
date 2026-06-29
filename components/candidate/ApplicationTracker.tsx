@@ -4,28 +4,29 @@ import { FadeUp, StaggerList } from "@/components/common/Motion";
 import { formatRelative, isTerminal, STATUS_META } from "@/lib/applications";
 import { slaLabel } from "@/lib/sla";
 import { getJob } from "@/lib/jobs";
+import { applicationsCopy as C } from "@/lib/copy/candidate";
+import { useVariant } from "@/lib/copy/useVariant";
 import { useStore } from "@/store/store";
 
 export function ApplicationTracker() {
   const { applications, now } = useStore();
   const t = now();
   const mine = applications.filter((a) => a.own);
+  const title = useVariant(C.title);
+  const subtitle = useVariant(C.subtitle);
+  const emptyTitle = useVariant(C.emptyTitle);
+  const emptyBody = useVariant(C.emptyBody);
 
   return (
     <section className="space-y-4">
       <div>
-        <h2 className="text-2xl font-semibold tracking-tight">Your applications</h2>
-        <p className="text-sm text-muted">
-          Live status — recruiters answer on the clock, so you’re never left guessing.
-        </p>
+        <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
+        <p className="text-sm text-muted">{subtitle}</p>
       </div>
       {mine.length === 0 && (
         <div className="card p-8 text-center">
-          <p className="font-medium">No applications yet</p>
-          <p className="mt-1 text-sm text-muted">
-            Head to <span className="text-fg">Workspace → Matches</span> and apply to a role — it
-            will appear here with a live SLA countdown.
-          </p>
+          <p className="font-medium">{emptyTitle}</p>
+          <p className="mt-1 text-sm text-muted">{emptyBody}</p>
         </div>
       )}
       <StaggerList className="space-y-3">

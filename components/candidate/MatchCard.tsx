@@ -4,6 +4,8 @@ import { useState } from "react";
 import { ScoreBadge } from "@/components/common/ScoreBadge";
 import { ConsentShare } from "@/components/candidate/ConsentShare";
 import { LikeButton } from "@/components/candidate/LikeButton";
+import { matchesCopy as M } from "@/lib/copy/candidate";
+import { useVariant } from "@/lib/copy/useVariant";
 import { useStore } from "@/store/store";
 import type { MatchResult } from "@/types";
 
@@ -12,6 +14,11 @@ export function MatchCard({ result, top = false }: { result: MatchResult; top?: 
   const { applications } = useStore();
   const [applying, setApplying] = useState(false);
   const applied = applications.some((a) => a.jobId === job.id && a.own);
+  const topMatch = useVariant(M.topMatch);
+  const whyItFits = useVariant(M.whyItFits);
+  const skillGaps = useVariant(M.skillGaps);
+  const noneMet = useVariant(M.noneMet);
+  const noGaps = useVariant(M.noGaps);
 
   return (
     <article
@@ -20,7 +27,7 @@ export function MatchCard({ result, top = false }: { result: MatchResult; top?: 
     >
       {top && (
         <span className="absolute -top-2 left-5 rounded-full bg-accent px-2 py-0.5 text-xs font-medium text-accent-contrast">
-          Top match
+          {topMatch}
         </span>
       )}
       <div className="flex items-start gap-4">
@@ -39,7 +46,7 @@ export function MatchCard({ result, top = false }: { result: MatchResult; top?: 
             disabled={applied}
             onClick={() => setApplying(true)}
           >
-            {applied ? "Applied ✓" : "Apply"}
+            {applied ? `${M.applied} ✓` : M.apply}
           </button>
           <LikeButton job={job} size="sm" />
         </div>
@@ -47,22 +54,22 @@ export function MatchCard({ result, top = false }: { result: MatchResult; top?: 
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <div>
-          <h4 className="text-xs font-semibold uppercase tracking-wide text-muted">Why it fits</h4>
+          <h4 className="text-xs font-semibold uppercase tracking-wide text-muted">{whyItFits}</h4>
           <ul className="mt-1.5 space-y-1.5">
             {result.metRequirements.map((m, i) => (
               <li key={i} className="text-sm">
                 <span className="mr-1 text-success">✓</span>
                 <span className="font-medium">{m.requirement}</span>
-                <span className="text-muted"> — {m.evidence}</span>
+                <span className="text-muted"> - {m.evidence}</span>
               </li>
             ))}
             {result.metRequirements.length === 0 && (
-              <li className="text-sm text-muted">No requirements clearly met.</li>
+              <li className="text-sm text-muted">{noneMet}</li>
             )}
           </ul>
         </div>
         <div>
-          <h4 className="text-xs font-semibold uppercase tracking-wide text-muted">Skill gaps</h4>
+          <h4 className="text-xs font-semibold uppercase tracking-wide text-muted">{skillGaps}</h4>
           <ul className="mt-1.5 flex flex-wrap gap-1.5">
             {result.gaps.map((g, i) => (
               <li
@@ -78,7 +85,7 @@ export function MatchCard({ result, top = false }: { result: MatchResult; top?: 
               </li>
             ))}
             {result.gaps.length === 0 && (
-              <li className="text-sm text-success">No gaps — strong fit.</li>
+              <li className="text-sm text-success">{noGaps}</li>
             )}
           </ul>
         </div>
