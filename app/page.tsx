@@ -12,7 +12,9 @@ import { RecruiterDashboard } from "@/components/recruiter/RecruiterDashboard";
 import { RecruiterMarket } from "@/components/recruiter/RecruiterMarket";
 import { RecruiterTalent } from "@/components/recruiter/RecruiterTalent";
 import { RecruiterStanding } from "@/components/recruiter/RecruiterStanding";
+import { Messages } from "@/components/common/Messages";
 import { candidateConduct } from "@/lib/conductScore";
+import { applicationThreads, currentUserId, totalUnread } from "@/lib/messaging";
 import { useStore } from "@/store/store";
 
 export default function Home() {
@@ -40,13 +42,20 @@ export default function Home() {
   );
 }
 
-type TopView = "discover" | "profile" | "matches" | "reskill" | "applications";
+type TopView = "discover" | "profile" | "matches" | "reskill" | "applications" | "messages";
 
 function CandidateWorkspace() {
-  const { applications } = useStore();
+  const { applications, messages, threadReads } = useStore();
   const [view, setView] = useState<TopView>("discover");
   const myConduct = candidateConduct(applications.filter((a) => a.own)).score;
   const openApps = applications.filter((a) => a.own).length;
+  const me = currentUserId("candidate");
+  const unreadMsgs = totalUnread(
+    applicationThreads(applications, "candidate").map((t) => t.id),
+    messages,
+    me,
+    threadReads,
+  );
 
   const tabs: { id: TopView; label: string; badge?: number }[] = [
     { id: "discover", label: "Discover" },
@@ -54,6 +63,7 @@ function CandidateWorkspace() {
     { id: "matches", label: "Matches" },
     { id: "reskill", label: "Reskilling" },
     { id: "applications", label: "Applications", badge: openApps || undefined },
+    { id: "messages", label: "Messages", badge: unreadMsgs || undefined },
   ];
 
   return (
@@ -100,8 +110,10 @@ function CandidateWorkspace() {
             <MatchResults />
           ) : view === "reskill" ? (
             <ReskillReel />
-          ) : (
+          ) : view === "applications" ? (
             <ApplicationTracker />
+          ) : (
+            <Messages />
           )}
         </motion.div>
       </AnimatePresence>
@@ -109,16 +121,25 @@ function CandidateWorkspace() {
   );
 }
 
-type RecruiterView = "market" | "talent" | "postings" | "standing";
+type RecruiterView = "market" | "talent" | "postings" | "standing" | "messages";
 
 function RecruiterWorkspace() {
+  const { applications, messages, threadReads } = useStore();
   const [view, setView] = useState<RecruiterView>("market");
+  const me = currentUserId("recruiter");
+  const unreadMsgs = totalUnread(
+    applicationThreads(applications, "recruiter").map((t) => t.id),
+    messages,
+    me,
+    threadReads,
+  );
 
-  const tabs: { id: RecruiterView; label: string }[] = [
+  const tabs: { id: RecruiterView; label: string; badge?: number }[] = [
     { id: "market", label: "Market" },
     { id: "talent", label: "Talent" },
     { id: "postings", label: "Postings" },
     { id: "standing", label: "Standing" },
+    { id: "messages", label: "Messages", badge: unreadMsgs || undefined },
   ];
 
   return (
@@ -140,6 +161,11 @@ function RecruiterWorkspace() {
               />
             )}
             {t.label}
+            {t.badge ? (
+              <span className="rounded-full bg-accent-soft px-1.5 text-[11px] font-semibold text-accent">
+                {t.badge}
+              </span>
+            ) : null}
           </button>
         ))}
       </div>
@@ -158,8 +184,10 @@ function RecruiterWorkspace() {
             <RecruiterTalent />
           ) : view === "postings" ? (
             <RecruiterDashboard />
-          ) : (
+          ) : view === "standing" ? (
             <RecruiterStanding onReview={() => setView("postings")} />
+          ) : (
+            <Messages />
           )}
         </motion.div>
       </AnimatePresence>

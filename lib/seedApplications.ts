@@ -81,6 +81,32 @@ export const SEED_APPLICATIONS: Application[] = [
     ),
   },
   {
+    // The candidate user's own application that reached mutual interest — gives the
+    // candidate side a live message thread on first load (see lib/seedMessages.ts).
+    id: "app-seed-own",
+    jobId: "job-002",
+    recruiterId: "rec-1",
+    candidateName: "You",
+    status: "reviewing",
+    createdAt: now - 2 * DAY,
+    respondedAt: now - 1 * DAY,
+    candidateInterested: true,
+    recruiterInterested: true,
+    own: true,
+    consent: snapshot({
+      name: "You",
+      headline: "Frontend engineer",
+      location: "Remote",
+      remotePref: "remote",
+      skills: [
+        { name: "React", evidence: "portfolio" },
+        { name: "TypeScript", evidence: "self_asserted" },
+      ],
+      experience: [],
+      projects: [],
+    }),
+  },
+  {
     id: "app-seed-3",
     jobId: "job-003",
     recruiterId: "rec-1",

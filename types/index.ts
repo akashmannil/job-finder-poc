@@ -199,6 +199,21 @@ export type ApplicationStatus =
   | "rejected"
   | "auto_closed";
 
+// ── Messaging ─────────────────────────────────────────────────────────────────
+
+/**
+ * A single message in a thread. `senderId` is a stable participant id
+ * (`"me"` for the candidate user, a recruiter id like `"rec-1"`, or a peer id) so
+ * a message can be attributed even in same-role (peer) threads.
+ */
+export interface Message {
+  id: string;
+  threadId: string;
+  senderId: string;
+  body: string;
+  createdAt: number;
+}
+
 export interface Application {
   id: string;
   jobId: string;

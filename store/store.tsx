@@ -9,8 +9,9 @@ import {
   useState,
 } from "react";
 import { SEED_APPLICATIONS } from "@/lib/seedApplications";
+import { SEED_MESSAGES } from "@/lib/seedMessages";
 import { autoResolveLapsed, DAY } from "@/lib/sla";
-import type { Application, Endorsement, GapItem, Profile, Role } from "@/types";
+import type { Application, Endorsement, GapItem, Message, Profile, Role } from "@/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // The single client-side store both sides of the marketplace read and write.
@@ -36,6 +37,10 @@ interface AppState {
   matchGaps: GapItem[];
   endorsements: Endorsement[];
   applications: Application[];
+  /** All messages across consent-gated threads (application + peer). */
+  messages: Message[];
+  /** Per-viewer read marks, keyed `${userId}:${threadId}` → last-read timestamp. */
+  threadReads: Record<string, number>;
   /** Job ids the candidate has liked — a market-demand signal on postings (not on people). */
   likedJobs: string[];
   /** Wall-clock of the last session, used for an honest "since you were here" digest. */
@@ -57,6 +62,10 @@ interface StoreValue extends AppState {
   removeEndorsement: (id: string) => void;
   addApplication: (a: Application) => void;
   updateApplication: (id: string, patch: Partial<Application>) => void;
+  /** Append a message to a thread (sender is the current viewer). */
+  sendMessage: (threadId: string, senderId: string, body: string) => void;
+  /** Mark a thread read by a viewer up to now. */
+  markThreadRead: (threadId: string, userId: string) => void;
   /** Toggle a like on a job posting. */
   toggleLike: (jobId: string) => void;
   /** Current (possibly simulated) time = Date.now() + clockOffset. */
@@ -74,6 +83,8 @@ const INITIAL: AppState = {
   matchGaps: [],
   endorsements: [],
   applications: SEED_APPLICATIONS,
+  messages: SEED_MESSAGES,
+  threadReads: {},
   likedJobs: [],
   lastSeenAt: 0,
   clockOffset: 0,
@@ -144,6 +155,33 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       })),
     [],
   );
+  const sendMessage = useCallback(
+    (threadId: string, senderId: string, body: string) =>
+      setState((s) => ({
+        ...s,
+        messages: [
+          ...s.messages,
+          {
+            id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+            threadId,
+            senderId,
+            body,
+            createdAt: Date.now(),
+          },
+        ],
+        // Sending implicitly catches the sender up on the thread.
+        threadReads: { ...s.threadReads, [`${senderId}:${threadId}`]: Date.now() },
+      })),
+    [],
+  );
+  const markThreadRead = useCallback(
+    (threadId: string, userId: string) =>
+      setState((s) => ({
+        ...s,
+        threadReads: { ...s.threadReads, [`${userId}:${threadId}`]: Date.now() },
+      })),
+    [],
+  );
   const toggleLike = useCallback(
     (jobId: string) =>
       setState((s) => ({
@@ -183,6 +221,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         removeEndorsement,
         addApplication,
         updateApplication,
+        sendMessage,
+        markThreadRead,
         toggleLike,
         now,
         advanceClock,
