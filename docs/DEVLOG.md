@@ -71,6 +71,12 @@ file in that commit.
 | 38 | [Recruiter & messaging copy](38-copy-recruiter-messaging.md) | `refactor: move recruiter, messaging & identity copy to constants` | Migrate recruiter (market/talent/standing/dashboard), messaging, and the shared identity page into `lib/copy/{recruiter,messaging,shared}.ts`. |
 | 39 | [Dash cleanup](39-dash-cleanup.md) | `style: replace em/en dashes with hyphens across source and docs` | Mechanical repo-wide sweep replacing em/en/figure/minus dashes with hyphens in every tracked source and markdown file. |
 
+### Phase 7 - incentives (why learn & apply)
+
+| # | Feature | Commit | What & why |
+|---|---------|--------|------------|
+| 40 | [Reskilling incentives](40-reskilling-impact.md) | `feat: reskilling impact stats (roles unlocked, demand, pay)` | Show what each skill unlocks (roles, demand %, median pay, pay premium) on every reskilling card, computed live from the job set. |
+
 ## Root documentation
 
 - [README](../README.md) - overview, demo script, setup, limitations

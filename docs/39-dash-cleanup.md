@@ -1,7 +1,7 @@
 # 39 - Remove em-dash / AI-style text repo-wide
 
 > Commit: `style: replace em/en dashes with hyphens across source and docs`
-> Nav: [Prev](38-copy-recruiter-messaging.md) · [Index](DEVLOG.md)
+> Nav: [Prev](38-copy-recruiter-messaging.md) · [Index](DEVLOG.md) · [Next](40-reskilling-impact.md)
 
 ## What this adds
 

@@ -90,6 +90,12 @@ export const reskillCopy = {
     "No course on file yet. Mark it in progress to flag your intent to grow.",
     "No course listed yet. Flag it in progress to show you're on it.",
   ],
+  impactHeadline: ["What it unlocks", "Why it pays off", "What you'd gain"],
+  rolesLabel: "roles want it",
+  demandLabel: "of postings",
+  payLabel: "roles pay (median)",
+  premiumPrefix: "Pays about",
+  premiumSuffix: "above the market median",
 } as const;
 
 export const reskillProgressCopy = {

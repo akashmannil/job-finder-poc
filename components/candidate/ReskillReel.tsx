@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { FadeUp } from "@/components/common/Motion";
 import { ReskillProgress } from "@/components/candidate/ReskillProgress";
 import { reskillPage } from "@/lib/reskill";
+import { skillImpact } from "@/lib/skillImpact";
 import { reskillCopy as C } from "@/lib/copy/candidate";
 import { useVariant } from "@/lib/copy/useVariant";
 import { useStore } from "@/store/store";
@@ -117,6 +118,8 @@ function ReelCard({
 }) {
   const noCourse = useVariant(C.noCourse);
   const onProfileNote = useVariant(C.onProfileNote);
+  const impactHeadline = useVariant(C.impactHeadline);
+  const impact = skillImpact(item.skill);
   return (
     <article className="card overflow-hidden p-0">
       <div className="flex items-center justify-between gap-2 bg-accent-soft px-5 py-3">
@@ -131,6 +134,24 @@ function ReelCard({
           <h3 className="text-2xl font-semibold tracking-tight">{item.skill}</h3>
           <p className="mt-1 text-sm text-muted">{item.pitch}</p>
         </div>
+
+        {impact.roles > 0 && (
+          <div className="space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+              {impactHeadline}
+            </p>
+            <div className="grid grid-cols-3 gap-2">
+              <ImpactStat value={`${impact.roles}`} label={C.rolesLabel} />
+              <ImpactStat value={`${impact.demandPct}%`} label={C.demandLabel} />
+              <ImpactStat value={`$${Math.round(impact.medianPay / 1000)}k`} label={C.payLabel} />
+            </div>
+            {impact.payPremium >= 1000 && (
+              <p className="text-xs font-medium text-success">
+                {C.premiumPrefix} ${Math.round(impact.payPremium / 1000)}k {C.premiumSuffix}.
+              </p>
+            )}
+          </div>
+        )}
 
         {item.courses.length > 0 ? (
           <ul className="space-y-1.5">
@@ -174,5 +195,14 @@ function ReelCard({
         </div>
       </div>
     </article>
+  );
+}
+
+function ImpactStat({ value, label }: { value: string; label: string }) {
+  return (
+    <div className="rounded-xl bg-surface2 p-2.5 text-center">
+      <p className="text-lg font-semibold tracking-tight">{value}</p>
+      <p className="text-[11px] leading-tight text-muted">{label}</p>
+    </div>
   );
 }
