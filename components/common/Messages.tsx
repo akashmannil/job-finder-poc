@@ -19,6 +19,8 @@ import {
   searchPeers,
   selfParticipant,
 } from "@/lib/peers";
+import { messagesCopy as MC } from "@/lib/copy/messaging";
+import { useVariant } from "@/lib/copy/useVariant";
 import { useStore } from "@/store/store";
 import type { ThreadView } from "@/lib/messaging";
 import type { PeerParticipant } from "@/types";
@@ -42,6 +44,12 @@ export function Messages() {
   } = useStore();
   const me = currentUserId(role);
   const myVisible = isVisible(me, networkVisibility);
+  const title = useVariant(MC.title);
+  const subtitle = useVariant(MC.subtitle);
+  const requestsH = useVariant(MC.requests);
+  const emptyMsg = useVariant(MC.empty);
+  const pendingSentH = useVariant(MC.pendingSent);
+  const selectPrompt = useVariant(MC.selectPrompt);
 
   const threads = useMemo<ThreadView[]>(
     () => [...applicationThreads(applications, role), ...activePeerThreadViews(peerThreads, role)],
@@ -58,28 +66,21 @@ export function Messages() {
     <div className="space-y-4">
       <div className="flex items-end justify-between gap-3">
         <div>
-          <h1 className="h-display">Messages</h1>
-          <p className="mt-1 text-muted">
-            Consent-gated by design — every thread is a connection both sides opted into. No cold
-            outreach, no open inbox.
-          </p>
+          <h1 className="h-display">{title}</h1>
+          <p className="mt-1 text-muted">{subtitle}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setVisibility(me, !myVisible)}
             aria-pressed={myVisible}
-            title={
-              myVisible
-                ? "You're discoverable — peers can find and request you"
-                : "You're hidden — peers can't find you in search"
-            }
+            title={myVisible ? MC.discoverableTitle : MC.hiddenTitle}
             className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1.5 text-sm"
           >
             <span className={`h-2.5 w-2.5 rounded-full ${myVisible ? "bg-success" : "bg-muted"}`} />
-            {myVisible ? "Discoverable" : "Hidden"}
+            {myVisible ? MC.discoverable : MC.hidden}
           </button>
           <button className="btn-soft text-sm" onClick={() => setComposing((v) => !v)}>
-            {composing ? "Close" : "New connection"}
+            {composing ? MC.close : MC.newConnection}
           </button>
         </div>
       </div>
@@ -91,9 +92,7 @@ export function Messages() {
         <aside className={selected ? "hidden md:block" : "block"}>
           {incoming.length > 0 && (
             <div className="mb-3 space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-                Connection requests
-              </p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted">{requestsH}</p>
               {incoming.map((t) => {
                 const o = otherOf(t, role);
                 return (
@@ -106,13 +105,13 @@ export function Messages() {
                         className="btn-primary text-xs"
                         onClick={() => respondToConnection(t.id, true)}
                       >
-                        Accept
+                        {MC.accept}
                       </button>
                       <button
                         className="btn-ghost text-xs"
                         onClick={() => respondToConnection(t.id, false)}
                       >
-                        Decline
+                        {MC.decline}
                       </button>
                     </div>
                   </div>
@@ -122,10 +121,7 @@ export function Messages() {
           )}
 
           {threads.length === 0 ? (
-            <div className="card p-6 text-center text-sm text-muted">
-              No conversations yet. Messaging unlocks on mutual interest, or start a peer connection
-              above.
-            </div>
+            <div className="card p-6 text-center text-sm text-muted">{emptyMsg}</div>
           ) : (
             <ul className="space-y-1">
               {threads.map((t) => {
@@ -162,12 +158,14 @@ export function Messages() {
 
           {outgoing.length > 0 && (
             <div className="mt-3 space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted">Pending sent</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+                {pendingSentH}
+              </p>
               {outgoing.map((t) => {
                 const o = otherOf(t, role);
                 return (
                   <div key={t.id} className="rounded-xl px-3 py-2 text-sm text-muted">
-                    {o?.name} · request sent, waiting
+                    {o?.name} · {MC.requestSent}
                   </div>
                 );
               })}
@@ -187,7 +185,7 @@ export function Messages() {
           />
         ) : (
           <div className="hidden place-items-center md:grid card p-10 text-center text-sm text-muted">
-            Select a conversation to read and reply.
+            {selectPrompt}
           </div>
         )}
       </div>
@@ -205,10 +203,12 @@ function NewConnection({ onDone }: { onDone: () => void }) {
 
   const results = searchPeers(role, query, networkVisibility, connected);
 
+  const noMatches = useVariant(MC.noMatches);
+
   function send() {
     if (!target) return;
     if (reason.trim().length < 10) {
-      return setError("Add a real reason (≥ 10 characters) — no cold DMs.");
+      return setError(MC.reasonError);
     }
     requestConnection(buildPeerRequest(selfParticipant(role, profile), target, reason.trim()));
     onDone();
@@ -217,7 +217,7 @@ function NewConnection({ onDone }: { onDone: () => void }) {
   return (
     <div className="card space-y-3 p-4">
       <p className="text-sm font-medium">
-        Connect with a {role === "recruiter" ? "fellow recruiter" : "peer"}
+        {MC.connectPrefix} {role === "recruiter" ? MC.connectWithRecruiter : MC.connectWithPeer}
       </p>
 
       {target ? (
@@ -233,24 +233,21 @@ function NewConnection({ onDone }: { onDone: () => void }) {
               setQuery("");
             }}
           >
-            Change
+            {MC.change}
           </button>
         </div>
       ) : (
         <div className="space-y-2">
           <input
             className="input"
-            placeholder={`Search ${role === "recruiter" ? "recruiters" : "people"} by name…`}
+            placeholder={role === "recruiter" ? MC.searchRecruiters : MC.searchPeople}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoFocus
           />
           {query.trim() &&
             (results.length === 0 ? (
-              <p className="text-sm text-muted">
-                No discoverable matches. People who turn off network visibility don&apos;t appear in
-                search.
-              </p>
+              <p className="text-sm text-muted">{noMatches}</p>
             ) : (
               <ul className="max-h-48 space-y-1 overflow-auto">
                 {results.map((p) => (
@@ -277,14 +274,14 @@ function NewConnection({ onDone }: { onDone: () => void }) {
           <textarea
             className="input"
             rows={2}
-            placeholder="Why do you want to connect? They'll see this before accepting."
+            placeholder={MC.reasonPlaceholder}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
           />
           {error && <p className="text-sm text-danger">{error}</p>}
           <div className="flex justify-end">
             <button className="btn-primary text-sm" onClick={send}>
-              Send request
+              {MC.sendRequest}
             </button>
           </div>
         </>
@@ -308,6 +305,7 @@ function Conversation({
 }) {
   const { messages, now } = useStore();
   const [draft, setDraft] = useState("");
+  const emptyThread = useVariant(MC.emptyThread);
   const items = threadMessages(messages, thread.id);
   const scroller = useRef<HTMLDivElement | null>(null);
 
@@ -357,18 +355,14 @@ function Conversation({
             </div>
           );
         })}
-        {items.length === 0 && (
-          <p className="text-center text-sm text-muted">
-            No messages yet — say hello. You both opted in.
-          </p>
-        )}
+        {items.length === 0 && <p className="text-center text-sm text-muted">{emptyThread}</p>}
       </div>
 
       <div className="flex items-end gap-2 border-t border-border p-3">
         <textarea
           className="input min-h-[2.5rem] flex-1 resize-none"
           rows={1}
-          placeholder="Write a message…"
+          placeholder={MC.writeMessage}
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={(e) => {
@@ -379,7 +373,7 @@ function Conversation({
           }}
         />
         <button className="btn-primary" onClick={submit} disabled={!draft.trim()}>
-          Send
+          {MC.send}
         </button>
       </div>
     </section>

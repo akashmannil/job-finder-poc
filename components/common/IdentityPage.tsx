@@ -4,6 +4,8 @@ import { FadeUp, StaggerList } from "@/components/common/Motion";
 import { EvidenceBadge } from "@/components/common/EvidenceBadge";
 import { ConductScore } from "@/components/common/ConductScore";
 import { RELATIONSHIP_WEIGHT } from "@/lib/endorsements";
+import { identityCopy as I } from "@/lib/copy/shared";
+import { useVariant } from "@/lib/copy/useVariant";
 import { EVIDENCE_RANK, type Endorsement, type Profile } from "@/types";
 
 /**
@@ -25,19 +27,21 @@ export function IdentityPage({
     (a, b) => EVIDENCE_RANK[b.evidence] - EVIDENCE_RANK[a.evidence],
   );
   const reskilling = profile.skills.filter((s) => s.currentlyReskilling);
+  const proofNote = useVariant(I.proofNote);
+  const skillsSub = useVariant(I.skillsSub);
 
   return (
     <StaggerList className="space-y-6">
       <FadeUp>
         <header className="card p-8">
-          <h1 className="h-display">{profile.name || "Unnamed candidate"}</h1>
+          <h1 className="h-display">{profile.name || I.unnamed}</h1>
           {profile.headline && <p className="mt-2 text-lg text-muted">{profile.headline}</p>}
           <p className="mt-2 text-sm text-muted">
             {profile.location || "Location not set"} · prefers {profile.remotePref}
           </p>
           {reskilling.length > 0 && (
             <div className="mt-3 flex flex-wrap items-center gap-2">
-              <span className="text-xs font-medium text-muted">Currently reskilling:</span>
+              <span className="text-xs font-medium text-muted">{I.reskillingLabel}</span>
               {reskilling.map((s) => (
                 <span key={s.name} className="chip !text-accent">
                   {s.name}
@@ -47,19 +51,17 @@ export function IdentityPage({
           )}
           {conduct !== undefined && (
             <div className="mt-4">
-              <ConductScore score={conduct} label="Conduct" detail="responsiveness & follow-through" />
+              <ConductScore score={conduct} label={I.conductLabel} detail={I.conductDetail} />
             </div>
           )}
-          <p className="mt-4 text-xs text-muted">
-            No views, followers, or likes — reputation here is evidence, not reach.
-          </p>
+          <p className="mt-4 text-xs text-muted">{proofNote}</p>
         </header>
       </FadeUp>
 
       <FadeUp>
         <section className="card p-6">
-          <h2 className="font-semibold">Skills</h2>
-          <p className="text-sm text-muted">Strongest evidence first.</p>
+          <h2 className="font-semibold">{I.skills}</h2>
+          <p className="text-sm text-muted">{skillsSub}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {skills.map((s) => (
               <span
@@ -70,7 +72,7 @@ export function IdentityPage({
                 <EvidenceBadge tier={s.evidence} />
               </span>
             ))}
-            {skills.length === 0 && <p className="text-sm text-muted">No skills listed.</p>}
+            {skills.length === 0 && <p className="text-sm text-muted">{I.noSkills}</p>}
           </div>
         </section>
       </FadeUp>
@@ -78,7 +80,7 @@ export function IdentityPage({
       {endorsements.length > 0 && (
         <FadeUp>
           <section className="card p-6">
-            <h2 className="font-semibold">Endorsements</h2>
+            <h2 className="font-semibold">{I.endorsements}</h2>
             <ul className="mt-3 space-y-3">
               {endorsements.map((e) => (
                 <li key={e.id} className="border-l-2 border-accent pl-3">
@@ -97,7 +99,7 @@ export function IdentityPage({
       {profile.experience.length > 0 && (
         <FadeUp>
           <section className="card p-6">
-            <h2 className="font-semibold">Experience</h2>
+            <h2 className="font-semibold">{I.experience}</h2>
             <ul className="mt-3 space-y-3">
               {profile.experience.map((x, i) => (
                 <li key={i}>
@@ -116,7 +118,7 @@ export function IdentityPage({
       {profile.projects.length > 0 && (
         <FadeUp>
           <section className="card p-6">
-            <h2 className="font-semibold">Projects</h2>
+            <h2 className="font-semibold">{I.projects}</h2>
             <ul className="mt-3 space-y-3">
               {profile.projects.map((p, i) => (
                 <li key={i}>

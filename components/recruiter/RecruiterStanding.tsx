@@ -6,6 +6,8 @@ import { isTerminal, formatRelative } from "@/lib/applications";
 import { recruiterConduct } from "@/lib/conductScore";
 import { ACTIVE_RECRUITER_ID, getJob, getRecruiter, getRecruiterJobs } from "@/lib/jobs";
 import { isOverdue, msLeft, slaLabel } from "@/lib/sla";
+import { standingCopy as RS } from "@/lib/copy/recruiter";
+import { useVariant } from "@/lib/copy/useVariant";
 import { useStore } from "@/store/store";
 
 // The recruiter's own "profile" — how they currently stand. Mirrors the candidate's
@@ -13,6 +15,10 @@ import { useStore } from "@/store/store";
 // factual breakdown, and the decisions they owe (anti-ghosting, not a vanity wall).
 export function RecruiterStanding({ onReview }: { onReview: () => void }) {
   const { applications, now } = useStore();
+  const responseScore = useVariant(RS.responseScore);
+  const vanityNote = useVariant(RS.vanityNote);
+  const needsDecision = useVariant(RS.needsDecision);
+  const allCaught = useVariant(RS.allCaught);
   const t = now();
   const recruiter = getRecruiter(ACTIVE_RECRUITER_ID);
   const jobs = getRecruiterJobs(ACTIVE_RECRUITER_ID);
@@ -30,11 +36,13 @@ export function RecruiterStanding({ onReview }: { onReview: () => void }) {
       <FadeUp>
         <header className="card p-8">
           <h1 className="h-display">{recruiter?.company ?? "Recruiter"}</h1>
-          <p className="mt-2 text-lg text-muted">Hiring team · {recruiter?.name}</p>
+          <p className="mt-2 text-lg text-muted">
+            {RS.hiringTeam} · {recruiter?.name}
+          </p>
           <div className="mt-4">
             <ConductScore
               score={conduct.score}
-              label="Public response score"
+              label={responseScore}
               detail={
                 conduct.score === null
                   ? "no decisions yet"
@@ -42,24 +50,21 @@ export function RecruiterStanding({ onReview }: { onReview: () => void }) {
               }
             />
           </div>
-          <p className="mt-4 text-xs text-muted">
-            No followers, ratings, or vanity metrics — a recruiter&apos;s reputation here is how they
-            treat applicants: decide, and decide on time.
-          </p>
+          <p className="mt-4 text-xs text-muted">{vanityNote}</p>
         </header>
       </FadeUp>
 
       {/* Snapshot */}
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Stat value={`${jobs.length}`} label="open postings" />
-        <Stat value={`${myApps.length}`} label="applicants" />
+        <Stat value={`${jobs.length}`} label={RS.openPostings} />
+        <Stat value={`${myApps.length}`} label={RS.applicants} />
         <Stat
-          value={conduct.medianResponseHours === null ? "—" : `${Math.round(conduct.medianResponseHours)}h`}
-          label="median response"
+          value={conduct.medianResponseHours === null ? "-" : `${Math.round(conduct.medianResponseHours)}h`}
+          label={RS.medianResponse}
         />
         <Stat
           value={`${overdueCount}`}
-          label="overdue"
+          label={RS.overdue}
           tone={overdueCount > 0 ? "negative" : "neutral"}
         />
       </section>
@@ -68,20 +73,17 @@ export function RecruiterStanding({ onReview }: { onReview: () => void }) {
       <section className="space-y-3">
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
-            Needs your decision
+            {needsDecision}
           </h2>
           {pending.length > 0 && (
             <button className="btn-soft text-sm" onClick={onReview}>
-              Review in Postings
+              {RS.review}
             </button>
           )}
         </div>
 
         {pending.length === 0 ? (
-          <div className="card p-6 text-sm text-muted">
-            You&apos;re all caught up — no applications are waiting on you. That&apos;s exactly how the
-            response score stays high.
-          </div>
+          <div className="card p-6 text-sm text-muted">{allCaught}</div>
         ) : (
           <StaggerList className="space-y-2">
             {pending.map((a) => {

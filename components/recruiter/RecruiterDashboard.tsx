@@ -7,11 +7,17 @@ import { PostingCard } from "@/components/recruiter/PostingCard";
 import { ReviewReel } from "@/components/recruiter/ReviewReel";
 import { recruiterConduct } from "@/lib/conductScore";
 import { ACTIVE_RECRUITER_ID, getRecruiter, getRecruiterJobs } from "@/lib/jobs";
+import { dashboardCopy as RD } from "@/lib/copy/recruiter";
+import { useVariant } from "@/lib/copy/useVariant";
 import { useStore } from "@/store/store";
 
 export function RecruiterDashboard() {
   const { applications, now } = useStore();
   const [mode, setMode] = useState<"list" | "reel">("list");
+  const dashboard = useVariant(RD.dashboard);
+  const dashboardTail = useVariant(RD.dashboardTail);
+  const applicantsH = useVariant(RD.applicants);
+  const noApplicants = useVariant(RD.noApplicants);
   const recruiter = getRecruiter(ACTIVE_RECRUITER_ID);
   const jobs = getRecruiterJobs(ACTIVE_RECRUITER_ID);
   const myApps = applications.filter((a) => a.recruiterId === ACTIVE_RECRUITER_ID);
@@ -39,26 +45,24 @@ export function RecruiterDashboard() {
           <div>
             <h1 className="h-display">{recruiter?.company ?? "Recruiter"}</h1>
             <p className="mt-1 text-muted">
-              Hiring dashboard · {recruiter?.name}. Answer on the clock — your response score is
-              public.
+              {dashboard} · {recruiter?.name}. {dashboardTail}
             </p>
           </div>
-          <ConductScore score={conduct.score} label="Your response score" detail={detail} />
+          <ConductScore score={conduct.score} label={RD.responseScore} detail={detail} />
         </div>
       </FadeUp>
 
       {postings.length === 0 ? (
         <FadeUp>
           <div className="card p-6 text-sm text-muted">
-            No applicants yet. Switch to the Candidate role, apply to a role at{" "}
-            <strong>{recruiter?.company}</strong>, then come back.
+            {noApplicants} <strong>{recruiter?.company}</strong>, {RD.noApplicantsTail}
           </div>
         </FadeUp>
       ) : (
         <>
           <FadeUp>
             <div className="flex items-center justify-between gap-3">
-              <h2 className="text-lg font-semibold tracking-tight">Applicants</h2>
+              <h2 className="text-lg font-semibold tracking-tight">{applicantsH}</h2>
               <div className="inline-flex rounded-[11px] bg-surface2 p-1">
                 {(["list", "reel"] as const).map((m) => (
                   <button
@@ -68,7 +72,7 @@ export function RecruiterDashboard() {
                       mode === m ? "bg-surface text-fg shadow-sm" : "text-muted hover:text-fg"
                     }`}
                   >
-                    {m === "reel" ? "Review reel" : "List"}
+                    {m === "reel" ? RD.reviewReel : RD.list}
                   </button>
                 ))}
               </div>

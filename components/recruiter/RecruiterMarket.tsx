@@ -4,6 +4,8 @@ import { FadeUp, StaggerList } from "@/components/common/Motion";
 import { ACTIVE_RECRUITER_ID, getRecruiter } from "@/lib/jobs";
 import { baseLikes, marketStats, trendingJobs } from "@/lib/likes";
 import { competitorJobs, recruiterStanding } from "@/lib/recruiterMarket";
+import { marketCopy as RM } from "@/lib/copy/recruiter";
+import { useVariant } from "@/lib/copy/useVariant";
 import { useStore } from "@/store/store";
 import type { Job } from "@/types";
 
@@ -13,6 +15,13 @@ import type { Job } from "@/types";
 // demand, candidates express it.
 export function RecruiterMarket() {
   const { likedJobs } = useStore();
+  const title = useVariant(RM.title);
+  const subtitleTail = useVariant(RM.subtitleTail);
+  const standingH = useVariant(RM.standing);
+  const drawnToH = useVariant(RM.drawnTo);
+  const competitionH = useVariant(RM.competition);
+  const rankNote = useVariant(RM.rankNote);
+  const rankNoteTail = useVariant(RM.rankNoteTail);
   const recruiter = getRecruiter(ACTIVE_RECRUITER_ID);
   const stats = marketStats();
   const standing = recruiterStanding(ACTIVE_RECRUITER_ID, likedJobs);
@@ -27,10 +36,9 @@ export function RecruiterMarket() {
       {/* Market highlight */}
       <section className="space-y-4">
         <div>
-          <h1 className="h-display">The market, right now</h1>
+          <h1 className="h-display">{title}</h1>
           <p className="mt-1 text-muted">
-            Where {recruiter?.company}&apos;s roles stand, what candidates are drawn to, and what
-            your competition is offering.
+            {RM.subtitlePrefix} {recruiter?.company}&apos;s {subtitleTail}
           </p>
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -45,34 +53,34 @@ export function RecruiterMarket() {
 
       {/* Your standing */}
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">Your standing</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">{standingH}</h2>
         <FadeUp>
           <div className="card space-y-4 p-6">
             <div className="grid gap-3 sm:grid-cols-3">
               <Stat
                 value={`${standing.postings}`}
-                label="open postings"
-                sub={`of ${standing.totalMarket} in market`}
+                label={RM.openPostings}
+                sub={RM.ofMarket(standing.totalMarket)}
               />
               <Stat
                 value={`$${Math.round(standing.avgPayMax / 1000)}k`}
-                label="avg top pay"
-                sub={`${payDelta >= 0 ? "+" : "−"}$${Math.abs(Math.round(payDelta / 1000))}k vs market`}
+                label={RM.avgPay}
+                sub={`${payDelta >= 0 ? "+" : "-"}$${Math.abs(Math.round(payDelta / 1000))}k vs market`}
                 tone={payDelta >= 0 ? "positive" : "negative"}
               />
               <Stat
                 value={`${standing.avgLikes}`}
-                label="avg interest / role"
-                sub={`${likeDelta >= 0 ? "+" : "−"}${Math.abs(likeDelta)} vs market`}
+                label={RM.avgInterest}
+                sub={`${likeDelta >= 0 ? "+" : "-"}${Math.abs(likeDelta)} vs market`}
                 tone={likeDelta >= 0 ? "positive" : "negative"}
               />
             </div>
 
             {standing.bestRank !== null && (
               <p className="text-sm text-muted">
-                Your strongest posting ranks{" "}
+                {rankNote}{" "}
                 <span className="font-semibold text-fg">#{standing.bestRank}</span> of{" "}
-                {standing.totalMarket} on overall appeal (pay, interest, remote).
+                {standing.totalMarket} {rankNoteTail}
               </p>
             )}
 
@@ -82,7 +90,7 @@ export function RecruiterMarket() {
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium">{job.title}</p>
                     <p className="text-xs text-muted">
-                      ${Math.round(job.salaryMin / 1000)}k–${Math.round(job.salaryMax / 1000)}k ·{" "}
+                      ${Math.round(job.salaryMin / 1000)}k-${Math.round(job.salaryMax / 1000)}k ·{" "}
                       {popularityLabel(job)}
                     </p>
                   </div>
@@ -96,9 +104,7 @@ export function RecruiterMarket() {
 
       {/* Popular postings */}
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
-          What candidates are drawn to
-        </h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">{drawnToH}</h2>
         <StaggerList className="grid gap-3 sm:grid-cols-2">
           {popular.map((job) => (
             <FadeUp key={job.id}>
@@ -110,9 +116,7 @@ export function RecruiterMarket() {
 
       {/* Competition */}
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
-          Your competition
-        </h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">{competitionH}</h2>
         <StaggerList className="space-y-2">
           {competition.map((job) => (
             <FadeUp key={job.id}>
@@ -126,7 +130,7 @@ export function RecruiterMarket() {
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="text-sm font-medium text-accent">
-                    ${Math.round(job.salaryMin / 1000)}k–${Math.round(job.salaryMax / 1000)}k
+                    ${Math.round(job.salaryMin / 1000)}k-${Math.round(job.salaryMax / 1000)}k
                   </span>
                   <span className="text-sm text-muted">{popularityLabel(job)}</span>
                 </div>
@@ -150,11 +154,11 @@ function MarketJobCard({ job, mine }: { job: Job; mine: boolean }) {
             {job.remote ? " · Remote" : ""}
           </p>
         </div>
-        {mine && <span className="chip shrink-0 !text-accent">Yours</span>}
+        {mine && <span className="chip shrink-0 !text-accent">{RM.yours}</span>}
       </div>
       <div className="mt-auto flex items-center justify-between gap-2 pt-1">
         <span className="text-sm font-medium text-accent">
-          ${Math.round(job.salaryMin / 1000)}k–${Math.round(job.salaryMax / 1000)}k
+          ${Math.round(job.salaryMin / 1000)}k-${Math.round(job.salaryMax / 1000)}k
         </span>
         <span className="text-sm text-muted">{popularityLabel(job)}</span>
       </div>

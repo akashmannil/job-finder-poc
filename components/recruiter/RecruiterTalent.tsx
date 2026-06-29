@@ -6,6 +6,8 @@ import { EvidenceBadge } from "@/components/common/EvidenceBadge";
 import { ScoreBadge } from "@/components/common/ScoreBadge";
 import { ACTIVE_RECRUITER_ID, getRecruiterJobs } from "@/lib/jobs";
 import { talentDevelopment, talentForJob } from "@/lib/talent";
+import { talentCopy as RT } from "@/lib/copy/recruiter";
+import { useVariant } from "@/lib/copy/useVariant";
 import { EVIDENCE_RANK } from "@/types";
 
 // The recruiter's "possible matches": who in the sourcing pool fits a chosen
@@ -20,20 +22,24 @@ export function RecruiterTalent() {
   const job = jobs.find((j) => j.id === jobId) ?? jobs[0];
   const matches = useMemo(() => (job ? talentForJob(job) : []), [job]);
   const development = useMemo(() => talentDevelopment(ACTIVE_RECRUITER_ID), []);
+  const title = useVariant(RT.title);
+  const subtitle = useVariant(RT.subtitle);
+  const dev = useVariant(RT.development);
+  const devSub = useVariant(RT.developmentSub);
+  const inviteNote = useVariant(RT.inviteNote);
+  const noPostings = useVariant(RT.noPostings);
+  const noCourse = useVariant(RT.noCourse);
 
   if (!job) {
-    return <p className="text-sm text-muted">No postings to source for yet.</p>;
+    return <p className="text-sm text-muted">{noPostings}</p>;
   }
 
   return (
     <div className="space-y-10">
       <section className="space-y-4">
         <div>
-          <h1 className="h-display">Talent</h1>
-          <p className="mt-1 text-muted">
-            Candidates who fit your roles, ranked on verified evidence. Inviting signals interest —
-            they still choose to apply.
-          </p>
+          <h1 className="h-display">{title}</h1>
+          <p className="mt-1 text-muted">{subtitle}</p>
         </div>
 
         {/* Posting selector */}
@@ -78,7 +84,7 @@ export function RecruiterTalent() {
                       setInvited((prev) => new Set(prev).add(candidate.id))
                     }
                   >
-                    {isInvited ? "Invited ✓" : "Invite to apply"}
+                    {isInvited ? `${RT.invited} ✓` : RT.invite}
                   </button>
                 </div>
 
@@ -96,16 +102,10 @@ export function RecruiterTalent() {
 
                 {match.gaps.length > 0 && (
                   <p className="mt-3 text-xs text-muted">
-                    Gaps:{" "}
-                    {match.gaps.map((g) => g.skill).join(", ")}
+                    {RT.gaps} {match.gaps.map((g) => g.skill).join(", ")}
                   </p>
                 )}
-                {isInvited && (
-                  <p className="mt-2 text-xs text-accent">
-                    They’ll see your interest and choose whether to apply — contact unlocks only if
-                    they do.
-                  </p>
-                )}
+                {isInvited && <p className="mt-2 text-xs text-accent">{inviteNote}</p>}
               </article>
             </FadeUp>
           );
@@ -114,13 +114,8 @@ export function RecruiterTalent() {
 
       {/* Talent development */}
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
-          Talent development
-        </h2>
-        <p className="text-sm text-muted">
-          Where your required skills are scarce in the market — training you could sponsor to grow the
-          candidates you need.
-        </p>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">{dev}</h2>
+        <p className="text-sm text-muted">{devSub}</p>
         <StaggerList className="grid gap-3 sm:grid-cols-2">
           {development.map((d) => (
             <FadeUp key={d.skill}>
@@ -131,7 +126,7 @@ export function RecruiterTalent() {
                     className={`chip ${d.supply <= 1 ? "!text-danger" : "!text-warning"}`}
                     title="Candidates in pool with this skill"
                   >
-                    {d.supply} in pool
+                    {RT.inPool(d.supply)}
                   </span>
                 </div>
                 <p className="text-xs text-muted">
@@ -155,7 +150,7 @@ export function RecruiterTalent() {
                     </li>
                   ))}
                   {d.courses.length === 0 && (
-                    <li className="text-sm text-muted">No course on file for this skill yet.</li>
+                    <li className="text-sm text-muted">{noCourse}</li>
                   )}
                 </ul>
               </div>
