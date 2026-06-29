@@ -2,6 +2,8 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { assessmentCopy as C } from "@/lib/copy/profile";
+import { useVariant } from "@/lib/copy/useVariant";
 import type { AnsweredItem, Assessment, GradeResult } from "@/types";
 
 type Phase = "loading" | "taking" | "grading" | "done" | "error";
@@ -20,6 +22,10 @@ export function SkillAssessment({
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [result, setResult] = useState<GradeResult | null>(null);
   const [error, setError] = useState<string>("");
+  const generating = useVariant(C.generating);
+  const grading = useVariant(C.grading);
+  const verifiedNote = useVariant(C.verifiedNote);
+  const tryAgain = useVariant(C.tryAgain);
 
   useEffect(() => {
     let active = true;
@@ -93,14 +99,16 @@ export function SkillAssessment({
           onClick={(e) => e.stopPropagation()}
         >
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="font-semibold">Assess: {skill}</h3>
+            <h3 className="font-semibold">
+              {C.titlePrefix}: {skill}
+            </h3>
             <button className="text-muted hover:text-fg" onClick={onClose} aria-label="Close">
               ✕
             </button>
           </div>
 
-          {phase === "loading" && <p className="text-sm text-muted">Generating a fair assessment…</p>}
-          {phase === "grading" && <p className="text-sm text-muted">Grading your answers…</p>}
+          {phase === "loading" && <p className="text-sm text-muted">{generating}</p>}
+          {phase === "grading" && <p className="text-sm text-muted">{grading}</p>}
           {phase === "error" && <p className="text-sm text-danger">{error}</p>}
 
           {phase === "taking" && assessment && (
@@ -131,7 +139,7 @@ export function SkillAssessment({
                 </fieldset>
               ))}
               <button className="btn-primary w-full" disabled={!allAnswered} onClick={submit}>
-                Submit answers
+                {C.submit}
               </button>
             </div>
           )}
@@ -144,18 +152,18 @@ export function SkillAssessment({
             >
               <div className="text-4xl">{result.passed ? "🎉" : "💪"}</div>
               <p className="text-2xl font-bold" style={{ color: result.passed ? "var(--success)" : "var(--danger)" }}>
-                {result.score}/100 {result.passed ? "— Passed" : "— Not yet"}
+                {result.score}/100 · {result.passed ? C.passedSuffix : C.notYetSuffix}
               </p>
               <p className="text-sm text-muted">{result.rationale}</p>
               {result.passed ? (
                 <p className="text-sm text-success">
-                  “{skill}” is now <strong>assessment-verified</strong> on your profile.
+                  “{skill}” {verifiedNote}
                 </p>
               ) : (
-                <p className="text-sm text-muted">Reskill and try again — you’ve got this.</p>
+                <p className="text-sm text-muted">{tryAgain}</p>
               )}
               <button className="btn-primary w-full" onClick={onClose}>
-                Done
+                {C.done}
               </button>
             </motion.div>
           )}

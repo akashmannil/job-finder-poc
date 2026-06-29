@@ -67,6 +67,7 @@ file in that commit.
 | # | Feature | Commit | What & why |
 |---|---------|--------|------------|
 | 36 | [Copy module + candidate copy](36-copy-module-candidate.md) | `refactor: centralize candidate copy into editable variant constants` | A `lib/copy` module (pick + useVariant) and migration of candidate discovery/matches/reskill/applications text into editable arrays of random variants. |
+| 37 | [Candidate profile copy](37-copy-candidate-profile.md) | `refactor: move candidate profile, consent & assessment copy to constants` | Migrate the candidate profile, consent dialog, and skill-assessment copy into `lib/copy/profile.ts` (variants + stable labels). |
 
 ## Root documentation
 

@@ -4,12 +4,16 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { IdentityPage } from "@/components/common/IdentityPage";
 import { applyConsent, CONSENT_FIELDS, DEFAULT_CONSENT } from "@/lib/consent";
+import { consentCopy as C } from "@/lib/copy/profile";
+import { useVariant } from "@/lib/copy/useVariant";
 import { useStore } from "@/store/store";
 import type { Application, ConsentChoices, Job } from "@/types";
 
 export function ConsentShare({ job, onClose }: { job: Job; onClose: () => void }) {
   const { profile, endorsements, addApplication } = useStore();
   const [choices, setChoices] = useState<ConsentChoices>(DEFAULT_CONSENT);
+  const subtitle = useVariant(C.subtitle);
+  const revokeNote = useVariant(C.revokeNote);
 
   const snapshot = applyConsent(profile, endorsements, choices);
 
@@ -48,9 +52,11 @@ export function ConsentShare({ job, onClose }: { job: Job; onClose: () => void }
         >
           <div className="flex items-center justify-between border-b border-border p-4">
             <div>
-              <h3 className="font-semibold">Apply — {job.title}</h3>
+              <h3 className="font-semibold">
+                {C.applyPrefix}: {job.title}
+              </h3>
               <p className="text-sm text-muted">
-                {job.company}. You control exactly what they see.
+                {job.company}. {subtitle}
               </p>
             </div>
             <button className="text-muted hover:text-fg" onClick={onClose} aria-label="Close">
@@ -60,7 +66,7 @@ export function ConsentShare({ job, onClose }: { job: Job; onClose: () => void }
 
           <div className="grid max-h-[64vh] gap-0 overflow-auto md:grid-cols-[14rem_1fr]">
             <div className="space-y-3 border-b border-border p-4 md:border-b-0 md:border-r">
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted">Share</h4>
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted">{C.share}</h4>
               {CONSENT_FIELDS.map((f) => (
                 <label key={f.key} className="flex items-center gap-2 text-sm">
                   <input
@@ -71,14 +77,12 @@ export function ConsentShare({ job, onClose }: { job: Job; onClose: () => void }
                   {f.label}
                 </label>
               ))}
-              <p className="pt-2 text-xs text-muted">
-                Revoke anytime — they only ever see this snapshot.
-              </p>
+              <p className="pt-2 text-xs text-muted">{revokeNote}</p>
             </div>
 
             <div className="space-y-2 p-4">
               <h4 className="text-xs font-semibold uppercase tracking-wide text-muted">
-                Recruiter preview
+                {C.preview}
               </h4>
               <div className="rounded-xl bg-surface2 p-3">
                 <IdentityPage profile={snapshot.profile} endorsements={snapshot.endorsements} />
@@ -88,10 +92,10 @@ export function ConsentShare({ job, onClose }: { job: Job; onClose: () => void }
 
           <div className="flex items-center justify-end gap-2 border-t border-border p-4">
             <button className="btn-ghost" onClick={onClose}>
-              Cancel
+              {C.cancel}
             </button>
             <button className="btn-primary" onClick={submit}>
-              Submit application
+              {C.submit}
             </button>
           </div>
         </motion.div>

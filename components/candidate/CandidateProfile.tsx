@@ -12,6 +12,8 @@ import {
   validateEndorsement,
 } from "@/lib/endorsements";
 import { SAMPLE_PROFILE } from "@/lib/sampleProfile";
+import { profileCopy as P } from "@/lib/copy/profile";
+import { useVariant } from "@/lib/copy/useVariant";
 import { useStore } from "@/store/store";
 import {
   EVIDENCE_LABEL,
@@ -46,6 +48,10 @@ export function CandidateProfile({ conduct }: { conduct: number | null }) {
   const { profile, endorsements, setProfile } = useStore();
   const [editing, setEditing] = useState<SectionId | null>(null);
   const [preview, setPreview] = useState(false);
+  const title = useVariant(P.title);
+  const subtitle = useVariant(P.subtitle);
+  const previewNote = useVariant(P.previewNote);
+  const emptyNote = useVariant(P.emptyNote);
 
   const toggle = (id: SectionId) => setEditing((cur) => (cur === id ? null : id));
   const isEmpty =
@@ -55,11 +61,9 @@ export function CandidateProfile({ conduct }: { conduct: number | null }) {
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-surface2 px-4 py-3">
-          <p className="text-sm text-muted">
-            This is exactly what a recruiter sees — no edit controls, no vanity metrics.
-          </p>
+          <p className="text-sm text-muted">{previewNote}</p>
           <button className="btn-soft text-sm" onClick={() => setPreview(false)}>
-            Back to editing
+            {P.backToEditing}
           </button>
         </div>
         <IdentityPage profile={profile} endorsements={endorsements} conduct={conduct} />
@@ -71,23 +75,19 @@ export function CandidateProfile({ conduct }: { conduct: number | null }) {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="h-display">Your profile</h1>
-          <p className="mt-1 text-muted">
-            This — not a résumé — is what gets matched. Evidence beats claims.
-          </p>
+          <h1 className="h-display">{title}</h1>
+          <p className="mt-1 text-muted">{subtitle}</p>
         </div>
         <button className="btn-ghost text-sm" onClick={() => setPreview(true)}>
-          Preview as recruiter
+          {P.previewBtn}
         </button>
       </div>
 
       {isEmpty && (
         <div className="card flex flex-wrap items-center justify-between gap-3 p-5">
-          <p className="text-sm text-muted">
-            Empty profile. Load a sample to see how it looks, then make it yours.
-          </p>
+          <p className="text-sm text-muted">{emptyNote}</p>
           <button className="btn-soft text-sm" onClick={() => setProfile(SAMPLE_PROFILE)}>
-            Load sample profile
+            {P.loadSample}
           </button>
         </div>
       )}
@@ -187,7 +187,7 @@ function IdentitySection({
   const reskilling = profile.skills.filter((s) => s.currentlyReskilling);
 
   return (
-    <Section title="Identity" editing={editing} onToggle={onToggle}>
+    <Section title={P.sIdentity} editing={editing} onToggle={onToggle}>
       {editing ? (
         <div className="grid gap-3 sm:grid-cols-2">
           <Field label="Name">
@@ -195,7 +195,7 @@ function IdentitySection({
               className="input"
               value={profile.name}
               onChange={(e) => updateProfile({ name: e.target.value })}
-              placeholder="Your name"
+              placeholder={P.phName}
             />
           </Field>
           <Field label="Location">
@@ -203,7 +203,7 @@ function IdentitySection({
               className="input"
               value={profile.location}
               onChange={(e) => updateProfile({ location: e.target.value })}
-              placeholder="City / Remote"
+              placeholder={P.phLocation}
             />
           </Field>
           <Field label="Headline" className="sm:col-span-2">
@@ -211,7 +211,7 @@ function IdentitySection({
               className="input"
               value={profile.headline}
               onChange={(e) => updateProfile({ headline: e.target.value })}
-              placeholder="One line on who you are"
+              placeholder={P.phHeadline}
             />
           </Field>
           <Field label="Work preference">
@@ -230,9 +230,7 @@ function IdentitySection({
         </div>
       ) : (
         <div>
-          <p className="text-2xl font-semibold tracking-tight">
-            {profile.name || "Unnamed candidate"}
-          </p>
+          <p className="text-2xl font-semibold tracking-tight">{profile.name || P.unnamed}</p>
           {profile.headline && <p className="mt-1 text-lg text-muted">{profile.headline}</p>}
           <p className="mt-1 text-sm text-muted">
             {profile.location || "Location not set"} · prefers {profile.remotePref}
@@ -266,6 +264,9 @@ function IdentitySection({
 
 function SkillsSection({ editing, onToggle }: { editing: boolean; onToggle: () => void }) {
   const { profile, updateProfile } = useStore();
+  const sub = useVariant(P.sSkillsSub);
+  const noSkillsView = useVariant(P.noSkillsView);
+  const noSkillsEdit = useVariant(P.noSkillsEdit);
   const [skillName, setSkillName] = useState("");
   const [skillTier, setSkillTier] = useState<EvidenceTier>("self_asserted");
   const [assessing, setAssessing] = useState<string | null>(null);
@@ -294,19 +295,14 @@ function SkillsSection({ editing, onToggle }: { editing: boolean; onToggle: () =
   }
 
   return (
-    <Section
-      title="Skills & evidence"
-      subtitle="Strongest evidence first. Prove a skill to upgrade it."
-      editing={editing}
-      onToggle={onToggle}
-    >
+    <Section title={P.sSkills} subtitle={sub} editing={editing} onToggle={onToggle}>
       {editing ? (
         <div className="space-y-4">
           <div className="flex flex-wrap gap-2">
             <input
               className="input min-w-[10rem] flex-1"
               value={skillName}
-              placeholder="Add a skill (e.g. React)"
+              placeholder={P.phSkill}
               onChange={(e) => setSkillName(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && addSkill()}
             />
@@ -322,7 +318,7 @@ function SkillsSection({ editing, onToggle }: { editing: boolean; onToggle: () =
               ))}
             </select>
             <button className="btn-primary" onClick={addSkill}>
-              Add
+              {P.addBtn}
             </button>
           </div>
           <ul className="space-y-2">
@@ -363,13 +359,13 @@ function SkillsSection({ editing, onToggle }: { editing: boolean; onToggle: () =
             ))}
             {profile.skills.length === 0 && (
               <li className="rounded-xl border border-dashed border-border px-3 py-6 text-center text-sm text-muted">
-                No skills yet — add a few above.
+                {noSkillsEdit}
               </li>
             )}
           </ul>
         </div>
       ) : profile.skills.length === 0 ? (
-        <p className="text-sm text-muted">No skills listed yet. Click Edit to add some.</p>
+        <p className="text-sm text-muted">{noSkillsView}</p>
       ) : (
         <div className="flex flex-wrap gap-2">
           {sorted.map((s) => {
@@ -386,7 +382,7 @@ function SkillsSection({ editing, onToggle }: { editing: boolean; onToggle: () =
                     className="text-xs font-medium text-accent hover:underline"
                     onClick={() => setAssessing(s.name)}
                   >
-                    Prove
+                    {P.prove}
                   </button>
                 )}
               </span>
@@ -410,23 +406,24 @@ function SkillsSection({ editing, onToggle }: { editing: boolean; onToggle: () =
 
 function ExperienceSection({ editing, onToggle }: { editing: boolean; onToggle: () => void }) {
   const { profile, updateProfile } = useStore();
+  const empty = useVariant(P.noExperience);
   const setExperience = (experience: ExperienceItem[]) => updateProfile({ experience });
 
   return (
-    <Section title="Experience" editing={editing} onToggle={onToggle}>
+    <Section title={P.sExperience} editing={editing} onToggle={onToggle}>
       {editing ? (
         <div className="space-y-3">
           {profile.experience.map((x, i) => (
             <div key={i} className="grid gap-2 rounded-xl border border-border p-3 sm:grid-cols-2">
               <input
                 className="input"
-                placeholder="Title"
+                placeholder={P.phTitle}
                 value={x.title}
                 onChange={(e) => editAt(profile.experience, setExperience, i, { title: e.target.value })}
               />
               <input
                 className="input"
-                placeholder="Company"
+                placeholder={P.phCompany}
                 value={x.company}
                 onChange={(e) => editAt(profile.experience, setExperience, i, { company: e.target.value })}
               />
@@ -434,7 +431,7 @@ function ExperienceSection({ editing, onToggle }: { editing: boolean; onToggle: 
                 className="input"
                 type="number"
                 min={0}
-                placeholder="Years"
+                placeholder={P.phYears}
                 value={x.years}
                 onChange={(e) =>
                   editAt(profile.experience, setExperience, i, { years: Number(e.target.value) })
@@ -442,7 +439,7 @@ function ExperienceSection({ editing, onToggle }: { editing: boolean; onToggle: 
               />
               <input
                 className="input sm:col-span-2"
-                placeholder="One-line summary"
+                placeholder={P.phRoleSummary}
                 value={x.summary}
                 onChange={(e) => editAt(profile.experience, setExperience, i, { summary: e.target.value })}
               />
@@ -450,7 +447,7 @@ function ExperienceSection({ editing, onToggle }: { editing: boolean; onToggle: 
                 className="justify-self-start text-xs text-muted hover:text-danger"
                 onClick={() => setExperience(profile.experience.filter((_, j) => j !== i))}
               >
-                Remove
+                {P.remove}
               </button>
             </div>
           ))}
@@ -460,11 +457,11 @@ function ExperienceSection({ editing, onToggle }: { editing: boolean; onToggle: 
               setExperience([...profile.experience, { title: "", company: "", years: 1, summary: "" }])
             }
           >
-            + Add role
+            {P.addRole}
           </button>
         </div>
       ) : profile.experience.length === 0 ? (
-        <p className="text-sm text-muted">No roles added yet. Click Edit to add your history.</p>
+        <p className="text-sm text-muted">{empty}</p>
       ) : (
         <ul className="space-y-3">
           {profile.experience.map((x, i) => (
@@ -485,29 +482,30 @@ function ExperienceSection({ editing, onToggle }: { editing: boolean; onToggle: 
 
 function ProjectsSection({ editing, onToggle }: { editing: boolean; onToggle: () => void }) {
   const { profile, updateProfile } = useStore();
+  const empty = useVariant(P.noProjects);
   const setProjects = (projects: Project[]) => updateProfile({ projects });
 
   return (
-    <Section title="Projects" editing={editing} onToggle={onToggle}>
+    <Section title={P.sProjects} editing={editing} onToggle={onToggle}>
       {editing ? (
         <div className="space-y-3">
           {profile.projects.map((p, i) => (
             <div key={i} className="grid gap-2 rounded-xl border border-border p-3">
               <input
                 className="input"
-                placeholder="Project name"
+                placeholder={P.phProjectName}
                 value={p.name}
                 onChange={(e) => editAt(profile.projects, setProjects, i, { name: e.target.value })}
               />
               <input
                 className="input"
-                placeholder="Description"
+                placeholder={P.phProjectDesc}
                 value={p.description}
                 onChange={(e) => editAt(profile.projects, setProjects, i, { description: e.target.value })}
               />
               <input
                 className="input"
-                placeholder="Link (optional)"
+                placeholder={P.phProjectLink}
                 value={p.link ?? ""}
                 onChange={(e) => editAt(profile.projects, setProjects, i, { link: e.target.value })}
               />
@@ -515,7 +513,7 @@ function ProjectsSection({ editing, onToggle }: { editing: boolean; onToggle: ()
                 className="justify-self-start text-xs text-muted hover:text-danger"
                 onClick={() => setProjects(profile.projects.filter((_, j) => j !== i))}
               >
-                Remove
+                {P.remove}
               </button>
             </div>
           ))}
@@ -523,11 +521,11 @@ function ProjectsSection({ editing, onToggle }: { editing: boolean; onToggle: ()
             className="btn-ghost text-sm"
             onClick={() => setProjects([...profile.projects, { name: "", description: "", link: "" }])}
           >
-            + Add project
+            {P.addProject}
           </button>
         </div>
       ) : profile.projects.length === 0 ? (
-        <p className="text-sm text-muted">No projects added yet. Click Edit to showcase work.</p>
+        <p className="text-sm text-muted">{empty}</p>
       ) : (
         <ul className="space-y-3">
           {profile.projects.map((p, i) => (
@@ -559,6 +557,8 @@ function ProjectsSection({ editing, onToggle }: { editing: boolean; onToggle: ()
 
 function EndorsementsSection({ editing, onToggle }: { editing: boolean; onToggle: () => void }) {
   const { profile, endorsements, addEndorsement, removeEndorsement } = useStore();
+  const sub = useVariant(P.sEndorsementsSub);
+  const empty = useVariant(P.noEndorsements);
   const [skill, setSkill] = useState("");
   const [endorserName, setEndorserName] = useState("");
   const [relationship, setRelationship] = useState<EndorsementRelationship>("manager");
@@ -582,11 +582,11 @@ function EndorsementsSection({ editing, onToggle }: { editing: boolean; onToggle
 
   return (
     <Section
-      title="Endorsements"
-      subtitle="No one-tap skills — each needs a real relationship and specific evidence."
+      title={P.sEndorsements}
+      subtitle={sub}
       editing={editing}
       onToggle={onToggle}
-      editLabel={endorsements.length === 0 ? "Add" : "Manage"}
+      editLabel={endorsements.length === 0 ? P.add : P.manage}
     >
       {editing ? (
         <div className="space-y-4">
@@ -597,7 +597,7 @@ function EndorsementsSection({ editing, onToggle }: { editing: boolean; onToggle
               onChange={(e) => setSkill(e.target.value)}
               aria-label="Skill to endorse"
             >
-              <option value="">Skill to endorse…</option>
+              <option value="">{P.skillToEndorse}</option>
               {profile.skills.map((s) => (
                 <option key={s.name} value={s.name}>
                   {s.name}
@@ -606,7 +606,7 @@ function EndorsementsSection({ editing, onToggle }: { editing: boolean; onToggle
             </select>
             <input
               className="input"
-              placeholder="Endorser's name"
+              placeholder={P.phEndorser}
               value={endorserName}
               onChange={(e) => setEndorserName(e.target.value)}
             />
@@ -625,14 +625,14 @@ function EndorsementsSection({ editing, onToggle }: { editing: boolean; onToggle
             <textarea
               className="input sm:col-span-2"
               rows={2}
-              placeholder="Specific evidence — what did they see you do?"
+              placeholder={P.phEvidence}
               value={evidence}
               onChange={(e) => setEvidence(e.target.value)}
             />
           </div>
           {error && <p className="text-sm text-danger">{error}</p>}
           <button className="btn-primary" onClick={submit}>
-            Add endorsement
+            {P.addEndorsement}
           </button>
 
           {endorsements.length > 0 && (
@@ -662,7 +662,7 @@ function EndorsementsSection({ editing, onToggle }: { editing: boolean; onToggle
           )}
         </div>
       ) : endorsements.length === 0 ? (
-        <p className="text-sm text-muted">No endorsements yet. Click Add to request one.</p>
+        <p className="text-sm text-muted">{empty}</p>
       ) : (
         <ul className="space-y-3">
           {endorsements.map((e) => (
